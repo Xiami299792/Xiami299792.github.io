@@ -1,0 +1,463 @@
+/* ==========================================================================
+   技术笔记 · Broadside
+   --------------------------------------------------------------------------
+   严格按 frontend-slides / bold-template-pack / broadside 的 design.md 实现：
+     · 调色板：ink-black #111111 / ink-black-alt #1A1A18 / fire-orange #E85D26
+                cream #F0ECE5 / cream-muted #888880 / cream-hint #505048
+                border-dark #282826
+     · 圆角全为 0（design.md: "Border radius is 0px everywhere"）
+     · 1px 是唯一的结构线宽，2px 只用于 36×2px 的短强调线
+     · Barlow 900 做巨标题、IBM Plex Mono 500 做所有 chrome 标签
+     · 短强调线、mono 编号、带框 mono 标签、只有顶边的信息块 —— 均为其 signature
+   中文按用户指定用「等线 Light」，注意这与 design.md 自带的建议
+   （思源宋体 900 + 霞鹜文楷）不同。
+   ========================================================================== */
+
+:root[data-cat='tech'] {
+  --paper: #111111;
+  --surface: #1a1a18;
+  --ink: #f0ece5;
+  --ink-muted: #888880;
+  --ink-faint: #505048;
+  --rule: #282826;
+  --rule-strong: #3a3a37;
+  --code-bg: #1a1a18;
+
+  --accent: #e85d26;
+  --accent-hover: #ff7040;
+  --accent-underline: rgba(232, 93, 38, 0.4);
+
+  --dot-tech: #e85d26;
+  --dot-essay: #e85d26;
+
+  /* 西文 Barlow，中文回退到等线 Light（微软字体，不可自托管，故用系统字体栈） */
+  --font-sans: 'Barlow', 'DengXian Light', '等线 Light', 'DengXian', '等线',
+    'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-serif: 'Barlow', 'DengXian Light', '等线 Light', 'PingFang SC', sans-serif;
+  /* mono 栈里必须带中文字体：IBM Plex Mono 没有汉字，
+     否则 h4、标签里的中文会掉到系统等宽字体，和正文不是一套 */
+  --font-mono: 'IBM Plex Mono', 'DengXian Light', '等线 Light', 'PingFang SC',
+    ui-monospace, Consolas, monospace;
+
+  --radius: 0;
+  --measure: 42rem;
+
+  background: #111111;
+  color-scheme: dark;
+}
+
+/* 关键：禁止伪粗体。等线 Light 只有 400，
+   若在标题上被合成加粗，中文会变成一坨假的粗体；关掉后西文取 Barlow 900、
+   中文保持等线 Light 的真实轻字重。 */
+:root[data-cat='tech'] h1,
+:root[data-cat='tech'] h2,
+:root[data-cat='tech'] h3,
+:root[data-cat='tech'] .post-card h3,
+:root[data-cat='tech'] .series-title,
+:root[data-cat='tech'] .brand {
+  font-synthesis-weight: none;
+}
+
+/* ---------- 页头：1px 底线，mono 导航 ---------- */
+
+:root[data-cat='tech'] .site-header {
+  background: #111111;
+  border-bottom: 1px solid var(--rule);
+}
+
+:root[data-cat='tech'] .brand {
+  font-family: 'Barlow', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .nav-link {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+:root[data-cat='tech'] .nav-link:hover {
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .nav-link.active {
+  color: var(--accent);
+  background: none;
+}
+
+/* ---------- 文章头：Broadside 的章节开场 ---------- */
+
+:root[data-cat='tech'] .post-header {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+
+/* 36×2px 短强调线 */
+:root[data-cat='tech'] .post-header::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 2px;
+  background: var(--accent);
+  margin-bottom: 18px;
+}
+
+:root[data-cat='tech'] .post-header h1 {
+  font-family: 'Barlow', var(--font-sans);
+  font-size: clamp(29px, 5.2vw, 46px);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin: 14px 0 0;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* 导语：Broadside 的 lead 层级 */
+:root[data-cat='tech'] .post-deck {
+  margin: 18px 0 0;
+  font-size: 17.5px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  max-width: 40em;
+}
+
+/* meta 行：mono 标签 + 火橙 kicker */
+:root[data-cat='tech'] .post-meta {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+:root[data-cat='tech'] .post-meta time {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+/* 带框 mono 标签（signature） */
+:root[data-cat='tech'] .cat,
+:root[data-cat='tech'] .tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: none;
+  border: 1px solid var(--accent);
+  border-radius: 0;
+  padding: 0.3em 0.8em;
+  line-height: 1.4;
+}
+
+:root[data-cat='tech'] .cat::before {
+  display: none;
+}
+
+:root[data-cat='tech'] .tag:hover {
+  background: var(--accent);
+  color: #111111;
+}
+
+:root[data-cat='tech'] .post-tags {
+  margin-top: 16px;
+  gap: 8px;
+}
+
+/* 系列横幅：只有细线，mono */
+:root[data-cat='tech'] .series-banner {
+  border-left: none;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 12px 0;
+  margin-bottom: 28px;
+}
+
+:root[data-cat='tech'] .series-banner__label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+:root[data-cat='tech'] .series-banner__title {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .series-banner__count,
+:root[data-cat='tech'] .series-banner__link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
+
+:root[data-cat='tech'] .series-banner__link:hover {
+  color: var(--accent);
+}
+
+/* ---------- 正文 ---------- */
+
+:root[data-cat='tech'] .prose {
+  /* 等线 Light 笔画细，深底上 16.5px 偏吃力，放大一号并放宽行距补偿 */
+  font-size: 17px;
+  line-height: 1.86;
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .prose h2 {
+  font-family: 'Barlow', var(--font-sans);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  border-bottom: none;
+  padding: 0;
+  margin: 2.4em 0 0.9em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+/* 每个二级标题上方一条 36×2px 短强调线 */
+:root[data-cat='tech'] .prose h2::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 2px;
+  background: var(--accent);
+  margin-bottom: 12px;
+}
+
+:root[data-cat='tech'] .prose h3 {
+  font-family: 'Barlow', var(--font-sans);
+  font-size: 18.5px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .prose h4 {
+  font-size: 16.5px;
+  font-weight: 400;
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+:root[data-cat='tech'] .prose h4::before {
+  content: '/ ';
+  color: var(--accent);
+}
+
+:root[data-cat='tech'] .prose strong {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+:root[data-cat='tech'] .prose a {
+  color: var(--accent);
+  text-decoration-color: var(--accent-underline);
+}
+
+:root[data-cat='tech'] .prose a:hover {
+  color: var(--accent-hover);
+}
+
+/* 引用：中文用「」思路，不做放大的西文引号 */
+:root[data-cat='tech'] .prose blockquote {
+  border-left: 2px solid var(--accent);
+  padding: 4px 0 4px 20px;
+  margin: 1.8em 0;
+  font-size: 17px;
+  line-height: 1.76;
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .prose blockquote::before {
+  content: none;
+}
+
+:root[data-cat='tech'] .prose :not(pre) > code {
+  background: #1a1a18;
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  color: #ffb08a;
+  font-size: 0.86em;
+}
+
+:root[data-cat='tech'] .prose pre {
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  background: #1a1a18 !important;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+:root[data-cat='tech'] .prose hr {
+  border-top: 1px solid var(--rule);
+  height: 0;
+}
+
+/* 表格：只留 1px 横线，表头 mono */
+:root[data-cat='tech'] .prose th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+:root[data-cat='tech'] .prose td {
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink);
+}
+
+/* 目录：细线 + mono */
+:root[data-cat='tech'] .toc {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 14px 0;
+}
+
+:root[data-cat='tech'] .toc-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+:root[data-cat='tech'] .toc a {
+  font-size: 14.5px;
+  color: var(--ink-muted);
+}
+
+:root[data-cat='tech'] .toc a:hover {
+  color: var(--accent);
+}
+
+/* 上下篇 */
+:root[data-cat='tech'] .post-nav {
+  border-top: 1px solid var(--rule);
+}
+
+:root[data-cat='tech'] .post-nav .dir {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+:root[data-cat='tech'] .post-nav .title {
+  font-size: 15.5px;
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .post-nav a:hover .title {
+  color: var(--accent);
+}
+
+/* 页脚 */
+:root[data-cat='tech'] .site-footer {
+  border-top: 1px solid var(--rule);
+  color: var(--ink-faint);
+}
+
+:root[data-cat='tech'] .footer-inner {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* 列表页 */
+:root[data-cat='tech'] .page-title {
+  font-family: 'Barlow', var(--font-sans);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+
+:root[data-cat='tech'] .page-lead {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+:root[data-cat='tech'] .section-title,
+:root[data-cat='tech'] .section-more {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:root[data-cat='tech'] .section-title .dot {
+  background: var(--accent);
+}
+
+:root[data-cat='tech'] .section-head {
+  border-bottom: 1px solid var(--rule);
+}
+
+:root[data-cat='tech'] .post-card {
+  border-bottom: 1px solid var(--rule);
+  padding: 22px 0 24px;
+}
+
+:root[data-cat='tech'] .post-card h3 {
+  font-family: 'Barlow', var(--font-sans);
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+}
+
+:root[data-cat='tech'] .post-card:hover h3 {
+  color: var(--accent);
+}
+
+:root[data-cat='tech'] .post-card p {
+  color: var(--ink-muted);
+  font-size: 15px;
+}
+
+:root[data-cat='tech'] .post-card .post-meta,
+:root[data-cat='tech'] .post-card time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+:root[data-cat='tech'] .empty,
+:root[data-cat='tech'] .comments-hint {
+  color: var(--ink-faint);
+  border-color: var(--rule);
+}

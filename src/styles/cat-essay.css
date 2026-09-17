@@ -1,0 +1,399 @@
+/* ==========================================================================
+   随笔 · 铅字报刊（Letterpress）
+   --------------------------------------------------------------------------
+   合成来源（frontend-slides / bold-template-pack）：
+     · Emerald Editorial —— 双线报头装饰、严格的直角、无阴影
+     · Biennale Yellow   —— 单一墨色承担所有文字与线、1px 细线是唯一边框词汇
+     · Monochrome        —— 36px 短强调线、1px 是唯一结构线宽
+     · Long Table        —— 单一锈红墨，只用不透明度做层次
+     · Broadside         —— 1px 结构线 / 2px 只给短强调线
+   中文用汇文明朝体（明朝体＝传统铅字），西文用 Source Serif 4。
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Huiwen Mincho';
+  src: url('./fonts/huiwen-mincho-subset.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root[data-cat='essay'] {
+  /* 新闻纸：比站点主色更灰、更旧 */
+  --paper: #f1ece0;
+  --surface: #f8f5ec;
+  --ink: #1a1a18;
+  --ink-muted: #4d4840;
+  --ink-faint: #837b6e;
+  --rule: #d6cfbe;
+  --rule-strong: #1a1a18;
+  --code-bg: #e7e1d2;
+
+  /* 单一锈红墨 */
+  --accent: #b53d2a;
+  --accent-hover: #8d2e1f;
+  --accent-underline: rgba(181, 61, 42, 0.34);
+
+  --dot-tech: #b53d2a;
+  --dot-essay: #b53d2a;
+
+  /* 明朝体做正文：铅字印刷的底子 */
+  --font-sans: 'Huiwen Mincho', 'Source Serif 4', Georgia, 'Songti SC',
+    'Noto Serif CJK SC', 'SimSun', serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  /* mono 栈里带明朝体做中文回退，避免标签里的汉字掉到系统等宽字体 */
+  --font-mono: 'IBM Plex Mono', 'Huiwen Mincho', ui-monospace, Consolas, monospace;
+
+  --radius: 0;
+  --measure: 40rem;
+
+  background: var(--paper);
+}
+
+/* 纸面加一层极淡的印刷网点，模拟新闻纸 */
+:root[data-cat='essay'] body {
+  background-image: radial-gradient(rgba(26, 26, 24, 0.055) 0.5px, transparent 0.5px);
+  background-size: 3px 3px;
+}
+
+/* ---------- 报头 ---------- */
+
+:root[data-cat='essay'] .site-header {
+  border-top: 3px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+:root[data-cat='essay'] .brand {
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+}
+
+:root[data-cat='essay'] .nav-link {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:root[data-cat='essay'] .nav-link.active {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+
+:root[data-cat='essay'] main {
+  padding-top: 44px;
+}
+
+/* ---------- 文章头：做成报纸标题区 ---------- */
+
+:root[data-cat='essay'] .post-header {
+  position: relative;
+  padding: 22px 0 20px;
+  margin-bottom: 30px;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: none;
+}
+
+/* 双线：报头装饰 */
+:root[data-cat='essay'] .post-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+:root[data-cat='essay'] .post-header h1 {
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-size: clamp(26px, 4.4vw, 34px);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  margin: 14px 0 0;
+  text-wrap: balance;
+}
+
+/* 标题下的导语：报纸的 deck */
+:root[data-cat='essay'] .post-deck {
+  margin: 16px 0 0;
+  font-size: 16.5px;
+  line-height: 1.72;
+  color: var(--ink-muted);
+}
+
+:root[data-cat='essay'] .post-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 10px;
+}
+
+:root[data-cat='essay'] .post-meta time,
+:root[data-cat='essay'] .post-meta .cat {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+:root[data-cat='essay'] .cat::before {
+  display: none;
+}
+
+:root[data-cat='essay'] .post-tags {
+  margin-top: 12px;
+}
+
+:root[data-cat='essay'] .tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* 系列横幅：一行细线 + mono 标签 */
+:root[data-cat='essay'] .series-banner {
+  border-left: none;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 0;
+  margin-bottom: 26px;
+}
+
+:root[data-cat='essay'] .series-banner__label,
+:root[data-cat='essay'] .series-banner__link,
+:root[data-cat='essay'] .series-banner__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ---------- 正文排版：报章正体 ---------- */
+
+:root[data-cat='essay'] .prose {
+  font-size: 17px;
+  line-height: 1.95;
+  text-align: justify;
+  text-justify: inter-ideograph;
+}
+
+/* 首字下沉：铅字印刷的招牌 */
+:root[data-cat='essay'] .prose > p:first-of-type::first-letter {
+  float: left;
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-size: 3.5em;
+  line-height: 0.86;
+  padding: 0.06em 0.1em 0 0;
+  margin-right: 0.04em;
+  color: var(--accent);
+}
+
+:root[data-cat='essay'] .prose h2 {
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  padding: 8px 0 9px;
+  margin: 2.3em 0 0.9em;
+  border-top: 2px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+/* 36px 短强调线，挂在二级标题上方 */
+:root[data-cat='essay'] .prose h2::before {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 2px;
+  background: var(--accent);
+  margin-bottom: 8px;
+}
+
+:root[data-cat='essay'] .prose h3 {
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-wrap: balance;
+}
+
+:root[data-cat='essay'] .prose h4 {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+:root[data-cat='essay'] .prose blockquote {
+  border-left: none;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 16px 0;
+  margin: 1.8em 0;
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-size: 17.5px;
+  line-height: 1.85;
+  color: var(--ink);
+  text-align: justify;
+}
+
+:root[data-cat='essay'] .prose blockquote::before {
+  content: '“';
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 40px;
+  line-height: 0.6;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+:root[data-cat='essay'] .prose hr {
+  border-top: none;
+  height: 5px;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  margin: 2.8em 0;
+}
+
+/* 表格：报纸的数据栏，只留横线 */
+:root[data-cat='essay'] .prose th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+:root[data-cat='essay'] .prose td {
+  border-bottom: 1px solid var(--rule);
+}
+
+:root[data-cat='essay'] .prose pre {
+  border-radius: 0;
+  border: 1px solid var(--rule-strong);
+  background: var(--code-bg) !important;
+  font-size: 13px;
+}
+
+:root[data-cat='essay'] .prose :not(pre) > code {
+  border-radius: 0;
+  font-size: 0.86em;
+}
+
+/* 目录：一条细线，mono 标签 */
+:root[data-cat='essay'] .toc {
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule);
+  padding: 12px 0;
+}
+
+:root[data-cat='essay'] .toc-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+:root[data-cat='essay'] .toc a {
+  font-family: var(--font-sans);
+  font-size: 15px;
+}
+
+/* 上下篇：报纸的「转版」提示 */
+:root[data-cat='essay'] .post-nav {
+  border-top: 2px solid var(--rule-strong);
+}
+
+:root[data-cat='essay'] .post-nav .dir,
+:root[data-cat='essay'] .post-nav .title {
+  font-family: var(--font-mono);
+}
+
+:root[data-cat='essay'] .post-nav .dir {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+:root[data-cat='essay'] .post-nav .title {
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-size: 15.5px;
+  letter-spacing: 0.01em;
+}
+
+/* 页脚：四栏报尾 */
+:root[data-cat='essay'] .site-footer {
+  border-top: 2px solid var(--rule-strong);
+  padding-top: 22px;
+}
+
+:root[data-cat='essay'] .footer-inner {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* 列表页（随笔分类页）也用报刊味 */
+:root[data-cat='essay'] .page-title {
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  padding-bottom: 12px;
+  border-bottom: 4px double var(--rule-strong);
+}
+
+:root[data-cat='essay'] .page-lead {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+:root[data-cat='essay'] .section-title,
+:root[data-cat='essay'] .section-more {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+:root[data-cat='essay'] .section-title .dot {
+  display: none;
+}
+
+:root[data-cat='essay'] .post-card h3 {
+  font-family: 'Huiwen Mincho', var(--font-sans);
+  font-weight: 400;
+  font-size: 19px;
+  letter-spacing: 0.02em;
+}
+
+:root[data-cat='essay'] .post-card {
+  padding: 20px 0 22px;
+  border-bottom: 1px solid var(--rule);
+}
+
+:root[data-cat='essay'] .post-card p {
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+:root[data-cat='essay'] .post-card .post-meta,
+:root[data-cat='essay'] .post-card .cat,
+:root[data-cat='essay'] .post-card time {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}

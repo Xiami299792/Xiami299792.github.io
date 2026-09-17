@@ -16,16 +16,16 @@ const cat = CATEGORIES[key];
 const posts = await getPostsByCategory(key);
 ---
 
-<BaseLayout wide title={cat.label} description={cat.description}>
+<BaseLayout wide cat={key} title={cat.label} description={cat.description}>
   <h1 class="page-title">{cat.label}</h1>
-  <p class="page-lead">{cat.description} 共 {posts.length} 篇。</p>
+  <p class="page-lead">共 {posts.length} 篇</p>
 
   {posts.length === 0 ? (
     <p class="empty">这个分类下还没有文章。</p>
   ) : (
     <div class="post-list">
       {posts.map((post) => (
-        <PostCard post={post} />
+        <PostCard post={post} showCategory={false} />
       ))}
     </div>
   )}

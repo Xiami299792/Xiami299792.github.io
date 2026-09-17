@@ -54,6 +54,7 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
   description={post.data.summary}
   type="article"
   image={post.data.cover}
+  cat={post.data.category}
 >
   <article data-pagefind-body>
     <header class="post-header">
@@ -74,6 +75,9 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
       </div>
 
       <h1>{post.data.title}</h1>
+
+      {/* 导语 / 报纸的 deck：两个分类主题都把它做成标题区的第二层 */}
+      {post.data.summary && <p class="post-deck">{post.data.summary}</p>}
 
       {
         post.data.tags.length > 0 && (

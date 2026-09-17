@@ -403,6 +403,15 @@ main {
   color: var(--ink-muted);
 }
 
+/* 导语：中性主题下就是一行略大的引言 */
+.post-deck {
+  margin: 14px 0 0;
+  font-size: 16.5px;
+  line-height: 1.72;
+  color: var(--ink-muted);
+  max-width: 40em;
+}
+
 /* ---------- 归档 ---------- */
 
 .archive-year {
