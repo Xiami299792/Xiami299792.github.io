@@ -20,8 +20,11 @@ const posts = defineCollection({
     category: z.enum(['tech', 'essay']),
     /** 标签，用于 /tags 聚合 */
     tags: z.array(z.string()).default([]),
-    /** 一句话摘要：列表页、SEO 描述、RSS 都用它，建议 40~80 字 */
-    summary: z.string(),
+    /**
+     * 一句话摘要（可选）。列表页、SEO 描述、RSS 都用它。
+     * 不写就不显示导语 —— 宁可空着，也不要为了填满而凑一句。
+     */
+    summary: z.string().optional(),
     /** 系列 slug（见 consts.ts 的 SERIES）。同一系列的文章会串成上下章导航 */
     series: z.string().optional(),
     /** 系列内的序号，从 1 开始 */

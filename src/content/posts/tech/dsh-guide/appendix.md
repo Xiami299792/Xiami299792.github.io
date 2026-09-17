@@ -6,7 +6,6 @@ series: dsh-guide
 order: 9
 part: 附录
 tags: [DSH, 速查表, 附录]
-summary: 附录 A~E：命令速查、术语卡、16 个可直接复制的提示词模板、评审团工具包，以及版本锚点与勘误页。随时翻，不用按顺序读。
 draft: false
 ---
 这一部分是给你随时翻的，不需要按顺序读。

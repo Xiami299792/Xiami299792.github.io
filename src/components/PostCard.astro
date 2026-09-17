@@ -35,5 +35,5 @@ const seriesTitle = seriesKey ? SERIES[seriesKey]?.title : undefined;
     {post.data.draft && <span class="draft-tag">草稿</span>}
   </div>
 
-  <p>{post.data.summary}</p>
+  {post.data.summary && <p>{post.data.summary}</p>}
 </a>

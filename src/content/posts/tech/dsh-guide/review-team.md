@@ -6,7 +6,6 @@ series: dsh-guide
 order: 6
 part: 进阶篇
 tags: [DSH, 评审团, AI 协作]
-summary: 你自己看不出自己作品的问题，AI 也一样。所以组一个评审团：让几个不同角色的 AI 从不同角度挑毛病，再按修改单逐条改。
 draft: false
 ---
 本章要解决的问题：你自己看不出自己作品的问题，AI 也一样。

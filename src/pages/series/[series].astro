@@ -61,7 +61,9 @@ function groupOf(post: (typeof posts)[number]) {
                     <span class="series-list__num">{String(n).padStart(2, '0')}</span>
                     <span class="series-list__body">
                       <span class="series-list__title">{post.data.title}</span>
-                      <span class="series-list__summary">{post.data.summary}</span>
+                      {post.data.summary && (
+                        <span class="series-list__summary">{post.data.summary}</span>
+                      )}
                     </span>
                     {mixedCategories && (
                       <span class={`cat cat--${CATEGORIES[post.data.category].key}`}>

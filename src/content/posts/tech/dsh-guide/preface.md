@@ -6,7 +6,6 @@ series: dsh-guide
 order: 1
 part: 基础篇
 tags: [DSH, AI 工具, 新手指南]
-summary: 这本书是干什么用的、写给谁看、读完你能做出什么，以及为什么我一开始就不打算讲技术。
 draft: false
 ---
 ## 先说我自己
