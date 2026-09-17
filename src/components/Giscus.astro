@@ -1,16 +1,23 @@
 ---
 import { GISCUS } from '../consts';
 
-const ready = GISCUS.enabled && GISCUS.repoId !== '' && GISCUS.categoryId !== '';
+// 四项都齐了才渲染。缺任意一项就整块不出现 ——
+// 访客不该看到「评论尚未启用」这种半成品提示。
+const ready =
+  GISCUS.enabled &&
+  GISCUS.repo !== '' &&
+  GISCUS.repoId !== '' &&
+  GISCUS.categoryId !== '';
 ---
 
-<section class="comments" aria-label="评论">
-  <h2 class="section-title comments-label">
-    <span class="dot"></span>评论
-  </h2>
+{
+  ready && (
+    <section class="comments" aria-label="评论">
+      <h2 class="section-title comments-label">
+        <span class="dot" />
+        评论
+      </h2>
 
-  {
-    ready ? (
       <div id="giscus-container">
         <script
           is:inline
@@ -31,11 +38,6 @@ const ready = GISCUS.enabled && GISCUS.repoId !== '' && GISCUS.categoryId !== ''
           async
         />
       </div>
-    ) : (
-      <p class="comments-hint">
-        评论尚未启用。打开 <code>src/consts.ts</code>，按 <code>GISCUS</code> 上方的注释填好
-        repoId / categoryId，再把 <code>enabled</code> 改成 <code>true</code> 即可。
-      </p>
-    )
-  }
-</section>
+    </section>
+  )
+}

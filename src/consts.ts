@@ -95,16 +95,19 @@ export const NAV = [
 /**
  * 评论：Giscus（基于 GitHub Discussions，零后端零成本）
  *
- * 启用步骤：
- *   1. 仓库必须是 public，并在 Settings → General → Features 勾选 Discussions
+ * 现状：repoId 已填（取自 GitHub API 的仓库 node_id）。
+ * 还差两步，都需要仓库管理权限，只能由站长本人做：
+ *   1. 仓库 Settings → General → Features 勾选 Discussions
  *   2. 安装 Giscus App：https://github.com/apps/giscus
- *   3. 打开 https://giscus.app/zh-CN 填入仓库名，把生成的 repoId / categoryId 抄到这里
+ *   3. 打开 https://giscus.app/zh-CN 填入仓库名，复制生成的 categoryId 填到下面
  *   4. 把 enabled 改成 true
+ *
+ * 未配置时评论区整块不渲染（访客看不到半成品）。
  */
 export const GISCUS = {
   enabled: false,
   repo: 'Xiami299792/Xiami299792.github.io',
-  repoId: '',
+  repoId: 'R_kgDOUeex_g',
   category: 'Announcements',
   categoryId: '',
   mapping: 'pathname',
