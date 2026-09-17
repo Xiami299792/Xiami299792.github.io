@@ -1,6 +1,6 @@
 ---
 title: 防伪水印的千年变迁：从《溪山行旅图》到 SynthID
-date: 2026-08-22
+date: 2026-09-17
 category: tech
 tags: [水印, 防伪, AI, 图像处理]
 draft: false
