@@ -1,14 +1,6 @@
 ---
 // 首页专用：People's Platform (Block & Bold) 海报风
-// 字体只在这一页加载，不影响其它页面
-import '@fontsource/alfa-slab-one/latin-400.css';
-import '@fontsource/archivo-narrow/latin-400.css';
-import '@fontsource/archivo-narrow/latin-500.css';
-import '@fontsource/archivo-narrow/latin-600.css';
-import '@fontsource/dm-mono/latin-400.css';
-import '@fontsource/dm-mono/latin-500.css';
-import '../styles/poster.css';
-
+// 字体与 poster.css 已在 BaseLayout 里引入，这里不再重复
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { CATEGORIES, SERIES, SITE, TECH_SECTIONS } from '../consts';
@@ -55,7 +47,7 @@ const modules = [
             {featuredInfo.title}
           </a>
           <p class="spotlight__sub">
-            {featuredInfo.subtitle} · 共 {featured.posts.length} 篇 · {featuredInfo.author}
+            {featuredInfo.subtitle} · 共 {featured.posts.length} 篇
           </p>
           <ol class="spotlight__list">
             {featured.posts.map((post, i) => (

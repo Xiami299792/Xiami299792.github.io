@@ -6,12 +6,19 @@ import '@fontsource/source-serif-4/latin-400.css';
 import '@fontsource/source-serif-4/latin-600.css';
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-600.css';
-// Broadside 的西文字体（科普分类用）
+// Broadside 的西文字体（技术分类用）
 import '@fontsource/barlow/latin-400.css';
 import '@fontsource/barlow/latin-700.css';
 import '@fontsource/barlow/latin-900.css';
 import '@fontsource/ibm-plex-mono/latin-400.css';
 import '@fontsource/ibm-plex-mono/latin-500.css';
+// People's Platform 的西文字体（首页与各栏目页用）
+import '@fontsource/alfa-slab-one/latin-400.css';
+import '@fontsource/archivo-narrow/latin-400.css';
+import '@fontsource/archivo-narrow/latin-500.css';
+import '@fontsource/archivo-narrow/latin-600.css';
+import '@fontsource/dm-mono/latin-400.css';
+import '@fontsource/dm-mono/latin-500.css';
 
 import { SITE } from '../consts';
 import Header from '../components/Header.astro';
@@ -19,6 +26,9 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import '../styles/cat-essay.css';
 import '../styles/cat-tech.css';
+// 海报风：站点外壳 + 栏目页。内部全部限定在 :root:not([data-cat])，
+// 有分类主题的文章页不会被它覆盖。
+import '../styles/poster.css';
 
 interface Props {
   title?: string;

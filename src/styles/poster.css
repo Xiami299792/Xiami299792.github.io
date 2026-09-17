@@ -48,7 +48,7 @@
   --p-hair: #4a4a56;
 }
 
-body {
+:root:not([data-cat]) body {
   background: var(--p-paper);
   color: var(--p-ink);
   font-family: var(--p-body);
@@ -58,17 +58,17 @@ body {
 
 /* ---------- 顶栏：蓝底 + DM Mono 标签（topbar 模式）---------- */
 
-.site-header {
+:root:not([data-cat]) .site-header {
   background: var(--p-blue);
   border-bottom: 6px solid var(--p-ink);
   color: var(--p-cream);
 }
 
-.header-inner {
+:root:not([data-cat]) .header-inner {
   height: 56px;
 }
 
-.brand {
+:root:not([data-cat]) .brand {
   font-family: var(--p-slab);
   font-size: 19px;
   font-weight: 400;
@@ -77,7 +77,7 @@ body {
   text-transform: none;
 }
 
-.nav-link {
+:root:not([data-cat]) .nav-link {
   font-family: var(--p-mono);
   font-size: 11px;
   letter-spacing: 0.08em;
@@ -86,22 +86,22 @@ body {
   padding: 4px 12px;
 }
 
-.nav-link:hover {
+:root:not([data-cat]) .nav-link:hover {
   color: var(--p-cream);
   background: rgba(244, 233, 214, 0.12);
 }
 
-.nav-link.active {
+:root:not([data-cat]) .nav-link.active {
   color: var(--p-ink);
   background: var(--p-orange);
   font-weight: 500;
 }
 
-.theme-toggle {
+:root:not([data-cat]) .theme-toggle {
   color: rgba(244, 233, 214, 0.72);
 }
 
-.theme-toggle:hover {
+:root:not([data-cat]) .theme-toggle:hover {
   color: var(--p-cream);
 }
 
@@ -445,7 +445,7 @@ body {
 
 /* ---------- 页脚 ---------- */
 
-.site-footer {
+:root:not([data-cat]) .site-footer {
   margin-top: 44px;
   border-top: 6px solid var(--p-ink);
   padding: 22px 0 40px;
@@ -456,7 +456,7 @@ body {
   color: var(--p-ink);
 }
 
-.footer-links a:hover {
+:root:not([data-cat]) .footer-links a:hover {
   color: var(--p-blue);
 }
 
@@ -503,4 +503,373 @@ body {
     left: 18px;
     top: 23px;
   }
+}
+
+/* ==========================================================================
+   栏目页：归档 / 搜索 / 系列 / 关于 / 404
+   --------------------------------------------------------------------------
+   全部限定在 :root:not([data-cat]) 下 —— 文章页有分类主题，
+   这些规则不该渗进去。首页没有 data-cat，但这些类名只在栏目页出现。
+   ========================================================================== */
+
+:root:not([data-cat]) .page-title {
+  margin: 0 0 14px;
+  font-family: var(--p-slab);
+  font-weight: 400;
+  font-size: clamp(30px, 5.5vw, 46px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  color: var(--p-ink);
+  text-shadow: 3px 3px 0 var(--p-red);
+}
+
+:root:not([data-cat]) .page-title:lang(zh) {
+  font-weight: 700;
+}
+
+:root:not([data-cat]) .page-lead {
+  margin: 0 0 36px;
+  padding-bottom: 14px;
+  border-bottom: 6px solid var(--p-ink);
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--p-muted-2);
+}
+
+/* ---------- 归档 ---------- */
+
+:root:not([data-cat]) .archive-year {
+  margin: 40px 0 8px;
+  font-family: var(--p-slab);
+  font-size: 36px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--p-orange);
+  text-shadow: 2px 2px 0 var(--p-red);
+}
+
+:root:not([data-cat]) .archive-item {
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 3px solid var(--p-ink);
+}
+
+:root:not([data-cat]) .archive-item time {
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--p-muted-2);
+}
+
+:root:not([data-cat]) .archive-item a {
+  font-family: var(--p-body);
+  font-weight: 600;
+  font-size: 17.5px;
+}
+
+:root:not([data-cat]) .archive-item a:hover {
+  color: var(--p-blue);
+}
+
+:root:not([data-cat]) .cat {
+  font-family: var(--p-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--p-blue);
+}
+
+:root:not([data-cat]) .cat::before {
+  background: var(--p-red);
+}
+
+/* ---------- 系列总览 ---------- */
+
+:root:not([data-cat]) .series-card {
+  margin-bottom: 22px;
+  padding: 24px 26px 26px;
+  border: 6px solid var(--p-ink);
+  border-radius: 0;
+}
+
+:root:not([data-cat]) .series-card__title {
+  font-family: var(--p-slab);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+:root:not([data-cat]) .series-card__title:lang(zh) {
+  font-weight: 700;
+}
+
+:root:not([data-cat]) .series-card__title a:hover {
+  color: var(--p-blue);
+}
+
+:root:not([data-cat]) .series-card__desc {
+  margin: 12px 0 0;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 16.5px;
+  color: var(--p-muted);
+}
+
+:root:not([data-cat]) .series-card__meta {
+  margin: 12px 0 0;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .series-card__list {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 16.5px;
+}
+
+:root:not([data-cat]) .series-card__list li {
+  position: relative;
+  padding: 8px 0 8px 24px;
+  border-bottom: 3px solid var(--p-ink);
+}
+
+:root:not([data-cat]) .series-card__list li:last-child {
+  border-bottom: none;
+}
+
+/* 菱形项目符 */
+:root:not([data-cat]) .series-card__list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 15px;
+  width: 9px;
+  height: 9px;
+  background: var(--p-red);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+:root:not([data-cat]) .series-card__list a:hover {
+  color: var(--p-blue);
+}
+
+/* ---------- 系列目录 ---------- */
+
+:root:not([data-cat]) .series-intro {
+  margin: 0 0 30px;
+  padding: 20px 24px;
+  border: 6px solid var(--p-ink);
+  border-radius: 0;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 16.5px;
+  color: var(--p-muted);
+}
+
+:root:not([data-cat]) .series-intro__meta {
+  margin-top: 12px !important;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--p-muted-2);
+}
+
+:root:not([data-cat]) .series-list__item {
+  border-bottom: 3px solid var(--p-ink);
+}
+
+:root:not([data-cat]) .series-list__num {
+  font-family: var(--p-mono);
+  font-size: 12px;
+  color: var(--p-orange);
+}
+
+:root:not([data-cat]) .series-list__title {
+  font-family: var(--p-slab);
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+:root:not([data-cat]) .series-list__title:lang(zh) {
+  font-weight: 700;
+}
+
+:root:not([data-cat]) .series-list__item a:hover .series-list__title {
+  color: var(--p-blue);
+}
+
+:root:not([data-cat]) .series-list__summary {
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--p-muted);
+}
+
+/* ---------- 关于页正文 ---------- */
+
+:root:not([data-cat]) .prose {
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.78;
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .prose h2 {
+  margin: 2em 0 0.6em;
+  padding: 0 0 10px;
+  border-bottom: 6px solid var(--p-ink);
+  font-family: var(--p-slab);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .prose h2::before {
+  content: none;
+}
+
+:root:not([data-cat]) .prose h2:lang(zh) {
+  font-weight: 700;
+}
+
+:root:not([data-cat]) .prose a {
+  color: var(--p-blue);
+  text-decoration-color: var(--p-blue);
+}
+
+:root:not([data-cat]) .prose ul,
+:root:not([data-cat]) .prose ol {
+  padding-left: 0;
+  list-style: none;
+}
+
+:root:not([data-cat]) .prose li {
+  position: relative;
+  padding: 6px 0 6px 24px;
+  margin: 0;
+  border-bottom: 3px solid var(--p-ink);
+}
+
+:root:not([data-cat]) .prose li:last-child {
+  border-bottom: none;
+}
+
+:root:not([data-cat]) .prose li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 17px;
+  width: 9px;
+  height: 9px;
+  background: var(--p-red);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+:root:not([data-cat]) .prose blockquote {
+  margin: 1.6em 0;
+  padding: 16px 20px;
+  border: 6px solid var(--p-ink);
+  border-left-width: 6px;
+  font-family: var(--p-body);
+  font-size: 17.5px;
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .prose blockquote::before {
+  content: none;
+}
+
+:root:not([data-cat]) .prose :not(pre) > code {
+  border-radius: 0;
+  background: var(--p-cream);
+  border: 3px solid var(--p-ink);
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .prose pre {
+  border: 6px solid var(--p-ink);
+  border-radius: 0;
+  background: var(--p-cream) !important;
+}
+
+:root:not([data-cat]) .prose hr {
+  height: 6px;
+  border: none;
+  background: var(--p-ink);
+  margin: 2.4em 0;
+}
+
+/* ---------- 搜索 ---------- */
+
+:root:not([data-cat]) #search {
+  --pagefind-ui-primary: var(--p-blue);
+  --pagefind-ui-text: var(--p-ink);
+  --pagefind-ui-background: var(--p-paper);
+  --pagefind-ui-border: var(--p-ink);
+  --pagefind-ui-tag: var(--p-cream);
+  --pagefind-ui-border-width: 3px;
+  --pagefind-ui-border-radius: 0;
+  --pagefind-ui-font: var(--p-body);
+}
+
+:root:not([data-cat]) #search .pagefind-ui__search-input {
+  border-radius: 0;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 17px;
+}
+
+:root:not([data-cat]) #search .pagefind-ui__result {
+  padding: 18px 0;
+  border-top: 3px solid var(--p-ink);
+}
+
+:root:not([data-cat]) #search .pagefind-ui__result-title a {
+  font-family: var(--p-slab);
+  font-weight: 400;
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) #search mark {
+  background: var(--p-orange);
+  color: var(--p-ink);
+}
+
+/* ---------- 404 / 空状态 ---------- */
+
+:root:not([data-cat]) .tag {
+  padding: 5px 14px;
+  border: 3px solid var(--p-ink);
+  border-radius: 999px;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+  background: none;
+}
+
+:root:not([data-cat]) .tag:hover {
+  background: var(--p-orange);
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .empty {
+  font-family: var(--p-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--p-muted-2);
 }
