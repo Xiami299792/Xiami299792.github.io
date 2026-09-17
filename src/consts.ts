@@ -44,9 +44,30 @@ export const CATEGORIES = {
 
 export type CategoryKey = keyof typeof CATEGORIES;
 
+/**
+ * 系列文章。
+ *
+ * 和分类的区别：分类是「内容属于哪个栏目」，系列是「这几篇要按顺序读」。
+ * 文章 frontmatter 里写 series: 'dsh-guide' + order: 3 就会自动串成上下章导航，
+ * 并在 /series/dsh-guide/ 生成系列目录页。
+ */
+export const SERIES = {
+  'dsh-guide': {
+    title: 'DSH 使用指南（大一新生版）',
+    subtitle: '从装上到用明白',
+    description:
+      '一本写给大一新生的 DeepSeek Harness 入门手册：怎么装、怎么配、怎么把话说清楚，最后做出一个真有人在用的东西。',
+    author: '田飞扬',
+    note: '应睿信科协邀请写作，核对于 2026 年 9 月。',
+  },
+} as const;
+
+export type SeriesKey = keyof typeof SERIES;
+
 /** 顶部导航（路径不要带 base，代码里会自动补） */
 export const NAV = [
   { href: '/', label: '首页' },
+  { href: '/series/', label: '系列' },
   { href: '/archive/', label: '归档' },
   { href: '/tags/', label: '标签' },
   { href: '/search/', label: '搜索' },

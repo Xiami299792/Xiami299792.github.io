@@ -1,26 +1,76 @@
 ---
 import { render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
-import { getPublishedPosts, postSlug } from '../../utils/posts';
+import { SERIES } from '../../consts';
+import {
+  getPublishedPosts,
+  getSeriesPosts,
+  postSlug,
+  seriesNeighbors,
+  type Post,
+} from '../../utils/posts';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
 
-  return posts.map((post, index) => ({
-    params: { id: postSlug(post) },
-    props: {
-      post,
-      // posts 已按日期倒序：index 越小越新
-      newer: posts[index - 1],
-      older: posts[index + 1],
-    },
-  }));
+  // 每个系列只算一次，避免每篇文章都重新遍历
+  const seriesCache = new Map<string, Post[]>();
+  for (const post of posts) {
+    const key = post.data.series;
+    if (key && !seriesCache.has(key)) {
+      seriesCache.set(key, await getSeriesPosts(key));
+    }
+  }
+
+  return posts.map((post, index) => {
+    const key = post.data.series;
+    const members = key ? seriesCache.get(key) : undefined;
+    const neighbors = members ? seriesNeighbors(members, post) : undefined;
+
+    return {
+      params: { id: postSlug(post) },
+      props: {
+        post,
+        // posts 已按日期倒序：index 越小越新
+        newer: posts[index - 1],
+        older: posts[index + 1],
+        seriesKey: key,
+        seriesInfo: key ? SERIES[key as keyof typeof SERIES] : undefined,
+        seriesIndex: neighbors?.index ?? 0,
+        seriesTotal: neighbors?.total ?? 0,
+        seriesPrev: neighbors?.prev,
+        seriesNext: neighbors?.next,
+      },
+    };
+  });
 }
 
-const { post, newer, older } = Astro.props;
+const {
+  post,
+  newer,
+  older,
+  seriesKey,
+  seriesInfo,
+  seriesIndex,
+  seriesTotal,
+  seriesPrev,
+  seriesNext,
+} = Astro.props;
+
 const { Content, headings } = await render(post);
 ---
 
-<PostLayout post={post} headings={headings} newer={newer} older={older}>
+<PostLayout
+  post={post}
+  headings={headings}
+  newer={newer}
+  older={older}
+  seriesKey={seriesKey}
+  seriesInfo={seriesInfo}
+  seriesIndex={seriesIndex}
+  seriesTotal={seriesTotal}
+  seriesPrev={seriesPrev}
+  seriesNext={seriesNext}
+>
   <Content />
 </PostLayout>

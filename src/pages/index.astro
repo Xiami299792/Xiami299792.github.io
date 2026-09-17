@@ -1,21 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import { CATEGORIES, SITE } from '../consts';
-import { getPostsByCategory } from '../utils/posts';
+import { CATEGORIES, SERIES, SITE } from '../consts';
+import { getPostsByCategory, getSeriesOverview, postPath } from '../utils/posts';
 import { withBase } from '../utils/url';
 
 const HOME_LIMIT = 5;
 
-const [tech, essay] = await Promise.all([
+const [tech, essay, seriesOverview] = await Promise.all([
   getPostsByCategory('tech'),
   getPostsByCategory('essay'),
+  getSeriesOverview(),
 ]);
 
 const sections = [
   { cat: CATEGORIES.tech, posts: tech },
   { cat: CATEGORIES.essay, posts: essay },
 ];
+
+const featured = seriesOverview[0];
+const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : undefined;
 ---
 
 <BaseLayout description={SITE.description}>
@@ -23,6 +27,45 @@ const sections = [
     <h1>{SITE.title}</h1>
     <p>{SITE.description}</p>
   </section>
+
+  {
+    featured && featuredInfo && (
+      <section class="section section--series">
+        <div class="section-head">
+          <h2 class="section-title">
+            <span class="dot" />
+            系列连载
+          </h2>
+          <a class="section-more" href={withBase('/series/')}>
+            全部系列 →
+          </a>
+        </div>
+
+        <div class="series-strip">
+          <div class="series-strip__head">
+            <a class="series-strip__title" href={withBase(`/series/${featured.key}/`)}>
+              {featuredInfo.title}
+            </a>
+            <p class="series-strip__sub">{featuredInfo.subtitle}</p>
+            <p class="series-strip__desc">{featuredInfo.description}</p>
+            <p class="series-strip__meta">
+              共 {featured.posts.length} 篇 · {featuredInfo.author}
+            </p>
+          </div>
+          <ol class="series-strip__list">
+            {featured.posts.map((post, i) => (
+              <li>
+                <a href={withBase(postPath(post))}>
+                  <span class="series-strip__num">{String(i + 1).padStart(2, '0')}</span>
+                  <span>{post.data.title}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    )
+  }
 
   {
     sections.map(({ cat, posts }) => (
@@ -45,7 +88,11 @@ const sections = [
               <PostCard post={post} />
             ))}
             {posts.length > HOME_LIMIT && (
-              <a class="section-more" style="padding:12px 18px" href={withBase(`/category/${cat.key}/`)}>
+              <a
+                class="section-more"
+                style="padding:12px 18px"
+                href={withBase(`/category/${cat.key}/`)}
+              >
                 查看全部 {posts.length} 篇 →
               </a>
             )}

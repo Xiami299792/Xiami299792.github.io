@@ -94,7 +94,33 @@ draft: false            # true = 草稿，本地可见，构建上线时自动�
 | `$E = mc^2$` | 行内公式（KaTeX） |
 | `$$ ... $$` | 独立成行的公式 |
 | 表格 / 引用 / 脚注 | 标准 GFM 全支持 |
-| `## 标题` | 自动生成右侧目录（超过 2 个二级标题时显示） |
+| `## 标题` | 自动生成目录（条目多时默认折叠，点标题展开） |
+
+### 系列文章
+
+多篇文章需要按顺序读时，用 `series` 把她们串起来：自动生成上下章导航和系列目录页。
+
+```yaml
+series: dsh-guide   # 系列 slug，需要在 src/consts.ts 的 SERIES 里登记
+order: 3            # 系列内序号，从 1 开始
+part: 基础篇         # 可选，系列目录页按它分组
+```
+
+然后在 `src/consts.ts` 的 `SERIES` 里补一条：
+
+```ts
+'dsh-guide': {
+  title: 'DSH 使用指南（大一新生版）',
+  subtitle: '从装上到用明白',
+  description: '系列简介，显示在系列目录页和首页。',
+  author: '田飞扬',
+  note: '应睿信科协邀请写作，核对于 2026 年 9 月。',
+},
+```
+
+效果：文章页顶部出现系列横幅、底部是「上一篇 / 下一篇（3/9）」，
+`/series/dsh-guide/` 是完整目录，`/series/` 汇总全部系列，导航栏也有入口。
+不属于任何系列的文章照旧显示全站的「更新的一篇 / 更早的一篇」。
 
 ### 插入图片
 
@@ -145,10 +171,10 @@ draft: false            # true = 草稿，本地可见，构建上线时自动�
 │  └─ images/                     文章配图（按年月分目录）
 ├─ scripts/new-post.mjs           pnpm new 的实现
 ├─ src/
-│  ├─ consts.ts                   ★ 站点配置、导航、Giscus —— 上线只改这里
+│  ├─ consts.ts                   ★ 站点配置、导航、系列、Giscus —— 上线只改这里
 │  ├─ content.config.ts           文章集合的字段定义与校验
 │  ├─ content/posts/
-│  │  ├─ tech/                    技术笔记
+│  │  ├─ tech/dsh-guide/          DSH 使用指南系列（9 篇）
 │  │  └─ essay/                   生活随笔
 │  ├─ components/
 │  │  ├─ Header.astro  Footer.astro
@@ -156,10 +182,11 @@ draft: false            # true = 草稿，本地可见，构建上线时自动�
 │  │  └─ Giscus.astro             评论区
 │  ├─ layouts/
 │  │  ├─ BaseLayout.astro         HTML 骨架、SEO、主题切换
-│  │  └─ PostLayout.astro         文章页：目录 / 正文 / 上下篇 / 评论
+│  │  └─ PostLayout.astro         文章页：系列横幅 / 目录 / 正文 / 上下篇 / 评论
 │  ├─ pages/
-│  │  ├─ index.astro              首页（技术 / 随笔 分栏）
+│  │  ├─ index.astro              首页（系列连载 + 技术 / 随笔 分栏）
 │  │  ├─ posts/[...id].astro      文章详情
+│  │  ├─ series/                  系列总览与系列目录页
 │  │  ├─ category/[category].astro
 │  │  ├─ tags/                    标签索引与标签页
 │  │  ├─ archive.astro            按年份归档

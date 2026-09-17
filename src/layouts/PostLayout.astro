@@ -6,18 +6,47 @@ import { CATEGORIES } from '../consts';
 import { formatDate, postPath, type Post } from '../utils/posts';
 import { withBase } from '../utils/url';
 
+interface SeriesInfo {
+  title: string;
+  subtitle: string;
+  description: string;
+  author: string;
+  note: string;
+}
+
 interface Props {
   post: Post;
   headings: { depth: number; slug: string; text: string }[];
-  /** 更早的一篇 */
+  /** 更早的一篇（全站范围） */
   older?: Post;
-  /** 更新的一篇 */
+  /** 更新的一篇（全站范围） */
   newer?: Post;
+  /** 所属系列 */
+  seriesKey?: string;
+  seriesInfo?: SeriesInfo;
+  seriesIndex?: number;
+  seriesTotal?: number;
+  seriesPrev?: Post;
+  seriesNext?: Post;
 }
 
-const { post, headings, older, newer } = Astro.props;
+const {
+  post,
+  headings,
+  older,
+  newer,
+  seriesKey,
+  seriesInfo,
+  seriesIndex = 0,
+  seriesTotal = 0,
+  seriesPrev,
+  seriesNext,
+} = Astro.props;
+
 const cat = CATEGORIES[post.data.category];
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const inSeries = Boolean(seriesKey && seriesInfo);
+const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
 ---
 
 <BaseLayout
@@ -60,9 +89,30 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     </header>
 
     {
+      inSeries && (
+        <aside class="series-banner">
+          <div class="series-banner__main">
+            <span class="series-banner__label">系列</span>
+            <a class="series-banner__title" href={seriesUrl}>
+              {seriesInfo!.title}
+            </a>
+            <span class="series-banner__count">
+              第 {seriesIndex + 1} 篇 · 共 {seriesTotal} 篇
+            </span>
+          </div>
+          <a class="series-banner__link" href={seriesUrl}>
+            目录 →
+          </a>
+        </aside>
+      )
+    }
+
+    {
       toc.length > 2 && (
-        <nav class="toc" aria-label="目录">
-          <p class="toc-title">本文目录</p>
+        <details class="toc" open={toc.length <= 14}>
+          <summary class="toc-title">
+            本文目录（{toc.length} 节）
+          </summary>
           <ul>
             {toc.map((h) => (
               <li class={h.depth === 3 ? 'depth-3' : ''}>
@@ -70,7 +120,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
               </li>
             ))}
           </ul>
-        </nav>
+        </details>
       )
     }
 
@@ -79,21 +129,49 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     </div>
 
     {
-      (older || newer) && (
-        <nav class="post-nav">
-          {newer && (
-            <a href={withBase(postPath(newer))}>
-              <span class="dir">← 更新的一篇</span>
-              <span class="title">{newer.data.title}</span>
+      inSeries ? (
+        <nav class="post-nav post-nav--series" aria-label="系列导航">
+          {seriesPrev ? (
+            <a href={withBase(postPath(seriesPrev))}>
+              <span class="dir">
+                ← 上一篇（{seriesIndex}/{seriesTotal}）
+              </span>
+              <span class="title">{seriesPrev.data.title}</span>
             </a>
+          ) : (
+            <span />
           )}
-          {older && (
-            <a class="next" href={withBase(postPath(older))}>
-              <span class="dir">更早的一篇 →</span>
-              <span class="title">{older.data.title}</span>
+          {seriesNext ? (
+            <a class="next" href={withBase(postPath(seriesNext))}>
+              <span class="dir">
+                下一篇（{seriesIndex + 2}/{seriesTotal}） →
+              </span>
+              <span class="title">{seriesNext.data.title}</span>
+            </a>
+          ) : (
+            <a class="next" href={seriesUrl}>
+              <span class="dir">已经是最后一篇 →</span>
+              <span class="title">回到系列目录</span>
             </a>
           )}
         </nav>
+      ) : (
+        (older || newer) && (
+          <nav class="post-nav" aria-label="文章导航">
+            {newer && (
+              <a href={withBase(postPath(newer))}>
+                <span class="dir">← 更新的一篇</span>
+                <span class="title">{newer.data.title}</span>
+              </a>
+            )}
+            {older && (
+              <a class="next" href={withBase(postPath(older))}>
+                <span class="dir">更早的一篇 →</span>
+                <span class="title">{older.data.title}</span>
+              </a>
+            )}
+          </nav>
+        )
       )
     }
 

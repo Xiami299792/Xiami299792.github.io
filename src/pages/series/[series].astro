@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CATEGORIES, SERIES, type SeriesKey } from '../../consts';
+import { getPublishedPosts, getSeriesPosts, postPath, seriesParts } from '../../utils/posts';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+  const keys = Object.keys(SERIES) as SeriesKey[];
+  const result = [];
+
+  for (const key of keys) {
+    const posts = await getSeriesPosts(key);
+    // 系列里一篇文章都没有就跳过；草稿只在开发模式可见
+    if (posts.length === 0) continue;
+    result.push({
+      params: { series: key },
+      props: { key, posts, parts: seriesParts(posts) },
+    });
+  }
+
+  return result;
+}
+
+const { key, posts, parts } = Astro.props;
+const info = SERIES[key as SeriesKey];
+const grouped = parts.length > 0;
+
+function groupOf(post: (typeof posts)[number]) {
+  return post.data.part ?? '';
+}
+---
+
+<BaseLayout title={info.title} description={info.description}>
+  <h1 class="page-title">{info.title}</h1>
+  <p class="page-lead">
+    {info.subtitle} · 共 {posts.length} 篇
+  </p>
+
+  <div class="series-intro">
+    <p>{info.description}</p>
+    <p class="series-intro__meta">
+      作者：{info.author} · {info.note}
+    </p>
+  </div>
+
+  {
+    (grouped ? parts : ['']).map((part) => {
+      const items = grouped ? posts.filter((p) => groupOf(p) === part) : posts;
+      return (
+        <section>
+          {part && <h2 class="archive-year">{part}</h2>}
+          <ol class="series-list">
+            {items.map((post) => {
+              const n = posts.indexOf(post) + 1;
+              return (
+                <li class="series-list__item">
+                  <a href={withBase(postPath(post))}>
+                    <span class="series-list__num">{String(n).padStart(2, '0')}</span>
+                    <span class="series-list__body">
+                      <span class="series-list__title">{post.data.title}</span>
+                      <span class="series-list__summary">{post.data.summary}</span>
+                    </span>
+                    <span class={`badge badge--${CATEGORIES[post.data.category].key}`}>
+                      {CATEGORIES[post.data.category].label}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      );
+    })
+  }
+</BaseLayout>

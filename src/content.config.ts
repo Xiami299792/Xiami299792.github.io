@@ -22,6 +22,12 @@ const posts = defineCollection({
     tags: z.array(z.string()).default([]),
     /** 一句话摘要：列表页、SEO 描述、RSS 都用它，建议 40~80 字 */
     summary: z.string(),
+    /** 系列 slug（见 consts.ts 的 SERIES）。同一系列的文章会串成上下章导航 */
+    series: z.string().optional(),
+    /** 系列内的序号，从 1 开始 */
+    order: z.number().optional(),
+    /** 系列内的分部，如「基础篇」「进阶篇」，只用于系列目录页分组展示 */
+    part: z.string().optional(),
     /** 最后修改时间，可选，列表页会显示「已更新」 */
     updated: z.coerce.date().optional(),
     /** 封面图，写 public 下的路径，如 /images/2026/03/foo.png，可选 */

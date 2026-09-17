@@ -1,5 +1,5 @@
 ---
-import { CATEGORIES } from '../consts';
+import { CATEGORIES, SERIES } from '../consts';
 import { formatDate, postPath, readingTime, type Post } from '../utils/posts';
 import { withBase } from '../utils/url';
 
@@ -12,6 +12,9 @@ interface Props {
 const { post, showCategory = false } = Astro.props;
 const cat = CATEGORIES[post.data.category];
 const rt = readingTime(post.body);
+
+const seriesKey = post.data.series as keyof typeof SERIES | undefined;
+const seriesTitle = seriesKey ? SERIES[seriesKey]?.title : undefined;
 ---
 
 <a class="post-card" href={withBase(postPath(post))}>
@@ -19,6 +22,13 @@ const rt = readingTime(post.body);
 
   <div class="post-meta">
     {showCategory && <span class={`badge badge--${cat.key}`}>{cat.emoji} {cat.label}</span>}
+    {
+      seriesTitle && (
+        <span class="badge badge--series" title={`系列：${seriesTitle}`}>
+          📚 第 {post.data.order ?? '?'} 篇
+        </span>
+      )
+    }
     <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
     {rt && <><span class="sep">·</span><span>{rt}</span></>}
     {post.data.updated && <><span class="sep">·</span><span>已更新</span></>}
