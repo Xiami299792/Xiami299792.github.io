@@ -86,7 +86,6 @@ export const NAV = [
   { href: '/', label: '首页' },
   { href: '/series/', label: '系列' },
   { href: '/archive/', label: '归档' },
-  { href: '/tags/', label: '标签' },
   { href: '/search/', label: '搜索' },
   { href: '/about/', label: '关于' },
 ] as const;

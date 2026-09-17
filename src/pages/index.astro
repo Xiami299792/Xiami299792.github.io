@@ -1,4 +1,14 @@
 ---
+// 首页专用：People's Platform (Block & Bold) 海报风
+// 字体只在这一页加载，不影响其它页面
+import '@fontsource/alfa-slab-one/latin-400.css';
+import '@fontsource/archivo-narrow/latin-400.css';
+import '@fontsource/archivo-narrow/latin-500.css';
+import '@fontsource/archivo-narrow/latin-600.css';
+import '@fontsource/dm-mono/latin-400.css';
+import '@fontsource/dm-mono/latin-500.css';
+import '../styles/poster.css';
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { CATEGORIES, SERIES, SITE, TECH_SECTIONS } from '../consts';
@@ -16,102 +26,85 @@ const [tech, essay, seriesOverview] = await Promise.all([
 const featured = seriesOverview[0];
 const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : undefined;
 
-// 首页做成「两本刊物并列」：技术（深色 Broadside）与生活随笔（铅字报刊）。
-// 技术下再按板块分成软科普 / 硬指南，各成一组，不混在一起。
-const techGroups = groupByTechSection(tech);
-const boards = [
-  { cat: CATEGORIES.tech, groups: techGroups },
+// 两个大板块 = 首页里的两个模块
+const modules = [
+  { cat: CATEGORIES.tech, groups: groupByTechSection(tech) },
   { cat: CATEGORIES.essay, groups: [{ key: null, posts: essay }] },
-].filter((b) => b.groups.some((g) => g.posts.length > 0));
+]
+  .map((m) => ({
+    ...m,
+    total: m.groups.reduce((n, g) => n + g.posts.length, 0),
+    shown: m.groups.reduce((n, g) => n + Math.min(g.posts.length, HOME_LIMIT), 0),
+  }))
+  .filter((m) => m.total > 0);
 ---
 
 <BaseLayout wide description={SITE.description}>
-  <section class="hero">
-    <h1>{SITE.title}</h1>
-    <p>{SITE.description}</p>
-  </section>
+  <div class="poster">
+    <header class="masthead">
+      <p class="kicker">Science &amp; Culture · Since 2026</p>
+      <h1>{SITE.title}</h1>
+      <p class="lede">{SITE.description}</p>
+    </header>
 
-  {
-    featured && featuredInfo && (
-      <section class="section section--series">
-        <div class="section-head">
-          <h2 class="section-title">
-            <span class="dot" />
-            系列连载
-          </h2>
-          <a class="section-more" href={withBase('/series/')}>
-            全部系列 →
+    {
+      featured && featuredInfo && (
+        <section class="spotlight">
+          <p class="spotlight__kicker">系列连载 · Series</p>
+          <a class="spotlight__title" href={withBase(`/series/${featured.key}/`)}>
+            {featuredInfo.title}
           </a>
-        </div>
-
-        <div class="series-strip">
-          <div class="series-strip__head">
-            <a class="series-strip__title" href={withBase(`/series/${featured.key}/`)}>
-              {featuredInfo.title}
-            </a>
-            <p class="series-strip__sub">{featuredInfo.subtitle}</p>
-            <p class="series-strip__desc">{featuredInfo.description}</p>
-            <p class="series-strip__meta">
-              共 {featured.posts.length} 篇 · {featuredInfo.author}
-            </p>
-          </div>
-          <ol class="series-strip__list">
+          <p class="spotlight__sub">
+            {featuredInfo.subtitle} · 共 {featured.posts.length} 篇 · {featuredInfo.author}
+          </p>
+          <ol class="spotlight__list">
             {featured.posts.map((post, i) => (
               <li>
                 <a href={withBase(postPath(post))}>
-                  <span class="series-strip__num">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="spotlight__num">{String(i + 1).padStart(2, '0')}</span>
                   <span>{post.data.title}</span>
                 </a>
               </li>
             ))}
           </ol>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    boards.map(({ cat, groups }) => {
-      const total = groups.reduce((n, g) => n + g.posts.length, 0);
-      return (
-        <section class="pub" data-cat={cat.key}>
-          <div class="section-head">
-            <h2 class="section-title">
-              <span class="dot" />
-              {cat.label}
-            </h2>
-            <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
-              共 {total} 篇 →
-            </a>
-          </div>
-
-          {groups.map((group) => (
-            <div class="board">
-              {group.key && (
-                <div class="subhead">
-                  <h3>{TECH_SECTIONS[group.key].label}</h3>
-                  <span>{TECH_SECTIONS[group.key].hint}</span>
-                  <em>{group.posts.length} 篇</em>
-                </div>
-              )}
-              <div class="post-list">
-                {group.posts.slice(0, HOME_LIMIT).map((post) => (
-                  <PostCard post={post} />
-                ))}
-                {group.posts.length > HOME_LIMIT && (
-                  <a
-                    class="section-more"
-                    style="display:inline-block;padding:14px 0"
-                    href={withBase(`/category/${cat.key}/`)}
-                  >
-                    查看全部 {group.posts.length} 篇 →
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
         </section>
-      );
-    })
-  }
+      )
+    }
+
+    <div class="modules">
+      {
+        modules.map(({ cat, groups, total, shown }, i) => (
+          <section class="module">
+            <div class="module__head">
+              <span class="module__num">{String(i + 1).padStart(2, '0')}</span>
+              <h2 class="module__title">{cat.label}</h2>
+              <span class="module__count">{total} 篇</span>
+            </div>
+
+            {groups.map((group) => (
+              <>
+                {group.key && (
+                  <div class="subhead">
+                    <h3>{TECH_SECTIONS[group.key].label}</h3>
+                    <em>{group.posts.length} 篇</em>
+                  </div>
+                )}
+                <div class="post-list">
+                  {group.posts.slice(0, HOME_LIMIT).map((post) => (
+                    <PostCard post={post} />
+                  ))}
+                </div>
+              </>
+            ))}
+
+            {total > shown && (
+              <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
+                查看全部 {total} 篇 →
+              </a>
+            )}
+          </section>
+        ))
+      }
+    </div>
+  </div>
 </BaseLayout>

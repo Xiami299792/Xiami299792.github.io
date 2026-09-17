@@ -1,0 +1,506 @@
+/* ==========================================================================
+   首页 · People's Platform (Block & Bold)
+   --------------------------------------------------------------------------
+   严格按 frontend-slides / bold-template-pack / peoples-platform 的 design.md：
+     · 调色板：blue #2C2CDC / blue-deep #1B1BB0 / orange #F2A03A / orange-deep #E89321
+                red #E83A2A / red-deep #B7281C / cream #F4E9D6 / paper #F5F2EA
+                ink #0E0E14
+     · 「red 从不直接出现，只做文字阴影」—— 堆叠阴影是这套系统的内联规则
+     · Alfa Slab One 是主声部，全大写，行高 0.82~0.88
+     · DM Mono 是账房声部，做所有标签；Archivo Narrow 是正文声部
+     · 6px 实心 ink 是主结构边框，3px 是细线；结构件圆角一律 0
+     · 菱形项目符（红方块转 45°）、列序号、inset 框线
+
+   中文适配（design.md 的 CJK 章节）：
+     · Alfa Slab One 没有等价的中文粗衬线可用，中文回退到系统粗体
+     · DM Mono 的大写 + 宽字距对中文无效 —— 中文标签字距归零、不做大写
+     · Archivo Narrow 没有中文压缩体，中文回退到系统字体
+   ========================================================================== */
+
+:root {
+  --p-blue: #2c2cdc;
+  --p-blue-deep: #1b1bb0;
+  --p-orange: #f2a03a;
+  --p-orange-deep: #e89321;
+  --p-red: #e83a2a;
+  --p-red-deep: #b7281c;
+  --p-cream: #f4e9d6;
+  --p-paper: #f5f2ea;
+  --p-ink: #0e0e14;
+
+  --p-slab: 'Alfa Slab One', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    sans-serif;
+  --p-body: 'Archivo Narrow', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --p-mono: 'DM Mono', ui-monospace, Consolas, monospace;
+
+  --p-muted: #3c3c46;
+  --p-muted-2: #5a5a66;
+  --p-hair: #b9b9c2;
+}
+
+/* 暗色：People's Platform 本身是纸白系统，这里做最小反转 ——
+   纸面转深、ink 转 cream（边框与文字同时反转），蓝/橙/红保持不变。 */
+:root[data-theme='dark'] {
+  --p-paper: #0f0f16;
+  --p-ink: #f4e9d6;
+  --p-muted: #c9c9d2;
+  --p-muted-2: #a5a5b0;
+  --p-hair: #4a4a56;
+}
+
+body {
+  background: var(--p-paper);
+  color: var(--p-ink);
+  font-family: var(--p-body);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* ---------- 顶栏：蓝底 + DM Mono 标签（topbar 模式）---------- */
+
+.site-header {
+  background: var(--p-blue);
+  border-bottom: 6px solid var(--p-ink);
+  color: var(--p-cream);
+}
+
+.header-inner {
+  height: 56px;
+}
+
+.brand {
+  font-family: var(--p-slab);
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--p-cream);
+  text-transform: none;
+}
+
+.nav-link {
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(244, 233, 214, 0.72);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.nav-link:hover {
+  color: var(--p-cream);
+  background: rgba(244, 233, 214, 0.12);
+}
+
+.nav-link.active {
+  color: var(--p-ink);
+  background: var(--p-orange);
+  font-weight: 500;
+}
+
+.theme-toggle {
+  color: rgba(244, 233, 214, 0.72);
+}
+
+.theme-toggle:hover {
+  color: var(--p-cream);
+}
+
+/* ---------- 报头 ---------- */
+
+.poster {
+  padding-top: 6px;
+}
+
+.masthead {
+  padding: 52px 0 30px;
+  border-bottom: 6px solid var(--p-ink);
+}
+
+.kicker {
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+  margin: 0 0 20px;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-family: var(--p-slab);
+  font-weight: 400;
+  /* 幻灯片上 display-title 是 240px；网页按内容宽度折算 */
+  font-size: clamp(40px, 8vw, 84px);
+  line-height: 0.9;
+  letter-spacing: -0.015em;
+  color: var(--p-orange);
+  /* 堆叠阴影：橙字永远先投一层红影，再投一层深红 */
+  text-shadow:
+    5px 5px 0 var(--p-red),
+    10px 10px 0 var(--p-red-deep);
+}
+
+/* 中文不套大写字距；Alfa Slab 无中文字形，回退到系统粗体 */
+.masthead h1:lang(zh) {
+  letter-spacing: 0.01em;
+}
+
+.masthead .lede {
+  margin: 34px 0 0;
+  max-width: 34em;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--p-ink);
+}
+
+/* ---------- 高亮块：蓝底 + cream inset 框（authoritative 时刻）---------- */
+
+.spotlight {
+  position: relative;
+  margin-top: 34px;
+  padding: 34px 38px 38px;
+  background: var(--p-blue);
+  border: 6px solid var(--p-ink);
+  color: var(--p-cream);
+}
+
+/* inset 框：蓝底上再套一圈 6px cream 边框 */
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 6px solid var(--p-cream);
+  pointer-events: none;
+}
+
+.spotlight > * {
+  position: relative;
+  z-index: 1;
+}
+
+.spotlight__kicker {
+  margin: 0 0 14px;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--p-orange);
+}
+
+.spotlight__title {
+  display: block;
+  font-family: var(--p-slab);
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--p-cream);
+  margin-bottom: 8px;
+}
+
+.spotlight__title:hover {
+  color: var(--p-orange);
+}
+
+.spotlight__sub {
+  margin: 0 0 20px;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(244, 233, 214, 0.7);
+}
+
+.spotlight__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  columns: 2;
+  column-gap: 34px;
+}
+
+.spotlight__list li {
+  break-inside: avoid;
+}
+
+.spotlight__list a {
+  display: flex;
+  gap: 12px;
+  padding: 5px 0;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 16px;
+  color: rgba(244, 233, 214, 0.88);
+  border-bottom: 3px solid rgba(244, 233, 214, 0.18);
+}
+
+.spotlight__list a:hover {
+  color: var(--p-orange);
+}
+
+.spotlight__num {
+  font-family: var(--p-mono);
+  font-size: 11px;
+  color: var(--p-orange);
+  flex: 0 0 auto;
+  padding-top: 3px;
+}
+
+/* ---------- 模块：两个大板块 ---------- */
+
+.modules {
+  display: grid;
+  gap: 30px;
+  margin-top: 34px;
+}
+
+.module {
+  border: 6px solid var(--p-ink);
+  background: var(--p-paper);
+}
+
+.module__head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 22px 26px 18px;
+  border-bottom: 6px solid var(--p-ink);
+}
+
+/* 列序号：橙色巨型数字 + 红色投影 */
+.module__num {
+  font-family: var(--p-slab);
+  font-size: 46px;
+  line-height: 0.85;
+  color: var(--p-orange);
+  text-shadow: 3px 3px 0 var(--p-red);
+  flex: 0 0 auto;
+}
+
+.module__title {
+  margin: 0;
+  font-family: var(--p-slab);
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--p-ink);
+}
+
+.module__count {
+  margin-left: auto;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+}
+
+/* 模块内的板块（软科普 / 硬指南）*/
+
+.module .subhead {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0;
+  padding: 14px 26px 12px;
+  border-bottom: 3px solid var(--p-ink);
+}
+
+.module .subhead h2,
+.module .subhead h3 {
+  margin: 0;
+  font-family: var(--p-slab);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--p-ink);
+}
+
+.module .subhead em {
+  margin-left: auto;
+  font-style: normal;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-ink);
+}
+
+/* ---------- 模块里的文章行 ---------- */
+
+.module .post-list {
+  display: block;
+}
+
+.module .post-card {
+  display: block;
+  padding: 18px 26px 20px;
+  border-bottom: 3px solid var(--p-ink);
+  border-radius: 0;
+  transition: background 0.14s;
+}
+
+.module .post-card:last-child {
+  border-bottom: none;
+}
+
+.module .post-card:hover {
+  background: var(--p-cream);
+}
+
+/* 菱形项目符：红方块转 45° */
+.module .post-card::before {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: var(--p-red);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+.module .post-card {
+  position: relative;
+  padding-left: 42px;
+}
+
+.module .post-card::before {
+  left: 26px;
+  top: 25px;
+}
+
+.module .post-card h3 {
+  margin: 0 0 7px;
+  font-family: var(--p-slab);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.28;
+  letter-spacing: 0;
+  color: var(--p-ink);
+}
+
+/* 中文标题交给系统粗体（Alfa Slab 没有中文字形）*/
+.module .post-card h3:lang(zh) {
+  font-weight: 700;
+}
+
+.module .post-card:hover h3 {
+  color: var(--p-blue);
+}
+
+.module .post-card p {
+  margin: 8px 0 0;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--p-muted);
+  -webkit-line-clamp: 2;
+}
+
+.module .post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--p-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--p-muted-2);
+}
+
+.module .post-meta .cat::before {
+  background: var(--p-red);
+}
+
+.module .post-meta .cat {
+  color: var(--p-blue);
+}
+
+.module .series-tag {
+  color: var(--p-muted-2);
+}
+
+.module .sep {
+  color: var(--p-hair);
+}
+
+/* 模块底部的「查看全部」 */
+.module .section-more {
+  display: block;
+  padding: 14px 26px 16px;
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-blue);
+  border-top: 3px solid var(--p-ink);
+}
+
+.module .section-more:hover {
+  background: var(--p-blue);
+  color: var(--p-cream);
+}
+
+/* ---------- 页脚 ---------- */
+
+.site-footer {
+  margin-top: 44px;
+  border-top: 6px solid var(--p-ink);
+  padding: 22px 0 40px;
+  background: var(--p-paper);
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--p-ink);
+}
+
+.footer-links a:hover {
+  color: var(--p-blue);
+}
+
+/* ---------- 窄屏 ---------- */
+
+@media (max-width: 680px) {
+  .masthead h1 {
+    text-shadow:
+      3px 3px 0 var(--p-red),
+      6px 6px 0 var(--p-red-deep);
+  }
+
+  .spotlight {
+    padding: 26px 22px 28px;
+  }
+
+  .spotlight::before {
+    inset: 8px;
+    border-width: 4px;
+  }
+
+  .spotlight__list {
+    columns: 1;
+  }
+
+  .module__head {
+    padding: 18px 18px 16px;
+    gap: 12px;
+  }
+
+  .module__num {
+    font-size: 34px;
+  }
+
+  .module__title {
+    font-size: 22px;
+  }
+
+  .module .post-card {
+    padding: 16px 18px 18px 36px;
+  }
+
+  .module .post-card::before {
+    left: 18px;
+    top: 23px;
+  }
+}

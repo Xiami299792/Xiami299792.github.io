@@ -82,10 +82,9 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
       {
         post.data.tags.length > 0 && (
           <div class="post-tags">
+            {/* 标签页已移除，这里只作展示，不再是链接 */}
             {post.data.tags.map((tag) => (
-              <a class="tag" href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>
-                #{tag}
-              </a>
+              <span class="tag">#{tag}</span>
             ))}
           </div>
         )

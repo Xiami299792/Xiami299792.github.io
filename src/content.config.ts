@@ -48,4 +48,15 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { posts };
+/**
+ * 单页内容（目前只有「关于」）。
+ * 放在 src/content/pages/ 下，一页一个 Markdown 文件，改内容不用碰 .astro。
+ */
+const pages = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string().optional(),
+  }),
+});
+
+export const collections = { posts, pages };
