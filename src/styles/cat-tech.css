@@ -1,5 +1,5 @@
 /* ==========================================================================
-   技术笔记 · Broadside
+   科普 · Broadside
    --------------------------------------------------------------------------
    严格按 frontend-slides / bold-template-pack / broadside 的 design.md 实现：
      · 调色板：ink-black #111111 / ink-black-alt #1A1A18 / fire-orange #E85D26
@@ -453,7 +453,21 @@
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  /* 用 cream-muted 而不是 cream-hint：#505048 压在 #111111 上只有约 2:1，
+     11px 的字几乎看不见。design.md 的 hint 色是给幻灯片大屏用的。 */
+  color: var(--ink-muted);
+}
+
+/* 系列标记：同样提亮 + 用等宽，否则在深底上糊成一团 */
+[data-cat='tech'] .series-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+[data-cat='tech'] .post-card .sep {
+  color: var(--rule-strong);
 }
 
 [data-cat='tech'] .empty,

@@ -6,6 +6,7 @@ series: dsh-guide
 order: 3
 part: 基础篇
 tags: [DSH, 安装, Windows]
+summary: "安装 DSH Desktop，或者再安装一个 OpenClaw"
 draft: false
 ---
 这一章要解决的问题：把 DSH 装到你的电脑上，再顺手装一个 OpenClaw。装完你要能用 DSH 做完一件小事，并且跟 OpenClaw 说过一句话。

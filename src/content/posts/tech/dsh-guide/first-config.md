@@ -6,6 +6,7 @@ series: dsh-guide
 order: 4
 part: 进阶篇
 tags: [DSH, 配置, API]
+summary: "顾名思义，你开始设置你的 Agent"
 draft: false
 ---
 本章要解决的问题：DSH 装好了，但它还不能干活。它不知道用哪个模型、不知道你的 Key、不知道可以动你电脑上的哪个文件夹、也不知道做到什么程度该停下来问你。这一章把这些一次性设好。

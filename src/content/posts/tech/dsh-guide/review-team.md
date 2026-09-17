@@ -6,6 +6,7 @@ series: dsh-guide
 order: 6
 part: 进阶篇
 tags: [DSH, 评审团, AI 协作]
+summary: "AI 有无限条路可以走，让它时刻审查自己的前景方向可以有效避免南辕北辙"
 draft: false
 ---
 本章要解决的问题：你自己看不出自己作品的问题，AI 也一样。

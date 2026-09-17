@@ -6,6 +6,7 @@ series: dsh-guide
 order: 2
 part: 基础篇
 tags: [DSH, AI 工具, 概念]
+summary: "DSH、API、Agent 和若干个常用词"
 draft: false
 ---
 本章要解决的问题：你以后会反复听到三个词——DSH、API、Agent。这一章把这三个词讲清楚，再简述若干个常用词。

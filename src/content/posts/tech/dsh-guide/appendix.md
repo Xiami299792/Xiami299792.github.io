@@ -6,6 +6,7 @@ series: dsh-guide
 order: 9
 part: 附录
 tags: [DSH, 速查表, 附录]
+summary: "你可能需要的部分"
 draft: false
 ---
 这一部分是给你随时翻的，不需要按顺序读。

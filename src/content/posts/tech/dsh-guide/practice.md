@@ -6,6 +6,7 @@ series: dsh-guide
 order: 7
 part: 进阶篇
 tags: [DSH, 实战, 刷题程序]
+summary: "实用至上"
 draft: false
 ---
 本章要解决的问题：前面五章讲的都是零件。这一章是组装——你会做出一个真正能用的东西。

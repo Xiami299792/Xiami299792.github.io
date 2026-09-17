@@ -6,7 +6,7 @@ export const SITE = {
   /** 浏览器标签页 / 站内显示的名字 */
   title: '夏弥的个人空间',
   /** 首页副标题 */
-  subtitle: '技术笔记与生活随笔',
+  subtitle: '科普与生活随笔',
   /** SEO 描述 + RSS 描述 */
   description: '一个记录技术学习与日常思考的个人博客。',
   author: '夏弥',
@@ -26,12 +26,12 @@ export const SITE = {
   base: '/',
 } as const;
 
-/** 两条内容线：技术笔记 / 生活随笔 */
+/** 两条内容线：科普 / 生活随笔 */
 export const CATEGORIES = {
   tech: {
     key: 'tech',
-    label: '技术笔记',
-    description: '学习记录、踩坑总结、能直接抄的代码片段。',
+    label: '科普',
+    description: '把技术讲明白，写给不打算成为专家的人。',
   },
   essay: {
     key: 'essay',

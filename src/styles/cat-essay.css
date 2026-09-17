@@ -398,4 +398,13 @@
   font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* 系列标记：跟随 meta 一起用等宽、提亮 */
+[data-cat='essay'] .series-tag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
 }
