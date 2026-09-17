@@ -11,7 +11,7 @@ for (const key of Object.keys(SERIES) as SeriesKey[]) {
 }
 ---
 
-<BaseLayout title="系列" description="按系列成组阅读的长文">
+<BaseLayout wide title="系列" description="按系列成组阅读的长文">
   <h1 class="page-title">系列</h1>
   <p class="page-lead">
     {overview.length} 个系列，共 {overview.reduce((n, s) => n + s.posts.length, 0)} 篇。

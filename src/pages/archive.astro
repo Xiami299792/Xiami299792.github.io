@@ -22,7 +22,7 @@ function fmt(date: Date) {
 }
 ---
 
-<BaseLayout title="归档" description="按时间浏览全部文章">
+<BaseLayout wide title="归档" description="按时间浏览全部文章">
   <h1 class="page-title">归档</h1>
   <p class="page-lead">共 {posts.length} 篇，按年份倒序排列。</p>
 
@@ -34,7 +34,7 @@ function fmt(date: Date) {
           <div class="archive-item">
             <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
             <a href={withBase(postPath(post))}>{post.data.title}</a>
-            <span class={`badge badge--${post.data.category}`}>
+            <span class={`cat cat--${post.data.category}`}>
               {CATEGORIES[post.data.category].label}
             </span>
           </div>

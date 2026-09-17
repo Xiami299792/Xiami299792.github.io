@@ -16,8 +16,8 @@ const cat = CATEGORIES[key];
 const posts = await getPostsByCategory(key);
 ---
 
-<BaseLayout title={cat.label} description={cat.description}>
-  <h1 class="page-title">{cat.emoji} {cat.label}</h1>
+<BaseLayout wide title={cat.label} description={cat.description}>
+  <h1 class="page-title">{cat.label}</h1>
   <p class="page-lead">{cat.description} 共 {posts.length} 篇。</p>
 
   {posts.length === 0 ? (

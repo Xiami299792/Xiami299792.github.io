@@ -58,19 +58,19 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
   <article data-pagefind-body>
     <header class="post-header">
       <div class="post-meta">
-        <a class={`badge badge--${cat.key}`} href={withBase(`/category/${cat.key}/`)}>
-          {cat.emoji} {cat.label}
+        <a class={`cat cat--${cat.key}`} href={withBase(`/category/${cat.key}/`)}>
+          {cat.label}
         </a>
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
         {
           post.data.updated && (
             <>
-              <span class="sep">·</span>
+              <span class="sep">/</span>
               <span>更新于 {formatDate(post.data.updated)}</span>
             </>
           )
         }
-        {post.data.draft && <span class="badge badge--draft">草稿</span>}
+        {post.data.draft && <span class="draft-tag">草稿</span>}
       </div>
 
       <h1>{post.data.title}</h1>
@@ -97,7 +97,7 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
               {seriesInfo!.title}
             </a>
             <span class="series-banner__count">
-              第 {seriesIndex + 1} 篇 · 共 {seriesTotal} 篇
+              第 {seriesIndex + 1} / {seriesTotal} 篇
             </span>
           </div>
           <a class="series-banner__link" href={seriesUrl}>
@@ -110,9 +110,7 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
     {
       toc.length > 2 && (
         <details class="toc" open={toc.length <= 14}>
-          <summary class="toc-title">
-            本文目录（{toc.length} 节）
-          </summary>
+          <summary class="toc-title">本文目录（{toc.length} 节）</summary>
           <ul>
             {toc.map((h) => (
               <li class={h.depth === 3 ? 'depth-3' : ''}>
@@ -130,12 +128,10 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
 
     {
       inSeries ? (
-        <nav class="post-nav post-nav--series" aria-label="系列导航">
+        <nav class="post-nav" aria-label="系列导航">
           {seriesPrev ? (
             <a href={withBase(postPath(seriesPrev))}>
-              <span class="dir">
-                ← 上一篇（{seriesIndex}/{seriesTotal}）
-              </span>
+              <span class="dir">← 上一篇（{seriesIndex}/{seriesTotal}）</span>
               <span class="title">{seriesPrev.data.title}</span>
             </a>
           ) : (
@@ -156,22 +152,24 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
           )}
         </nav>
       ) : (
-        (older || newer) && (
-          <nav class="post-nav" aria-label="文章导航">
-            {newer && (
-              <a href={withBase(postPath(newer))}>
-                <span class="dir">← 更新的一篇</span>
-                <span class="title">{newer.data.title}</span>
-              </a>
-            )}
-            {older && (
-              <a class="next" href={withBase(postPath(older))}>
-                <span class="dir">更早的一篇 →</span>
-                <span class="title">{older.data.title}</span>
-              </a>
-            )}
-          </nav>
-        )
+        <nav class="post-nav" aria-label="文章导航">
+          {newer ? (
+            <a href={withBase(postPath(newer))}>
+              <span class="dir">← 更新的一篇</span>
+              <span class="title">{newer.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {older ? (
+            <a class="next" href={withBase(postPath(older))}>
+              <span class="dir">更早的一篇 →</span>
+              <span class="title">{older.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
       )
     }
 

@@ -22,7 +22,7 @@ const featured = seriesOverview[0];
 const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : undefined;
 ---
 
-<BaseLayout description={SITE.description}>
+<BaseLayout wide description={SITE.description}>
   <section class="hero">
     <h1>{SITE.title}</h1>
     <p>{SITE.description}</p>
@@ -68,21 +68,21 @@ const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : un
   }
 
   {
-    sections.map(({ cat, posts }) => (
-      <section class={`section section--${cat.key}`}>
-        <div class="section-head">
-          <h2 class="section-title">
-            <span class="dot" />
-            {cat.label}
-          </h2>
-          <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
-            {cat.description} 共 {posts.length} 篇 →
-          </a>
-        </div>
+    // 空分类不显示，免得首页挂着「共 0 篇」的区块
+    sections
+      .filter(({ posts }) => posts.length > 0)
+      .map(({ cat, posts }) => (
+        <section class={`section section--${cat.key}`}>
+          <div class="section-head">
+            <h2 class="section-title">
+              <span class="dot" />
+              {cat.label}
+            </h2>
+            <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
+              共 {posts.length} 篇 →
+            </a>
+          </div>
 
-        {posts.length === 0 ? (
-          <p class="empty">还没有文章。</p>
-        ) : (
           <div class="post-list">
             {posts.slice(0, HOME_LIMIT).map((post) => (
               <PostCard post={post} />
@@ -90,15 +90,14 @@ const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : un
             {posts.length > HOME_LIMIT && (
               <a
                 class="section-more"
-                style="padding:12px 18px"
+                style="display:inline-block;padding:14px 0"
                 href={withBase(`/category/${cat.key}/`)}
               >
                 查看全部 {posts.length} 篇 →
               </a>
             )}
           </div>
-        )}
-      </section>
-    ))
+        </section>
+      ))
   }
 </BaseLayout>

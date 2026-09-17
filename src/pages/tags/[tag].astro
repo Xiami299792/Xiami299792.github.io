@@ -24,7 +24,7 @@ interface Props {
 const { tag, posts } = Astro.props;
 ---
 
-<BaseLayout title={`#${tag}`} description={`标签 ${tag} 下的全部文章`}>
+<BaseLayout wide title={`#${tag}`} description={`标签 ${tag} 下的全部文章`}>
   <h1 class="page-title">#{tag}</h1>
   <p class="page-lead">共 {posts.length} 篇。</p>
 

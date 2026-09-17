@@ -1,4 +1,12 @@
 ---
+// 自托管字体（@fontsource 把 woff2 打进产物，不走 Google Fonts CDN，
+// 国内访问不会因为 fonts.googleapis.com 被墙而卡住）
+// 只引 latin 子集：中文字形交给系统字体，避免加载几 MB 的 CJK 字体
+import '@fontsource/source-serif-4/latin-400.css';
+import '@fontsource/source-serif-4/latin-600.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-600.css';
+
 import { SITE } from '../consts';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -9,6 +17,8 @@ interface Props {
   description?: string;
   type?: 'website' | 'article';
   image?: string;
+  /** 列表页用较宽的栏；文章页保持阅读栏宽 */
+  wide?: boolean;
 }
 
 const {
@@ -16,6 +26,7 @@ const {
   description = SITE.description,
   type = 'website',
   image,
+  wide = false,
 } = Astro.props;
 
 const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} · ${SITE.subtitle}`;
@@ -65,21 +76,15 @@ const ogImage = image ? new URL(image, Astro.site ?? 'https://example.com').href
   <body>
     <Header />
     <main>
-      <div class="container container--narrow">
+      <div class:list={['container', { 'container--narrow': !wide }]}>
         <slot />
       </div>
     </main>
     <Footer />
 
     <script>
+      // 图标由 CSS 根据 data-theme 切换，这里只负责翻转和记住选择
       const toggle = document.getElementById('theme-toggle');
-      const SUN = '☀️';
-      const MOON = '🌙';
-
-      function paint() {
-        const isDark = document.documentElement.dataset.theme === 'dark';
-        if (toggle) toggle.textContent = isDark ? SUN : MOON;
-      }
 
       toggle?.addEventListener('click', () => {
         const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
@@ -89,10 +94,7 @@ const ogImage = image ? new URL(image, Astro.site ?? 'https://example.com').href
         } catch (e) {
           /* 隐私模式下 localStorage 可能不可用，忽略即可 */
         }
-        paint();
       });
-
-      paint();
     </script>
   </body>
 </html>

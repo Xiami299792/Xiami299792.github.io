@@ -202,21 +202,50 @@ part: 基础篇         # 可选，系列目录页按它分组
 
 ## 想改外观
 
-所有颜色、字体、圆角、宽度都是 `src/styles/global.css` 顶部的 CSS 变量：
+设计方向是 **Paper & Ink**：暖米白纸面 + 炭黑墨水 + 一个克制的强调色（朱红）。
+层次全部由「字号 / 字重 / 留白 / 1px 细线」建立，刻意不用装饰。
+
+**明确不用的东西**（改的时候也建议别加）：渐变、毛玻璃、投影、emoji 图标、彩色药丸徽章、圆角卡片、悬停上浮。
+这些是「看起来像模板」的典型特征，克制比堆料更耐看。
+
+所有变量都在 `src/styles/global.css` 顶部：
 
 ```css
 :root {
-  --bg: #fbfaf7;        /* 页面底色 */
-  --text: #1c1c19;      /* 正文颜色 */
-  --accent: #2563eb;    /* 强调色 */
-  --tech: #2563eb;      /* 技术笔记的配色 */
-  --essay: #b96a0c;     /* 生活随笔的配色 */
-  --content-width: 720px;  /* 正文阅读宽度 */
+  --paper: #faf9f7;      /* 页面底色（纸） */
+  --ink: #1a1a1a;        /* 正文（墨） */
+  --ink-muted: #56534d;  /* 次要文字 */
+  --ink-faint: #8b8781;  /* 日期、标签等弱信息 */
+  --rule: #e7e3db;       /* 1px 分隔线 */
+  --accent: #b3272e;     /* 强调色：链接、当前导航、系列标记 */
+  --dot-tech: #b3272e;   /* 技术笔记的圆点 */
+  --dot-essay: #857748;  /* 生活随笔的圆点 */
+
+  --measure: 41rem;      /* 正文阅读栏宽（中文约 38~40 字/行） */
+  --wide: 52rem;         /* 列表页与页头页脚的栏宽 */
 }
 ```
 
-深色主题在下面的 `:root[data-theme='dark']` 里，改对应的几个值即可。
-主题切换逻辑在 `src/layouts/BaseLayout.astro`，首次渲染前同步写 `data-theme`，所以不会有白屏闪烁。
+深色主题在 `:root[data-theme='dark']` 里，改对应的值即可。
+主题切换在 `src/layouts/BaseLayout.astro`：首次绘制前同步写 `data-theme`，所以不会白屏闪烁；
+顶栏那个太阳/月亮图标是**两个 SVG 由 CSS 按 `data-theme` 显示其中一个**，不需要 JS 改文字。
+
+### 字体
+
+| 用途 | 字体 | 说明 |
+| --- | --- | --- |
+| 正文 / 标题 / 中文 | 系统字体栈 | `PingFang SC` / `Microsoft YaHei` / `Noto Sans CJK SC` |
+| 日期、编号、引用 | **Source Serif 4** | 自托管，带旧式数字（`oldstyle-nums`） |
+| 代码 | **JetBrains Mono** | 自托管 |
+
+两款西文字体由 `@fontsource/*` 打进产物（约 85KB），**不走 Google Fonts CDN**——
+`fonts.googleapis.com` 在国内基本访问不通，外链会导致字体加载卡住并拖慢首屏。
+
+中文没有用 Web 字体：一套中文字体动辄 5~15MB，即使按 `unicode-range` 切片，
+长文也会拉下好几 MB。中文字形交给系统字体是这里的正确取舍。
+
+想换字体就装对应的 `@fontsource` 包，然后在 `src/layouts/BaseLayout.astro` 顶部改 import，
+再改 `global.css` 里的 `--font-serif` / `--font-mono`。
 
 ---
 

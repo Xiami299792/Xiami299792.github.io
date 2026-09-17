@@ -31,13 +31,11 @@ export const CATEGORIES = {
   tech: {
     key: 'tech',
     label: '技术笔记',
-    emoji: '🛠️',
     description: '学习记录、踩坑总结、能直接抄的代码片段。',
   },
   essay: {
     key: 'essay',
     label: '生活随笔',
-    emoji: '🌿',
     description: '日常、阅读，以及一些没什么用但想说的想法。',
   },
 } as const;
