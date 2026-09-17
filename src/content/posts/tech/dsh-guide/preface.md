@@ -2,6 +2,7 @@
 title: 前言
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 1
 part: 基础篇

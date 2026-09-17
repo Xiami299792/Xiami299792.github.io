@@ -2,6 +2,7 @@
 title: 第 6 章 实操篇：做一个刷题程序
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 7
 part: 进阶篇

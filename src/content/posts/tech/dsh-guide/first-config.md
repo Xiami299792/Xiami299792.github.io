@@ -2,6 +2,7 @@
 title: 第 3 章 首次配置
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 4
 part: 进阶篇

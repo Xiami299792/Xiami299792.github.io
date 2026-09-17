@@ -2,6 +2,7 @@
 title: 第 4 章 Skill：让 AI 记住重复操作
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 5
 part: 进阶篇

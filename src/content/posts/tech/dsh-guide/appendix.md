@@ -2,6 +2,7 @@
 title: 附录
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 9
 part: 附录

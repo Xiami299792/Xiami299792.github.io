@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import { CATEGORIES, type CategoryKey } from '../../consts';
-import { getPostsByCategory } from '../../utils/posts';
+import { CATEGORIES, TECH_SECTIONS, type CategoryKey } from '../../consts';
+import { getPostsByCategory, groupByTechSection } from '../../utils/posts';
 
 export async function getStaticPaths() {
   return (Object.keys(CATEGORIES) as CategoryKey[]).map((key) => ({
@@ -14,19 +14,36 @@ export async function getStaticPaths() {
 const { key } = Astro.props;
 const cat = CATEGORIES[key];
 const posts = await getPostsByCategory(key);
+
+// 技术分类下分「软科普 / 硬指南」两个板块，分组展示，不混在一起
+const groups =
+  key === 'tech' ? groupByTechSection(posts) : [{ key: null, posts }];
 ---
 
 <BaseLayout wide cat={key} title={cat.label} description={cat.description}>
   <h1 class="page-title">{cat.label}</h1>
   <p class="page-lead">共 {posts.length} 篇</p>
 
-  {posts.length === 0 ? (
-    <p class="empty">这个分类下还没有文章。</p>
-  ) : (
-    <div class="post-list">
-      {posts.map((post) => (
-        <PostCard post={post} showCategory={false} />
-      ))}
-    </div>
-  )}
+  {
+    posts.length === 0 ? (
+      <p class="empty">这个分类下还没有文章。</p>
+    ) : (
+      groups.map((group) => (
+        <section class="board">
+          {group.key && (
+            <div class="subhead">
+              <h2>{TECH_SECTIONS[group.key].label}</h2>
+              <span>{TECH_SECTIONS[group.key].hint}</span>
+              <em>{group.posts.length} 篇</em>
+            </div>
+          )}
+          <div class="post-list">
+            {group.posts.map((post) => (
+              <PostCard post={post} showCategory={false} />
+            ))}
+          </div>
+        </section>
+      ))
+    )
+  }
 </BaseLayout>

@@ -2,6 +2,7 @@
 title: 第 5 章 评审团：让 AI 帮你检查产出
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 6
 part: 进阶篇

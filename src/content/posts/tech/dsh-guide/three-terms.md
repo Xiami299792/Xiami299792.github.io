@@ -2,6 +2,7 @@
 title: 第 1 章 三个名词
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 2
 part: 基础篇

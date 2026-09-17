@@ -44,7 +44,9 @@ const {
   cat,
 } = Astro.props;
 
-const pageTitle = title ? `${title} · ${SITE.title}` : `${SITE.title} · ${SITE.subtitle}`;
+// 首页的 <title> 只用站点名 —— 站名本身已经是一句话，
+// 再拼副标题会变成「新世界 · 科学与文化 · 科学与文化」。
+const pageTitle = title ? `${title} · ${SITE.title}` : SITE.title;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com').href;
 const ogImage = image ? new URL(image, Astro.site ?? 'https://example.com').href : undefined;
 ---

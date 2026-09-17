@@ -1,8 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import { CATEGORIES, SERIES, SITE } from '../consts';
-import { getPostsByCategory, getSeriesOverview, postPath } from '../utils/posts';
+import { CATEGORIES, SERIES, SITE, TECH_SECTIONS } from '../consts';
+import { getPostsByCategory, getSeriesOverview, groupByTechSection, postPath } from '../utils/posts';
 import { withBase } from '../utils/url';
 
 const HOME_LIMIT = 5;
@@ -13,13 +13,16 @@ const [tech, essay, seriesOverview] = await Promise.all([
   getSeriesOverview(),
 ]);
 
-const sections = [
-  { cat: CATEGORIES.tech, posts: tech },
-  { cat: CATEGORIES.essay, posts: essay },
-];
-
 const featured = seriesOverview[0];
 const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : undefined;
+
+// 首页做成「两本刊物并列」：技术（深色 Broadside）与生活随笔（铅字报刊）。
+// 技术下再按板块分成软科普 / 硬指南，各成一组，不混在一起。
+const techGroups = groupByTechSection(tech);
+const boards = [
+  { cat: CATEGORIES.tech, groups: techGroups },
+  { cat: CATEGORIES.essay, groups: [{ key: null, posts: essay }] },
+].filter((b) => b.groups.some((g) => g.posts.length > 0));
 ---
 
 <BaseLayout wide description={SITE.description}>
@@ -68,11 +71,9 @@ const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : un
   }
 
   {
-    // 首页做成「两本刊物并列」：每个分类一条通栏色带，各自套自己的主题。
-    // 空分类不显示，免得首页挂着「共 0 篇」的区块。
-    sections
-      .filter(({ posts }) => posts.length > 0)
-      .map(({ cat, posts }) => (
+    boards.map(({ cat, groups }) => {
+      const total = groups.reduce((n, g) => n + g.posts.length, 0);
+      return (
         <section class="pub" data-cat={cat.key}>
           <div class="section-head">
             <h2 class="section-title">
@@ -80,25 +81,37 @@ const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : un
               {cat.label}
             </h2>
             <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
-              共 {posts.length} 篇 →
+              共 {total} 篇 →
             </a>
           </div>
 
-          <div class="post-list">
-            {posts.slice(0, HOME_LIMIT).map((post) => (
-              <PostCard post={post} />
-            ))}
-            {posts.length > HOME_LIMIT && (
-              <a
-                class="section-more"
-                style="display:inline-block;padding:14px 0"
-                href={withBase(`/category/${cat.key}/`)}
-              >
-                查看全部 {posts.length} 篇 →
-              </a>
-            )}
-          </div>
+          {groups.map((group) => (
+            <div class="board">
+              {group.key && (
+                <div class="subhead">
+                  <h3>{TECH_SECTIONS[group.key].label}</h3>
+                  <span>{TECH_SECTIONS[group.key].hint}</span>
+                  <em>{group.posts.length} 篇</em>
+                </div>
+              )}
+              <div class="post-list">
+                {group.posts.slice(0, HOME_LIMIT).map((post) => (
+                  <PostCard post={post} />
+                ))}
+                {group.posts.length > HOME_LIMIT && (
+                  <a
+                    class="section-more"
+                    style="display:inline-block;padding:14px 0"
+                    href={withBase(`/category/${cat.key}/`)}
+                  >
+                    查看全部 {group.posts.length} 篇 →
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
         </section>
-      ))
+      );
+    })
   }
 </BaseLayout>

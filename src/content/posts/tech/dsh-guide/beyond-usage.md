@@ -2,6 +2,7 @@
 title: 第 7 章 使用之外：报错、消费与明智使用
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 8
 part: 进阶篇

@@ -1,6 +1,6 @@
 # 拾光集 · Astro 个人博客
 
-一个用 **Astro + Markdown + GitHub Pages** 搭的纯静态个人博客，双栏目：**科普** 与 **生活随笔**。
+一个用 **Astro + Markdown + GitHub Pages** 搭的纯静态个人博客，双栏目：**技术**（下分软科普 / 硬指南两个板块）与 **生活随笔**。
 
 无数据库、无服务器、无运维。文章是仓库里的 Markdown 文件，`git push` 即上线。
 
@@ -13,7 +13,7 @@ pnpm install     # 安装依赖
 pnpm dev         # 本地预览  →  http://localhost:4321
 pnpm build       # 构建到 dist/（含搜索索引）
 pnpm preview     # 预览构建产物（搜索功能只有构建后才可用）
-pnpm new tech "文章标题"    # 新建一篇科普
+pnpm new tech "文章标题"    # 新建一篇技术文章
 pnpm new essay "文章标题"   # 新建一篇生活随笔
 ```
 
@@ -218,7 +218,7 @@ part: 基础篇         # 可选，系列目录页按它分组
   --ink-faint: #8b8781;  /* 日期、标签等弱信息 */
   --rule: #e7e3db;       /* 1px 分隔线 */
   --accent: #b3272e;     /* 强调色：链接、当前导航、系列标记 */
-  --dot-tech: #b3272e;   /* 科普的圆点 */
+  --dot-tech: #b3272e;   /* 技术的圆点 */
   --dot-essay: #857748;  /* 生活随笔的圆点 */
 
   --measure: 41rem;      /* 正文阅读栏宽（中文约 38~40 字/行） */

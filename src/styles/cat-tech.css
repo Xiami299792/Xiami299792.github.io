@@ -475,3 +475,40 @@
   color: var(--ink-faint);
   border-color: var(--rule);
 }
+
+/* ---------- 板块分隔：软科普 / 硬指南 ---------- */
+
+[data-cat='tech'] .board + .board {
+  margin-top: 42px;
+}
+
+[data-cat='tech'] .subhead {
+  align-items: baseline;
+  gap: 12px;
+  margin: 30px 0 2px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* 板块名做小标题，不再加短强调线 —— 那条线是文章标题级才用的 */
+[data-cat='tech'] .subhead h2,
+[data-cat='tech'] .subhead h3 {
+  font-family: 'Barlow', var(--font-sans);
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-transform: none;
+}
+
+[data-cat='tech'] .subhead span,
+[data-cat='tech'] .subhead em {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+[data-cat='tech'] .subhead em {
+  letter-spacing: 0.08em;
+}

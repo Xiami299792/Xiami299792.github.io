@@ -4,9 +4,9 @@
 
 export const SITE = {
   /** 浏览器标签页 / 站内显示的名字 */
-  title: '夏弥的个人空间',
-  /** 首页副标题 */
-  subtitle: '科普与生活随笔',
+  title: '新世界 · 科学与文化',
+  /** 首页副标题（已不拼进 <title>，站名自己就是一句话；留着备用） */
+  subtitle: '科学与文化',
   /** SEO 描述 + RSS 描述 */
   description: '一个记录技术学习与日常思考的个人博客。',
   author: '夏弥',
@@ -26,11 +26,11 @@ export const SITE = {
   base: '/',
 } as const;
 
-/** 两条内容线：科普 / 生活随笔 */
+/** 两条内容线：技术 / 生活随笔 */
 export const CATEGORIES = {
   tech: {
     key: 'tech',
-    label: '科普',
+    label: '技术',
     description: '把技术讲明白，写给不打算成为专家的人。',
   },
   essay: {
@@ -41,6 +41,25 @@ export const CATEGORIES = {
 } as const;
 
 export type CategoryKey = keyof typeof CATEGORIES;
+
+/**
+ * 技术分类下的两个板块 —— 首页和分类页都按它分组，不混在一起。
+ * 文章 frontmatter 里写 section: 'soft' | 'hard'。
+ */
+export const TECH_SECTIONS = {
+  soft: {
+    key: 'soft',
+    label: '软科普',
+    hint: '讲原理、讲来龙去脉',
+  },
+  hard: {
+    key: 'hard',
+    label: '硬指南',
+    hint: '手把手、可照着做',
+  },
+} as const;
+
+export type TechSectionKey = keyof typeof TECH_SECTIONS;
 
 /**
  * 系列文章。

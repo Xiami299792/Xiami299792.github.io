@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { TECH_SECTIONS, type TechSectionKey } from '../consts';
 
 export type Post = CollectionEntry<'posts'>;
 
@@ -22,6 +23,22 @@ export async function getPublishedPosts(): Promise<Post[]> {
 export async function getPostsByCategory(category: Post['data']['category']): Promise<Post[]> {
   const posts = await getPublishedPosts();
   return posts.filter((post) => post.data.category === category);
+}
+
+/**
+ * 把技术文章按板块分组（软科普 / 硬指南）。
+ * 顺序跟随 consts.ts 里 TECH_SECTIONS 的声明顺序，空板块不返回。
+ * 没写 section 的文章归到「硬指南」。
+ */
+export function groupByTechSection(
+  posts: Post[],
+): { key: TechSectionKey; posts: Post[] }[] {
+  return (Object.keys(TECH_SECTIONS) as TechSectionKey[])
+    .map((key) => ({
+      key,
+      posts: posts.filter((post) => (post.data.section ?? 'hard') === key),
+    }))
+    .filter((group) => group.posts.length > 0);
 }
 
 /**

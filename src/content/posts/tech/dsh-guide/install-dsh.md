@@ -2,6 +2,7 @@
 title: 第 2 章 安装 DSH
 date: 2026-09-17
 category: tech
+section: hard
 series: dsh-guide
 order: 3
 part: 基础篇

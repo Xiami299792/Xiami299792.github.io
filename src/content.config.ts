@@ -18,6 +18,14 @@ const posts = defineCollection({
     date: z.coerce.date(),
     /** 分类，决定首页分栏和配色 */
     category: z.enum(['tech', 'essay']),
+    /**
+     * 板块（只对 category: tech 有意义）。
+     * tech 下分两块，列表页与首页都按它分组，不混在一起：
+     *   soft = 软科普（讲原理、讲来龙去脉）
+     *   hard = 硬指南（手把手、可照着做）
+     * 见 consts.ts 的 TECH_SECTIONS。
+     */
+    section: z.enum(['soft', 'hard']).optional(),
     /** 标签，用于 /tags 聚合 */
     tags: z.array(z.string()).default([]),
     /**
