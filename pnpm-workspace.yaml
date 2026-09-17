@@ -11,3 +11,15 @@ allowBuilds:
 # 一旦 registry 有供应链策略（例如 minimumReleaseAge）就会直接中断构建。
 # 关掉之后：改了 package.json 请自己手动跑一次 pnpm install。
 verifyDepsBeforeRun: false
+
+# pnpm 11 默认 minimumReleaseAge = 1440（24 小时）：
+# 凡是「发布不满一天」的包都不允许被安装，`pnpm install --frozen-lockfile` 会直接失败。
+#
+# 这会持续打断 CI：只要 astro / rolldown 这类依赖最近发过新版，
+# 本地 pnpm add 能成功（全新解析不检查），但推上去后 CI 的 lockfile 校验就挂，
+# 报 ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION。
+#
+# 设为 0 表示不做这个时间窗检查。本项目依赖的版本已经全部写死在 pnpm-lock.yaml 里，
+# 而 lockfile 是随代码一起 review 的，所以这里关掉是可控的。
+# 若你想恢复这层保护，把 0 改成 1440 即可，但要接受「更新依赖后 24 小时内推不上 CI」。
+minimumReleaseAge: 0
