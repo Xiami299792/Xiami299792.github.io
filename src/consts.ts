@@ -55,7 +55,7 @@ export const SERIES = {
     subtitle: '从装上到用明白',
     description:
       '一本写给大一新生的 DeepSeek Harness 入门手册：怎么装、怎么配、怎么把话说清楚，最后做出一个真有人在用的东西。',
-    author: '田飞扬',
+    author: '夏弥',
     note: '应睿信科协邀请写作，核对于 2026 年 9 月。',
   },
 } as const;
