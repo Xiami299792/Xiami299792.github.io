@@ -833,6 +833,49 @@ main {
   font-size: 13.5px;
 }
 
+/* ---------- 首页：两本刊物并列 ---------- */
+
+/* 色带通栏：背景铺满视口，内容仍与栅格对齐。
+   用 ::before 而不是负 margin —— .pub 在 .container 内、父级有 padding，
+   负 margin 算不准对齐位置。z-index:0 让色带盖住页面底色，又在内容之下。 */
+.pub {
+  position: relative;
+  padding: 48px 0 52px;
+  margin-top: 16px;
+}
+
+.pub::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: var(--paper);
+  z-index: 0;
+}
+
+.pub > * {
+  position: relative;
+  z-index: 1;
+}
+
+.pub[data-cat] {
+  color: var(--ink);
+}
+
+.pub .section-head {
+  padding-bottom: 12px;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 620px) {
+  .pub {
+    padding: 34px 0 38px;
+  }
+}
+
 /* ---------- 系列：文章页顶部横幅 ---------- */
 
 .series-banner {

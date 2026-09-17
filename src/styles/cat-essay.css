@@ -18,7 +18,7 @@
   font-display: swap;
 }
 
-:root[data-cat='essay'] {
+[data-cat='essay'] {
   /* 新闻纸：比站点主色更灰、更旧 */
   --paper: #f1ece0;
   --surface: #f8f5ec;
@@ -50,45 +50,47 @@
   background: var(--paper);
 }
 
-/* 纸面加一层极淡的印刷网点，模拟新闻纸 */
-:root[data-cat='essay'] body {
+/* 纸面加一层极淡的印刷网点，模拟新闻纸。
+   作用在 [data-cat='essay'] 本身，所以首页的随笔区块也能有纸感。 */
+[data-cat='essay'] body,
+.pub[data-cat='essay'] {
   background-image: radial-gradient(rgba(26, 26, 24, 0.055) 0.5px, transparent 0.5px);
   background-size: 3px 3px;
 }
 
 /* ---------- 报头 ---------- */
 
-:root[data-cat='essay'] .site-header {
+[data-cat='essay'] .site-header {
   border-top: 3px solid var(--rule-strong);
   border-bottom: 1px solid var(--rule-strong);
 }
 
-:root[data-cat='essay'] .brand {
+[data-cat='essay'] .brand {
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-size: 19px;
   font-weight: 400;
   letter-spacing: 0.16em;
 }
 
-:root[data-cat='essay'] .nav-link {
+[data-cat='essay'] .nav-link {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-:root[data-cat='essay'] .nav-link.active {
+[data-cat='essay'] .nav-link.active {
   color: var(--accent);
   border-bottom: 1px solid var(--accent);
 }
 
-:root[data-cat='essay'] main {
+[data-cat='essay'] main {
   padding-top: 44px;
 }
 
 /* ---------- 文章头：做成报纸标题区 ---------- */
 
-:root[data-cat='essay'] .post-header {
+[data-cat='essay'] .post-header {
   position: relative;
   padding: 22px 0 20px;
   margin-bottom: 30px;
@@ -97,7 +99,7 @@
 }
 
 /* 双线：报头装饰 */
-:root[data-cat='essay'] .post-header::after {
+[data-cat='essay'] .post-header::after {
   content: '';
   position: absolute;
   left: 0;
@@ -108,7 +110,7 @@
   border-bottom: 1px solid var(--rule-strong);
 }
 
-:root[data-cat='essay'] .post-header h1 {
+[data-cat='essay'] .post-header h1 {
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-size: clamp(26px, 4.4vw, 34px);
   font-weight: 400;
@@ -119,14 +121,14 @@
 }
 
 /* 标题下的导语：报纸的 deck */
-:root[data-cat='essay'] .post-deck {
+[data-cat='essay'] .post-deck {
   margin: 16px 0 0;
   font-size: 16.5px;
   line-height: 1.72;
   color: var(--ink-muted);
 }
 
-:root[data-cat='essay'] .post-meta {
+[data-cat='essay'] .post-meta {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -136,22 +138,22 @@
   padding-bottom: 10px;
 }
 
-:root[data-cat='essay'] .post-meta time,
-:root[data-cat='essay'] .post-meta .cat {
+[data-cat='essay'] .post-meta time,
+[data-cat='essay'] .post-meta .cat {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
 }
 
-:root[data-cat='essay'] .cat::before {
+[data-cat='essay'] .cat::before {
   display: none;
 }
 
-:root[data-cat='essay'] .post-tags {
+[data-cat='essay'] .post-tags {
   margin-top: 12px;
 }
 
-:root[data-cat='essay'] .tag {
+[data-cat='essay'] .tag {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -160,7 +162,7 @@
 }
 
 /* 系列横幅：一行细线 + mono 标签 */
-:root[data-cat='essay'] .series-banner {
+[data-cat='essay'] .series-banner {
   border-left: none;
   border-top: 1px solid var(--rule-strong);
   border-bottom: 1px solid var(--rule);
@@ -168,9 +170,9 @@
   margin-bottom: 26px;
 }
 
-:root[data-cat='essay'] .series-banner__label,
-:root[data-cat='essay'] .series-banner__link,
-:root[data-cat='essay'] .series-banner__count {
+[data-cat='essay'] .series-banner__label,
+[data-cat='essay'] .series-banner__link,
+[data-cat='essay'] .series-banner__count {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -179,7 +181,7 @@
 
 /* ---------- 正文排版：报章正体 ---------- */
 
-:root[data-cat='essay'] .prose {
+[data-cat='essay'] .prose {
   font-size: 17px;
   line-height: 1.95;
   text-align: justify;
@@ -187,7 +189,7 @@
 }
 
 /* 首字下沉：铅字印刷的招牌 */
-:root[data-cat='essay'] .prose > p:first-of-type::first-letter {
+[data-cat='essay'] .prose > p:first-of-type::first-letter {
   float: left;
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-size: 3.5em;
@@ -197,7 +199,7 @@
   color: var(--accent);
 }
 
-:root[data-cat='essay'] .prose h2 {
+[data-cat='essay'] .prose h2 {
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-size: 19px;
   font-weight: 400;
@@ -209,7 +211,7 @@
 }
 
 /* 36px 短强调线，挂在二级标题上方 */
-:root[data-cat='essay'] .prose h2::before {
+[data-cat='essay'] .prose h2::before {
   content: '';
   display: block;
   width: 36px;
@@ -218,7 +220,7 @@
   margin-bottom: 8px;
 }
 
-:root[data-cat='essay'] .prose h3 {
+[data-cat='essay'] .prose h3 {
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-size: 17px;
   font-weight: 400;
@@ -226,14 +228,14 @@
   text-wrap: balance;
 }
 
-:root[data-cat='essay'] .prose h4 {
+[data-cat='essay'] .prose h4 {
   font-size: 16px;
   font-weight: 400;
   color: var(--ink);
   letter-spacing: 0.02em;
 }
 
-:root[data-cat='essay'] .prose blockquote {
+[data-cat='essay'] .prose blockquote {
   border-left: none;
   border-top: 1px solid var(--rule-strong);
   border-bottom: 1px solid var(--rule-strong);
@@ -246,7 +248,7 @@
   text-align: justify;
 }
 
-:root[data-cat='essay'] .prose blockquote::before {
+[data-cat='essay'] .prose blockquote::before {
   content: '“';
   display: block;
   font-family: var(--font-serif);
@@ -256,7 +258,7 @@
   margin-bottom: 6px;
 }
 
-:root[data-cat='essay'] .prose hr {
+[data-cat='essay'] .prose hr {
   border-top: none;
   height: 5px;
   border-top: 1px solid var(--rule-strong);
@@ -265,7 +267,7 @@
 }
 
 /* 表格：报纸的数据栏，只留横线 */
-:root[data-cat='essay'] .prose th {
+[data-cat='essay'] .prose th {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -273,70 +275,70 @@
   border-bottom: 1px solid var(--rule-strong);
 }
 
-:root[data-cat='essay'] .prose td {
+[data-cat='essay'] .prose td {
   border-bottom: 1px solid var(--rule);
 }
 
-:root[data-cat='essay'] .prose pre {
+[data-cat='essay'] .prose pre {
   border-radius: 0;
   border: 1px solid var(--rule-strong);
   background: var(--code-bg) !important;
   font-size: 13px;
 }
 
-:root[data-cat='essay'] .prose :not(pre) > code {
+[data-cat='essay'] .prose :not(pre) > code {
   border-radius: 0;
   font-size: 0.86em;
 }
 
 /* 目录：一条细线，mono 标签 */
-:root[data-cat='essay'] .toc {
+[data-cat='essay'] .toc {
   border-top: 1px solid var(--rule-strong);
   border-bottom: 1px solid var(--rule);
   padding: 12px 0;
 }
 
-:root[data-cat='essay'] .toc-title {
+[data-cat='essay'] .toc-title {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-:root[data-cat='essay'] .toc a {
+[data-cat='essay'] .toc a {
   font-family: var(--font-sans);
   font-size: 15px;
 }
 
 /* 上下篇：报纸的「转版」提示 */
-:root[data-cat='essay'] .post-nav {
+[data-cat='essay'] .post-nav {
   border-top: 2px solid var(--rule-strong);
 }
 
-:root[data-cat='essay'] .post-nav .dir,
-:root[data-cat='essay'] .post-nav .title {
+[data-cat='essay'] .post-nav .dir,
+[data-cat='essay'] .post-nav .title {
   font-family: var(--font-mono);
 }
 
-:root[data-cat='essay'] .post-nav .dir {
+[data-cat='essay'] .post-nav .dir {
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-:root[data-cat='essay'] .post-nav .title {
+[data-cat='essay'] .post-nav .title {
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-size: 15.5px;
   letter-spacing: 0.01em;
 }
 
 /* 页脚：四栏报尾 */
-:root[data-cat='essay'] .site-footer {
+[data-cat='essay'] .site-footer {
   border-top: 2px solid var(--rule-strong);
   padding-top: 22px;
 }
 
-:root[data-cat='essay'] .footer-inner {
+[data-cat='essay'] .footer-inner {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -344,7 +346,7 @@
 }
 
 /* 列表页（随笔分类页）也用报刊味 */
-:root[data-cat='essay'] .page-title {
+[data-cat='essay'] .page-title {
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-weight: 400;
   letter-spacing: 0.06em;
@@ -352,7 +354,7 @@
   border-bottom: 4px double var(--rule-strong);
 }
 
-:root[data-cat='essay'] .page-lead {
+[data-cat='essay'] .page-lead {
   font-family: var(--font-mono);
   font-size: 11.5px;
   letter-spacing: 0.1em;
@@ -360,38 +362,38 @@
   color: var(--ink-faint);
 }
 
-:root[data-cat='essay'] .section-title,
-:root[data-cat='essay'] .section-more {
+[data-cat='essay'] .section-title,
+[data-cat='essay'] .section-more {
   font-family: var(--font-mono);
   font-size: 11.5px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
-:root[data-cat='essay'] .section-title .dot {
+[data-cat='essay'] .section-title .dot {
   display: none;
 }
 
-:root[data-cat='essay'] .post-card h3 {
+[data-cat='essay'] .post-card h3 {
   font-family: 'Huiwen Mincho', var(--font-sans);
   font-weight: 400;
   font-size: 19px;
   letter-spacing: 0.02em;
 }
 
-:root[data-cat='essay'] .post-card {
+[data-cat='essay'] .post-card {
   padding: 20px 0 22px;
   border-bottom: 1px solid var(--rule);
 }
 
-:root[data-cat='essay'] .post-card p {
+[data-cat='essay'] .post-card p {
   font-size: 15px;
   line-height: 1.8;
 }
 
-:root[data-cat='essay'] .post-card .post-meta,
-:root[data-cat='essay'] .post-card .cat,
-:root[data-cat='essay'] .post-card time {
+[data-cat='essay'] .post-card .post-meta,
+[data-cat='essay'] .post-card .cat,
+[data-cat='essay'] .post-card time {
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: 0.1em;

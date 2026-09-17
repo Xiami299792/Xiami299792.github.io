@@ -68,11 +68,12 @@ const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : un
   }
 
   {
-    // 空分类不显示，免得首页挂着「共 0 篇」的区块
+    // 首页做成「两本刊物并列」：每个分类一条通栏色带，各自套自己的主题。
+    // 空分类不显示，免得首页挂着「共 0 篇」的区块。
     sections
       .filter(({ posts }) => posts.length > 0)
       .map(({ cat, posts }) => (
-        <section class={`section section--${cat.key}`}>
+        <section class="pub" data-cat={cat.key}>
           <div class="section-head">
             <h2 class="section-title">
               <span class="dot" />
