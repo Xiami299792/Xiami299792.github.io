@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="关于" description="关于这个博客和它的作者">
+  <h1 class="page-title">关于</h1>
+
+  <div class="prose">
+    <p>
+      这里是我的个人博客，主要放两类东西：<strong>技术笔记</strong>和<strong>生活随笔</strong>。
+      前者是学习和踩坑的记录，后者是一些没什么用但想写下来的想法。
+    </p>
+
+    <h2>关于这个站</h2>
+    <ul>
+      <li>用 <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> 构建，纯静态输出</li>
+      <li>托管在 GitHub Pages，源码在 GitHub 上，文章都是 Markdown 文件</li>
+      <li>评论用 Giscus，搜索用 Pagefind，没有任何后端服务</li>
+    </ul>
+
+    <h2>联系我</h2>
+    <ul>
+      <li>GitHub：<a href="https://github.com/Xiami299792" target="_blank" rel="noopener">@Xiami299792</a></li>
+      <li>邮箱：<a href="mailto:2476839118@qq.com">2476839118@qq.com</a></li>
+    </ul>
+
+    <blockquote>
+      <p>把这里的内容改掉，就是你的「关于」页了。</p>
+    </blockquote>
+  </div>
+</BaseLayout>

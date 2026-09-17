@@ -1,0 +1,13 @@
+# pnpm 11 默认拦截所有依赖的安装脚本，这里显式声明。
+#
+# esbuild 的 postinstall 只是校验/下载二进制，而其平台二进制已由可选依赖
+# （@esbuild/win32-x64 等）提供，跳过脚本不影响使用，故设为 false 以保持安装干净。
+# 如果你在别的环境遇到 esbuild 报错，把这里改成 true 再 pnpm install 一次即可。
+allowBuilds:
+  esbuild: false
+
+# 关闭「运行脚本前自动校验依赖」。
+# 默认行为会在 pnpm dev / pnpm build 前偷偷跑一次 pnpm install，
+# 一旦 registry 有供应链策略（例如 minimumReleaseAge）就会直接中断构建。
+# 关掉之后：改了 package.json 请自己手动跑一次 pnpm install。
+verifyDepsBeforeRun: false

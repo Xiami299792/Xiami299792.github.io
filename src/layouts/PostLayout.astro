@@ -1,0 +1,102 @@
+---
+import 'katex/dist/katex.min.css';
+import BaseLayout from './BaseLayout.astro';
+import Giscus from '../components/Giscus.astro';
+import { CATEGORIES } from '../consts';
+import { formatDate, postPath, type Post } from '../utils/posts';
+import { withBase } from '../utils/url';
+
+interface Props {
+  post: Post;
+  headings: { depth: number; slug: string; text: string }[];
+  /** 更早的一篇 */
+  older?: Post;
+  /** 更新的一篇 */
+  newer?: Post;
+}
+
+const { post, headings, older, newer } = Astro.props;
+const cat = CATEGORIES[post.data.category];
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.summary}
+  type="article"
+  image={post.data.cover}
+>
+  <article data-pagefind-body>
+    <header class="post-header">
+      <div class="post-meta">
+        <a class={`badge badge--${cat.key}`} href={withBase(`/category/${cat.key}/`)}>
+          {cat.emoji} {cat.label}
+        </a>
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        {
+          post.data.updated && (
+            <>
+              <span class="sep">·</span>
+              <span>更新于 {formatDate(post.data.updated)}</span>
+            </>
+          )
+        }
+        {post.data.draft && <span class="badge badge--draft">草稿</span>}
+      </div>
+
+      <h1>{post.data.title}</h1>
+
+      {
+        post.data.tags.length > 0 && (
+          <div class="post-tags">
+            {post.data.tags.map((tag) => (
+              <a class="tag" href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    {
+      toc.length > 2 && (
+        <nav class="toc" aria-label="目录">
+          <p class="toc-title">本文目录</p>
+          <ul>
+            {toc.map((h) => (
+              <li class={h.depth === 3 ? 'depth-3' : ''}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {
+      (older || newer) && (
+        <nav class="post-nav">
+          {newer && (
+            <a href={withBase(postPath(newer))}>
+              <span class="dir">← 更新的一篇</span>
+              <span class="title">{newer.data.title}</span>
+            </a>
+          )}
+          {older && (
+            <a class="next" href={withBase(postPath(older))}>
+              <span class="dir">更早的一篇 →</span>
+              <span class="title">{older.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )
+    }
+
+    <Giscus />
+  </article>
+</BaseLayout>

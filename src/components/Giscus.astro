@@ -1,0 +1,41 @@
+---
+import { GISCUS } from '../consts';
+
+const ready = GISCUS.enabled && GISCUS.repoId !== '' && GISCUS.categoryId !== '';
+---
+
+<section class="comments" aria-label="评论">
+  <h2 class="section-title" style="margin-bottom:16px">
+    <span class="dot"></span>评论
+  </h2>
+
+  {
+    ready ? (
+      <div id="giscus-container">
+        <script
+          is:inline
+          src="https://giscus.app/client.js"
+          data-repo={GISCUS.repo}
+          data-repo-id={GISCUS.repoId}
+          data-category={GISCUS.category}
+          data-category-id={GISCUS.categoryId}
+          data-mapping={GISCUS.mapping}
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="preferred_color_scheme"
+          data-lang={GISCUS.lang}
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async
+        />
+      </div>
+    ) : (
+      <p class="comments-hint">
+        评论尚未启用。打开 <code>src/consts.ts</code>，按 <code>GISCUS</code> 上方的注释填好
+        repoId / categoryId，再把 <code>enabled</code> 改成 <code>true</code> 即可。
+      </p>
+    )
+  }
+</section>

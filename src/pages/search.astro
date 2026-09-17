@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// 注意：搜索索引由 Pagefind 在 `pnpm build` 之后生成，
+// 所以开发模式（pnpm dev）下这里会提示不可用，属正常现象。
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout title="搜索" description="站内全文搜索">
+  <h1 class="page-title">搜索</h1>
+  <p class="page-lead">索引在构建时生成，支持中文分词。</p>
+
+  <div id="search" class="search-box" data-base={base}></div>
+
+  <script>
+    const host = document.getElementById('search');
+    const base = host?.dataset.base ?? '';
+
+    function load() {
+      const style = document.createElement('link');
+      style.rel = 'stylesheet';
+      style.href = `${base}/pagefind/pagefind-ui.css`;
+      document.head.appendChild(style);
+
+      const pagefind = document.createElement('script');
+      pagefind.src = `${base}/pagefind/pagefind-ui.js`;
+      pagefind.onload = () => {
+        const UI = (window as any).PagefindUI;
+        if (!UI) return;
+        new UI({
+          element: '#search',
+          showSubResults: true,
+          showImages: false,
+          translations: {
+            placeholder: '搜索文章…',
+            clear_search: '清空',
+            load_more: '加载更多结果',
+            search_label: '搜索本站',
+            zero_results: '没有找到与 [SEARCH_TERM] 相关的内容',
+            many_results: '找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果',
+            one_result: '找到 [COUNT] 条与 [SEARCH_TERM] 相关的结果',
+            searching: '搜索 [SEARCH_TERM] 中…',
+          },
+        });
+      };
+      pagefind.onerror = () => {
+        if (host) {
+          host.innerHTML =
+            '<p class="comments-hint">搜索索引还没生成。运行 <code>pnpm build &amp;&amp; pnpm preview</code>，或在部署后的线上站点访问本页即可使用。</p>';
+        }
+      };
+      document.head.appendChild(pagefind);
+    }
+
+    load();
+  </script>
+</BaseLayout>

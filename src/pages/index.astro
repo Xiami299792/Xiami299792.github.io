@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { CATEGORIES, SITE } from '../consts';
+import { getPostsByCategory } from '../utils/posts';
+import { withBase } from '../utils/url';
+
+const HOME_LIMIT = 5;
+
+const [tech, essay] = await Promise.all([
+  getPostsByCategory('tech'),
+  getPostsByCategory('essay'),
+]);
+
+const sections = [
+  { cat: CATEGORIES.tech, posts: tech },
+  { cat: CATEGORIES.essay, posts: essay },
+];
+---
+
+<BaseLayout description={SITE.description}>
+  <section class="hero">
+    <h1>{SITE.title}</h1>
+    <p>{SITE.description}</p>
+  </section>
+
+  {
+    sections.map(({ cat, posts }) => (
+      <section class={`section section--${cat.key}`}>
+        <div class="section-head">
+          <h2 class="section-title">
+            <span class="dot" />
+            {cat.label}
+          </h2>
+          <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
+            {cat.description} 共 {posts.length} 篇 →
+          </a>
+        </div>
+
+        {posts.length === 0 ? (
+          <p class="empty">还没有文章。</p>
+        ) : (
+          <div class="post-list">
+            {posts.slice(0, HOME_LIMIT).map((post) => (
+              <PostCard post={post} />
+            ))}
+            {posts.length > HOME_LIMIT && (
+              <a class="section-more" style="padding:12px 18px" href={withBase(`/category/${cat.key}/`)}>
+                查看全部 {posts.length} 篇 →
+              </a>
+            )}
+          </div>
+        )}
+      </section>
+    ))
+  }
+</BaseLayout>

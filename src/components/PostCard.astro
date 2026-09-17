@@ -1,0 +1,29 @@
+---
+import { CATEGORIES } from '../consts';
+import { formatDate, postPath, readingTime, type Post } from '../utils/posts';
+import { withBase } from '../utils/url';
+
+interface Props {
+  post: Post;
+  /** 是否显示分类徽章（首页分栏时不需要，归档/标签页需要） */
+  showCategory?: boolean;
+}
+
+const { post, showCategory = false } = Astro.props;
+const cat = CATEGORIES[post.data.category];
+const rt = readingTime(post.body);
+---
+
+<a class="post-card" href={withBase(postPath(post))}>
+  <h3>{post.data.title}</h3>
+
+  <div class="post-meta">
+    {showCategory && <span class={`badge badge--${cat.key}`}>{cat.emoji} {cat.label}</span>}
+    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+    {rt && <><span class="sep">·</span><span>{rt}</span></>}
+    {post.data.updated && <><span class="sep">·</span><span>已更新</span></>}
+    {post.data.draft && <span class="badge badge--draft">草稿</span>}
+  </div>
+
+  <p>{post.data.summary}</p>
+</a>

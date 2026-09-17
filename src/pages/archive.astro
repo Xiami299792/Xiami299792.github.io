@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CATEGORIES } from '../consts';
+import { getPublishedPosts, postPath } from '../utils/posts';
+import { withBase } from '../utils/url';
+
+const posts = await getPublishedPosts();
+
+const byYear = new Map<number, typeof posts>();
+for (const post of posts) {
+  const year = post.data.date.getFullYear();
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(post);
+}
+
+const years = [...byYear.keys()].sort((a, b) => b - a);
+
+function fmt(date: Date) {
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${m}-${d}`;
+}
+---
+
+<BaseLayout title="归档" description="按时间浏览全部文章">
+  <h1 class="page-title">归档</h1>
+  <p class="page-lead">共 {posts.length} 篇，按年份倒序排列。</p>
+
+  {
+    years.map((year) => (
+      <section>
+        <h2 class="archive-year">{year}</h2>
+        {byYear.get(year)!.map((post) => (
+          <div class="archive-item">
+            <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+            <a href={withBase(postPath(post))}>{post.data.title}</a>
+            <span class={`badge badge--${post.data.category}`}>
+              {CATEGORIES[post.data.category].label}
+            </span>
+          </div>
+        ))}
+      </section>
+    ))
+  }
+
+  {posts.length === 0 && <p class="empty">还没有文章。</p>}
+</BaseLayout>

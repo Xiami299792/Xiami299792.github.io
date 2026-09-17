@@ -1,0 +1,17 @@
+---
+import { SITE } from '../consts';
+import { withBase } from '../utils/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer" data-pagefind-ignore>
+  <div class="container footer-inner">
+    <span>© {year} {SITE.author} · 用 Astro 构建</span>
+    <span class="footer-links">
+      <a href={withBase('/rss.xml')}>RSS</a>
+      <a href={withBase('/archive/')}>归档</a>
+      <a href={withBase('/tags/')}>标签</a>
+    </span>
+  </div>
+</footer>
