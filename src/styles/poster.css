@@ -33,6 +33,9 @@
   --p-body: 'Archivo Narrow', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --p-mono: 'DM Mono', ui-monospace, Consolas, monospace;
 
+  /* 文字用蓝：深色下要提亮，直接拿 --p-blue 当文字色对比度只有约 2.4:1 */
+  --p-blue-text: var(--p-blue);
+
   --p-muted: #3c3c46;
   --p-muted-2: #5a5a66;
   --p-hair: #b9b9c2;
@@ -43,6 +46,7 @@
 :root[data-theme='dark'] {
   --p-paper: #0f0f16;
   --p-ink: #f4e9d6;
+  --p-blue-text: #8f8fff;
   --p-muted: #c9c9d2;
   --p-muted-2: #a5a5b0;
   --p-hair: #4a4a56;
@@ -390,7 +394,7 @@
 }
 
 .module .post-card:hover h3 {
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 .module .post-card p {
@@ -420,7 +424,7 @@
 }
 
 .module .post-meta .cat {
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 .module .series-tag {
@@ -439,7 +443,7 @@
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--p-blue);
+  color: var(--p-blue-text);
   border-top: 3px solid var(--p-ink);
 }
 
@@ -462,7 +466,7 @@
 }
 
 :root:not([data-cat]) .footer-links a:hover {
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 /* ---------- 窄屏 ---------- */
@@ -575,14 +579,14 @@
 }
 
 :root:not([data-cat]) .archive-item a:hover {
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 :root:not([data-cat]) .cat {
   font-family: var(--p-mono);
   font-size: 10.5px;
   letter-spacing: 0.1em;
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 :root:not([data-cat]) .cat::before {
@@ -610,7 +614,7 @@
 }
 
 :root:not([data-cat]) .series-card__title a:hover {
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 :root:not([data-cat]) .series-card__desc {
@@ -663,7 +667,7 @@
 }
 
 :root:not([data-cat]) .series-card__list a:hover {
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 /* ---------- 系列目录 ---------- */
@@ -709,7 +713,7 @@
 }
 
 :root:not([data-cat]) .series-list__item a:hover .series-list__title {
-  color: var(--p-blue);
+  color: var(--p-blue-text);
 }
 
 :root:not([data-cat]) .series-list__summary {
@@ -749,8 +753,8 @@
 }
 
 :root:not([data-cat]) .prose a {
-  color: var(--p-blue);
-  text-decoration-color: var(--p-blue);
+  color: var(--p-blue-text);
+  text-decoration-color: var(--p-blue-text);
 }
 
 :root:not([data-cat]) .prose ul,
@@ -819,7 +823,7 @@
 /* ---------- 搜索 ---------- */
 
 :root:not([data-cat]) #search {
-  --pagefind-ui-primary: var(--p-blue);
+  --pagefind-ui-primary: var(--p-blue-text);
   --pagefind-ui-text: var(--p-ink);
   --pagefind-ui-background: var(--p-paper);
   --pagefind-ui-border: var(--p-ink);
