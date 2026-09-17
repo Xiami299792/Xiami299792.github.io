@@ -1,6 +1,6 @@
 # 拾光集 · Astro 个人博客
 
-一个用 **Astro + Markdown + GitHub Pages** 搭的纯静态个人博客，双栏目：**技术**（下分软科普 / 硬指南两个板块）与 **生活随笔**。
+一个用 **Astro + Markdown + GitHub Pages** 搭的纯静态个人博客，双栏目：**技术**（下分软科普 / 硬指南两个板块）与 **随笔**。
 
 无数据库、无服务器、无运维。文章是仓库里的 Markdown 文件，`git push` 即上线。
 
@@ -14,7 +14,7 @@ pnpm dev         # 本地预览  →  http://localhost:4321
 pnpm build       # 构建到 dist/（含搜索索引）
 pnpm preview     # 预览构建产物（搜索功能只有构建后才可用）
 pnpm new tech "文章标题"    # 新建一篇技术文章
-pnpm new essay "文章标题"   # 新建一篇生活随笔
+pnpm new essay "文章标题"   # 新建一篇随笔
 ```
 
 > 改了 `package.json` 的依赖之后，记得手动跑一次 `pnpm install`——
@@ -175,7 +175,7 @@ part: 基础篇         # 可选，系列目录页按它分组
 │  ├─ content.config.ts           文章集合的字段定义与校验
 │  ├─ content/posts/
 │  │  ├─ tech/dsh-guide/          DSH 使用指南系列（9 篇）
-│  │  └─ essay/                   生活随笔
+│  │  └─ essay/                   随笔
 │  ├─ components/
 │  │  ├─ Header.astro  Footer.astro
 │  │  ├─ PostCard.astro           列表页卡片
@@ -219,7 +219,7 @@ part: 基础篇         # 可选，系列目录页按它分组
   --rule: #e7e3db;       /* 1px 分隔线 */
   --accent: #b3272e;     /* 强调色：链接、当前导航、系列标记 */
   --dot-tech: #b3272e;   /* 技术的圆点 */
-  --dot-essay: #857748;  /* 生活随笔的圆点 */
+  --dot-essay: #857748;  /* 随笔的圆点 */
 
   --measure: 41rem;      /* 正文阅读栏宽（中文约 38~40 字/行） */
   --wide: 52rem;         /* 列表页与页头页脚的栏宽 */

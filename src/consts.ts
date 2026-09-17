@@ -28,7 +28,7 @@ export const SITE = {
   base: '/',
 } as const;
 
-/** 两条内容线：技术 / 生活随笔 */
+/** 两条内容线：技术 / 随笔 */
 export const CATEGORIES = {
   tech: {
     key: 'tech',
@@ -37,7 +37,7 @@ export const CATEGORIES = {
   },
   essay: {
     key: 'essay',
-    label: '生活随笔',
+    label: '随笔',
     description: '日常、阅读，以及一些没什么用但想说的想法。',
   },
 } as const;
