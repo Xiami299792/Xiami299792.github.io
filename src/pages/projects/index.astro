@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects, projectPath } from '../../utils/projects';
+import { withBase } from '../../utils/url';
+
+const projects = await getProjects();
+---
+
+<BaseLayout
+  wide
+  title="项目"
+  description="做过的东西：从想法到能用的成品，以及做完之后的复盘。"
+>
+  <h1 class="page-title">项目</h1>
+  <p class="page-lead">共 {projects.length} 个</p>
+
+  {
+    projects.length === 0 ? (
+      <p class="empty">还没有项目。</p>
+    ) : (
+      <div class="projects">
+        {projects.map((project, i) => (
+          <a class="project" href={withBase(projectPath(project))}>
+            <span class="project__num">{String(i + 1).padStart(2, '0')}</span>
+
+            <div class="project__body">
+              <div class="project__head">
+                <h2 class="project__title">{project.data.title}</h2>
+                <span class="project__year">{project.data.year}</span>
+              </div>
+
+              <p class="project__summary">{project.data.summary}</p>
+
+              <div class="project__meta">
+                {project.data.status && <span class="project__status">{project.data.status}</span>}
+                {project.data.stack.map((tech) => (
+                  <span class="project__tech">{tech}</span>
+                ))}
+              </div>
+            </div>
+
+            <span class="project__arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+        ))}
+      </div>
+    )
+  }
+</BaseLayout>

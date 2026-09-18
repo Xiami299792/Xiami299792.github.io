@@ -59,4 +59,35 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { posts, pages };
+/**
+ * 项目。放在 src/content/projects/ 下，一个项目一个 Markdown 文件。
+ * frontmatter 放元信息（链接、技术栈、年份），正文写这个项目的故事。
+ */
+const projects = defineCollection({
+  type: 'content',
+  schema: z.object({
+    /** 项目名 */
+    title: z.string(),
+    /** 一句话说明，列表页用 */
+    summary: z.string(),
+    /**
+     * 年份或时间段，如 2026 / 2026 春。
+     * 用 coerce —— 写 `year: 2026` 时 YAML 会给一个数字，
+     * 不做转换就会报「data does not match collection schema」。
+     */
+    year: z.coerce.string(),
+    /** 线上地址 */
+    url: z.string().optional(),
+    /** 源码地址（没有就留空） */
+    repo: z.string().optional(),
+    /** 技术栈，列表页做成小标签 */
+    stack: z.array(z.string()).default([]),
+    /** 状态，如「已上线」「已归档」 */
+    status: z.string().optional(),
+    /** 排序，小的在前 */
+    order: z.number().default(0),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { posts, pages, projects };

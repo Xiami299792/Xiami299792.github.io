@@ -1,0 +1,53 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects, projectSlug } from '../../utils/projects';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({
+    params: { id: projectSlug(project) },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, year, url, repo, stack, status } = project.data;
+---
+
+<BaseLayout wide title={title} description={summary}>
+  <h1 class="page-title">{title}</h1>
+
+  <p class="page-lead">
+    {year}
+    {status && <> · {status}</>}
+  </p>
+
+  <div class="project-bar">
+    {
+      url && (
+        <a class="tag tag--solid" href={url} target="_blank" rel="noopener noreferrer">
+          打开线上 ↗
+        </a>
+      )
+    }
+    {
+      repo && (
+        <a class="tag" href={repo} target="_blank" rel="noopener noreferrer">
+          源码 ↗
+        </a>
+      )
+    }
+    {stack.map((tech) => <span class="tag tag--plain">{tech}</span>)}
+  </div>
+
+  <div class="prose">
+    <Content />
+  </div>
+
+  <p class="project-back">
+    <a href={withBase('/projects/')}>← 全部项目</a>
+  </p>
+</BaseLayout>

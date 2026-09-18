@@ -86,6 +86,7 @@ export type SeriesKey = keyof typeof SERIES;
 /** 顶部导航（路径不要带 base，代码里会自动补） */
 export const NAV = [
   { href: '/', label: '首页' },
+  { href: '/projects/', label: '项目' },
   { href: '/series/', label: '系列' },
   { href: '/archive/', label: '归档' },
   { href: '/search/', label: '搜索' },

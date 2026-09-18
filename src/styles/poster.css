@@ -895,12 +895,23 @@
 @media (max-width: 620px) {
   :root:not([data-cat]) .header-inner {
     height: auto;
-    padding: 12px 0 13px;
-    gap: 10px;
+    padding: 11px 0 12px;
+    gap: 9px;
   }
 
   :root:not([data-cat]) .brand {
     font-size: 17px;
+  }
+
+  /* 六个导航项在 390px 下按原间距会折成两行，顶栏高到 142px。
+     收紧间距和内边距后回到一行 —— 实测过，不是估计。 */
+  :root:not([data-cat]) .site-nav {
+    gap: 7px;
+  }
+
+  :root:not([data-cat]) .nav-link {
+    padding: 4px 9px;
+    font-size: 10.5px;
   }
 
   /* 栏目页大标题也交给浏览器均衡折行，避免孤字 */
@@ -990,5 +1001,186 @@
 
   :root:not([data-cat]) .archive-year {
     font-size: 30px;
+  }
+}
+/* ==========================================================================
+   项目（/projects/ 与项目详情页）
+   ========================================================================== */
+
+:root:not([data-cat]) .projects {
+  display: grid;
+  gap: 22px;
+}
+
+:root:not([data-cat]) .project {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: start;
+  padding: 22px 24px 24px;
+  border: 6px solid var(--p-ink);
+  border-radius: 0;
+  color: var(--p-ink);
+  transition: background 0.14s;
+}
+
+:root:not([data-cat]) .project:hover {
+  background: var(--p-cream);
+}
+
+/* 列序号：橙色巨型数字 + 红色错位投影 */
+:root:not([data-cat]) .project__num {
+  font-family: var(--p-slab);
+  font-size: 42px;
+  line-height: 0.85;
+  color: var(--p-orange);
+  text-shadow: 3px 3px 0 var(--p-red);
+}
+
+:root:not([data-cat]) .project__body {
+  min-width: 0;
+}
+
+:root:not([data-cat]) .project__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 14px;
+}
+
+:root:not([data-cat]) .project__title {
+  margin: 0;
+  font-family: var(--p-slab);
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--p-ink);
+  text-wrap: balance;
+}
+
+:root:not([data-cat]) .project__title:lang(zh) {
+  font-weight: 700;
+}
+
+:root:not([data-cat]) .project:hover .project__title {
+  color: var(--p-blue-text);
+}
+
+:root:not([data-cat]) .project__year {
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--p-muted-2);
+}
+
+:root:not([data-cat]) .project__summary {
+  margin: 12px 0 0;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--p-muted);
+  text-wrap: pretty;
+}
+
+:root:not([data-cat]) .project__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+:root:not([data-cat]) .project__status,
+:root:not([data-cat]) .project__tech {
+  padding: 4px 11px;
+  border: 3px solid var(--p-ink);
+  font-family: var(--p-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .project__status {
+  background: var(--p-orange);
+}
+
+:root:not([data-cat]) .project__arrow {
+  align-self: center;
+  font-family: var(--p-slab);
+  font-size: 24px;
+  color: var(--p-ink);
+}
+
+:root:not([data-cat]) .project:hover .project__arrow {
+  color: var(--p-blue-text);
+}
+
+/* ---------- 项目详情页的链接条 ---------- */
+
+:root:not([data-cat]) .project-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 36px;
+}
+
+:root:not([data-cat]) .tag--solid {
+  background: var(--p-blue);
+  border-color: var(--p-blue);
+  color: var(--p-cream);
+}
+
+:root:not([data-cat]) .tag--solid:hover {
+  background: var(--p-orange);
+  border-color: var(--p-ink);
+  color: var(--p-ink);
+}
+
+/* 技术栈只是标注，不是链接，不做 hover 反馈 */
+:root:not([data-cat]) .tag--plain,
+:root:not([data-cat]) .tag--plain:hover {
+  background: none;
+  border-color: var(--p-muted-2);
+  color: var(--p-muted-2);
+}
+
+:root:not([data-cat]) .project-back {
+  margin: 46px 0 0;
+  padding-top: 18px;
+  border-top: 6px solid var(--p-ink);
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+:root:not([data-cat]) .project-back a:hover {
+  color: var(--p-blue-text);
+}
+
+/* ---------- 窄屏 ---------- */
+
+@media (max-width: 680px) {
+  :root:not([data-cat]) .project {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px 16px 20px;
+  }
+
+  :root:not([data-cat]) .project__num {
+    font-size: 30px;
+  }
+
+  :root:not([data-cat]) .project__title {
+    font-size: 21px;
+  }
+
+  :root:not([data-cat]) .project__summary {
+    font-size: 16px;
+  }
+
+  /* 箭头在窄屏让出空间，标题下面已经能点了 */
+  :root:not([data-cat]) .project__arrow {
+    display: none;
   }
 }
