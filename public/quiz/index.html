@@ -820,7 +820,16 @@ function sanitizeCfg() {
     ? Number(cfg.examMinutes) : 90;
 }
 sanitizeCfg();
-const saveProg = () => save(K.prog, prog);
+/* 一条记录是否值得留存：全是 0 的就是空壳（渲染时 P() 顺手建的），存盘和导出都该剔掉 */
+const progHasData = p => !!p && typeof p === "object" &&
+  !!(p.seen || p.right || p.wrong || p.recite || p.fav || p.inWrong);
+const saveProg = () => {
+  // 内存里保留空壳（P() 的读写都依赖它），但写盘前剔掉：
+  // 否则每答一题都要把 240 条零记录序列化进 localStorage
+  const slim = {};
+  Object.keys(prog).forEach(id => { if (progHasData(prog[id])) slim[id] = prog[id]; });
+  save(K.prog, slim);
+};
 const saveDaily = () => save(K.daily, daily);
 const saveCfg  = () => save(K.cfg, cfg);
 
@@ -2065,13 +2074,9 @@ function bindMe() {
   };
   fr.onchange = saveCfg;
   $("#expBtn").onclick = () => {
-    // 只导出真正有内容的题目记录：渲染时会给没碰过的题建空壳，否则备份文件白白胖一圈
+    // 只导出真正有内容的题目记录（同 saveProg 的口径），否则备份文件白白胖一圈
     const slim = {};
-    Object.keys(prog).forEach(id => {
-      const p = prog[id];
-      if (p && typeof p === "object" &&
-          (p.seen || p.right || p.wrong || p.recite || p.fav || p.inWrong)) slim[id] = p;
-    });
+    Object.keys(prog).forEach(id => { if (progHasData(prog[id])) slim[id] = prog[id]; });
     const text = JSON.stringify({ app: "军事理论刷题", v: 1, prog: slim, daily, cfg }, null, 1);
     try {
       const a = document.createElement("a");
