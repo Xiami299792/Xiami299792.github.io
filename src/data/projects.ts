@@ -1,15 +1,14 @@
 /**
  * 项目清单。
  *
- * 项目只在这里登记元信息，卡片直接链到项目本身 —— 不再写介绍文档、
- * 也不生成详情页。要加项目就往下面的数组里加一条。
+ * 只登记「这是什么项目」——不写介绍、不写描述、不生成详情页。
+ * 卡片上只有名字、年份和技术标签，点进去就是成品本身。
+ * 要加项目就往下面的数组里加一条。
  */
 
 export type Project = {
   /** 项目名 */
   title: string;
-  /** 一句话说明，卡片上显示一行 */
-  summary: string;
   /** 年份 */
   year: string;
   /** 站内路径（如 /quiz/）或外链 */
@@ -25,7 +24,6 @@ export type Project = {
 export const PROJECTS: Project[] = [
   {
     title: '军事理论刷题',
-    summary: '把群里的 PDF 题库做成手机上点开就能刷的网页，不用注册、不用装 App。',
     year: '2026',
     href: '/quiz/',
     stack: ['HTML', 'CSS', 'JavaScript'],

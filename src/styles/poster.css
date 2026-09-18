@@ -1004,21 +1004,23 @@
   }
 }
 /* ==========================================================================
-   项目（/projects/ 与项目详情页）
+   项目（/projects/）
+   --------------------------------------------------------------------------
+   卡片只有一行：序号、名字、年份、标签、箭头。
+   没有描述文字 —— 点开就是成品本身。
    ========================================================================== */
 
 :root:not([data-cat]) .projects {
   display: grid;
-  gap: 22px;
+  gap: 18px;
 }
 
 :root:not([data-cat]) .project {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 20px;
-  align-items: start;
-  padding: 22px 24px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
   border: 6px solid var(--p-ink);
   border-radius: 0;
   color: var(--p-ink);
@@ -1029,34 +1031,23 @@
   background: var(--p-cream);
 }
 
-/* 列序号：橙色巨型数字 + 红色错位投影 */
+/* 列序号：橙色数字 + 红色错位投影 */
 :root:not([data-cat]) .project__num {
   font-family: var(--p-slab);
-  font-size: 42px;
+  font-size: 30px;
   line-height: 0.85;
   color: var(--p-orange);
-  text-shadow: 3px 3px 0 var(--p-red);
-}
-
-:root:not([data-cat]) .project__body {
-  min-width: 0;
-}
-
-:root:not([data-cat]) .project__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 14px;
+  text-shadow: 2px 2px 0 var(--p-red);
+  flex: 0 0 auto;
 }
 
 :root:not([data-cat]) .project__title {
-  margin: 0;
   font-family: var(--p-slab);
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 400;
+  line-height: 1.1;
   letter-spacing: 0;
   color: var(--p-ink);
-  text-wrap: balance;
 }
 
 :root:not([data-cat]) .project__title:lang(zh) {
@@ -1074,21 +1065,12 @@
   color: var(--p-muted-2);
 }
 
-:root:not([data-cat]) .project__summary {
-  margin: 12px 0 0;
-  font-family: var(--p-body);
-  font-weight: 500;
-  font-size: 17px;
-  line-height: 1.6;
-  color: var(--p-muted);
-  text-wrap: pretty;
-}
-
+/* 标签靠右，箭头跟在最后 */
 :root:not([data-cat]) .project__meta {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 16px;
+  margin-left: auto;
 }
 
 :root:not([data-cat]) .project__status,
@@ -1106,9 +1088,9 @@
 }
 
 :root:not([data-cat]) .project__arrow {
-  align-self: center;
+  flex: 0 0 auto;
   font-family: var(--p-slab);
-  font-size: 24px;
+  font-size: 22px;
   color: var(--p-ink);
 }
 
@@ -1116,71 +1098,31 @@
   color: var(--p-blue-text);
 }
 
-/* ---------- 项目详情页的链接条 ---------- */
-
-:root:not([data-cat]) .project-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 0 0 36px;
-}
-
-:root:not([data-cat]) .tag--solid {
-  background: var(--p-blue);
-  border-color: var(--p-blue);
-  color: var(--p-cream);
-}
-
-:root:not([data-cat]) .tag--solid:hover {
-  background: var(--p-orange);
-  border-color: var(--p-ink);
-  color: var(--p-ink);
-}
-
-/* 技术栈只是标注，不是链接，不做 hover 反馈 */
-:root:not([data-cat]) .tag--plain,
-:root:not([data-cat]) .tag--plain:hover {
-  background: none;
-  border-color: var(--p-muted-2);
-  color: var(--p-muted-2);
-}
-
-:root:not([data-cat]) .project-back {
-  margin: 46px 0 0;
-  padding-top: 18px;
-  border-top: 6px solid var(--p-ink);
-  font-family: var(--p-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-}
-
-:root:not([data-cat]) .project-back a:hover {
-  color: var(--p-blue-text);
-}
-
 /* ---------- 窄屏 ---------- */
 
 @media (max-width: 680px) {
   :root:not([data-cat]) .project {
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 14px;
-    padding: 18px 16px 20px;
+    gap: 10px 12px;
+    padding: 16px 16px 18px;
   }
 
   :root:not([data-cat]) .project__num {
-    font-size: 30px;
+    font-size: 24px;
   }
 
   :root:not([data-cat]) .project__title {
-    font-size: 21px;
+    font-size: 20px;
   }
 
-  :root:not([data-cat]) .project__summary {
-    font-size: 16px;
+  /* 窄屏标签换到第二行，靠左排 */
+  :root:not([data-cat]) .project__meta {
+    flex-basis: 100%;
+    margin-left: 0;
+    order: 3;
   }
 
-  /* 箭头在窄屏让出空间，标题下面已经能点了 */
   :root:not([data-cat]) .project__arrow {
-    display: none;
+    order: 2;
+    font-size: 18px;
   }
 }
