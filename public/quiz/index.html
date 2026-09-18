@@ -692,7 +692,7 @@ const ICON = {
 
 /* ---------------- 存储（沙箱降级） ---------------- */
 const mem = {};
-let storeOK = true, storeWhy = "";
+let storeOK = true, storeWhy = "", storeBad = false, storeBadKey = "";
 try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); }
 catch (e) {
   storeOK = false;
@@ -710,11 +710,22 @@ function load(k, def) {
   }
   if (raw == null) return (k in mem) ? mem[k] : def;
   try { return JSON.parse(raw); }
-  catch (e) {                       // 只是这一个键坏了：清掉它，不要拖累其它键的读写
-    try { localStorage.removeItem(k); } catch (_) {}
+  catch (e) {
+    // 只是这一个键坏了：别一声不响把整份进度删掉。先留底再重置，
+    // 并把状态标出来 —— 原来 storeOK 仍是 true，首页/设置页的提示永远不会显示
+    storeBad = true;
     storeWhy = "本地数据损坏，已重置";
+    storeBadKey = k + ".bad";
+    try { localStorage.setItem(storeBadKey, raw); } catch (_) {}
+    try { localStorage.removeItem(k); } catch (_) {}
     return (k in mem) ? mem[k] : def;
   }
+}
+/* 只读原始存储值：不写盘、不删键，失败也不改任何状态（合并保存时用） */
+function readRaw(k) {
+  if (!storeOK) return null;
+  try { const raw = localStorage.getItem(k); return raw == null ? null : JSON.parse(raw); }
+  catch (e) { return null; }
 }
 function save(k, v) {
   mem[k] = v;
@@ -781,7 +792,8 @@ function openIntro(force) {
 }
 let introNoShow = false;
 function closeIntro() {
-  if (introNoShow) save("mil.intro.v1", true);
+  // 按勾选框的真实状态存：只写 true 的话，取消勾选也无效，开场说明再也回不来
+  save("mil.intro.v1", !!introNoShow);
   closeModal();
 }
 let prog  = load(K.prog, {});    // { id: {seen,right,wrong,streak,lastAt,inWrong,ws} }
@@ -795,12 +807,19 @@ const SKINS = [
 ];
 const skinOf = id => SKINS.filter(s => s.id === id)[0] || SKINS[0];
 
-let cfg   = Object.assign({
+let cfg = {
   // shuffle 默认开：题库答案位置有系统性偏差（单选 A/B/C/D=20/39/32/9，
   // 多选 78/80 含 A），固定选项顺序会让人靠位置蒙对，必须打乱
   theme: "light", font: 16, sound: true, auto: true, shuffle: true,
   size: 20, scope: "all", skin: "ink", examDate: "2026-09-19", examPass: 60, examMinutes: 90
-}, load(K.cfg, {}));
+};
+// 逐键拷贝而不是 Object.assign：手改过的存储里若出现 "__proto__" 键，
+// Object.assign 走的是 setter，会把 cfg 的原型整个换掉
+(function mergeStoredCfg() {
+  const src = load(K.cfg, {});
+  if (!src || typeof src !== "object" || Array.isArray(src)) return;
+  Object.keys(src).forEach(k => { if (k !== "__proto__") cfg[k] = src[k]; });
+})();
 
 // 存储里/备份里的值一律当作不可信输入：逐项校验并夹紧
 function sanitizeCfg() {
@@ -823,24 +842,78 @@ sanitizeCfg();
 /* 一条记录是否值得留存：全是 0 的就是空壳（渲染时 P() 顺手建的），存盘和导出都该剔掉 */
 const progHasData = p => !!p && typeof p === "object" &&
   !!(p.seen || p.right || p.wrong || p.recite || p.fav || p.inWrong);
-const saveProg = () => {
+const cntOf = v => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
+/* 合并同一道题的两份记录：计数取大（单调累加，取大不会凭空造分），
+   状态位取更近一次交互的那份（lastAt 大者胜） */
+function mergeRec(a, b) {
+  if (!progHasData(a)) return b;
+  if (!progHasData(b)) return a;
+  const newer = (a.lastAt || 0) >= (b.lastAt || 0) ? a : b;
+  const older = newer === a ? b : a;
+  return Object.assign({}, older, newer, {
+    seen: Math.max(cntOf(a.seen), cntOf(b.seen)),
+    right: Math.max(cntOf(a.right), cntOf(b.right)),
+    wrong: Math.max(cntOf(a.wrong), cntOf(b.wrong)),
+    recite: Math.max(cntOf(a.recite), cntOf(b.recite)),
+    lastRecite: Math.max(cntOf(a.lastRecite), cntOf(b.lastRecite))
+  });
+}
+const slimProg = () => {
   // 内存里保留空壳（P() 的读写都依赖它），但写盘前剔掉：
   // 否则每答一题都要把 240 条零记录序列化进 localStorage
   const slim = {};
   Object.keys(prog).forEach(id => { if (progHasData(prog[id])) slim[id] = prog[id]; });
-  save(K.prog, slim);
+  return slim;
 };
-const saveDaily = () => save(K.daily, daily);
+/* 不合并的直接落盘：只有「清空记录」「恢复备份」这种要整表替换的场景才用它，
+   否则合并逻辑会把刚清掉/刚覆盖掉的旧记录又并回来 */
+const writeProg = () => save(K.prog, slimProg());
+const writeDaily = () => save(K.daily, daily);
+const saveProg = () => {
+  // 两个标签页同开时各自持有一份内存表，后写的会整表覆盖对方。
+  // 写盘前先把磁盘上那份并进来，两边都不丢。
+  const disk = readRaw(K.prog);
+  if (disk && typeof disk === "object" && !Array.isArray(disk)) {
+    Object.keys(disk).forEach(id => {
+      if (id === "__proto__") return;
+      const merged = mergeRec(prog[id], disk[id]);
+      if (progHasData(merged)) prog[id] = merged;
+    });
+  }
+  writeProg();
+};
+const saveDaily = () => {
+  // 同样的道理：按天取较大的 n / r。两标签页各自增加时取大只是少算，绝不会多算。
+  const disk = readRaw(K.daily);
+  if (disk && typeof disk === "object" && !Array.isArray(disk)) {
+    Object.keys(disk).forEach(k => {
+      if (k === "__proto__") return;
+      const b = disk[k]; if (!b || typeof b !== "object") return;
+      if (!daily[k] || typeof daily[k] !== "object") { daily[k] = { n: cntOf(b.n), r: cntOf(b.r) }; return; }
+      daily[k].n = Math.max(cntOf(daily[k].n), cntOf(b.n));
+      daily[k].r = Math.max(cntOf(daily[k].r), cntOf(b.r));
+    });
+  }
+  save(K.daily, daily);
+};
 const saveCfg  = () => save(K.cfg, cfg);
 
 function P(id) {
   // 恢复备份/存储被外部改动后 prog 可能不是合法对象，这里兜底重建
   if (!prog || typeof prog !== "object" || Array.isArray(prog)) prog = {};
-  const p = prog[id];
-  if (!p || typeof p !== "object" || Array.isArray(p)) {
+  if (!prog[id] || typeof prog[id] !== "object" || Array.isArray(prog[id])) {
     prog[id] = { seen: 0, right: 0, wrong: 0, streak: 0, lastAt: 0, inWrong: false, ws: 0 };
   }
-  return prog[id];
+  const p = prog[id];
+  // 归一化字段类型：备份文件、手改过的存储都可能塞进字符串 / null / NaN。
+  // 不修的话 weight() 会算出 NaN（加权抽题退化成「永远取池尾」），
+  // 统计页会变成字符串拼接和 NaN%，错题本的连对计数也会失灵。
+  const cnt = v => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
+  p.seen = cnt(p.seen); p.right = cnt(p.right); p.wrong = cnt(p.wrong);
+  p.streak = cnt(p.streak); p.ws = cnt(p.ws);
+  p.recite = cnt(p.recite); p.lastRecite = cnt(p.lastRecite); p.lastAt = cnt(p.lastAt);
+  p.inWrong = !!p.inWrong; p.fav = !!p.fav;
+  return p;
 }
 
 /* ---------------- 音效 ---------------- */
@@ -875,6 +948,7 @@ function toast(m, ms) {
   clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("on"), ms || 1800);
 }
 function say(title, bodyHTML, btn) {
+  clearTimeout(S.timer);               // 弹层开着时别让自动跳题在背后把题目翻过去
   $("#modal").innerHTML =
     '<div class="mask" data-x><div class="modal">' +
       '<h3>' + esc(title) + "</h3>" +
@@ -885,6 +959,7 @@ function say(title, bodyHTML, btn) {
   lockScroll();
 }
 function ask(title, msg, onYes, yes) {
+  clearTimeout(S.timer);               // 同上：确认框开着时不要在背后自动翻题
   $("#modal").innerHTML =
     '<div class="mask" data-x><div class="modal">' +
       '<h3>' + esc(title) + "</h3>" +
@@ -1021,6 +1096,7 @@ function startRecite(list, label) {
   S.i = 0; S.frontier = 0; S.planned = S.queue.length; S.resolved = 0;
   S.attempts = 0; S.correct = 0; S.sel = []; S.locked = false;
   S.first = {}; S.last = {}; S.startAt = Date.now();
+  S.reciteDone = {};                  // 本次背题已计过数的题目下标（见 bindQuiz 里的去重）
   S.token = (S.token || 0) + 1;
   clearTimeout(S.timer);
   go("quiz");
@@ -1047,8 +1123,12 @@ function examHistory() { const h = load(K.exam, []); return Array.isArray(h) ? h
 
 /* 点卡片会立刻渲染新页面；浏览器随后补发的 click 是按「当前 DOM」重新命中测试的，
    于是落在新页面上（用户感受就是「莫名其妙把第一题选了」）。吞掉紧随其后的那一次。 */
-function swallowClick() {
-  const h = ev => { ev.stopPropagation(); ev.preventDefault(); };
+function swallowClick(x, y) {
+  // 只吞「同一落点」的合成 click：否则从轮播进入模式后 400ms 内的第一次
+  // 真实点击（选项 / 确认答案）也会被无声吃掉
+  const near = ev => typeof x !== "number" ||
+    (Math.abs((ev.clientX || 0) - x) < 40 && Math.abs((ev.clientY || 0) - y) < 40);
+  const h = ev => { if (!near(ev)) return; ev.stopPropagation(); ev.preventDefault(); };
   document.addEventListener("click", h, true);
   setTimeout(() => document.removeEventListener("click", h, true), 400);
 }
@@ -1170,7 +1250,7 @@ function bindCarousel() {
       const m = carModes()[i];
       if (m.id === "wrong" && !wrongList().length) return toast("错题本是空的");
       if (m.id === "fresh" && !freshList().length) return toast("这个范围内没有没刷过的题了");
-      swallowClick();                              // 先吞掉这次 click，再换页
+      swallowClick(lastX, lastY);                  // 先吞掉这次 click，再换页
       if (m.id === "smart") start("smart", buildSmart(), "智能刷题");
       else if (m.id === "fresh") start("fresh", buildFresh(), "临阵磨枪");
       else if (m.id === "wrong") start("wrong", wrongList(), "错题重刷");
@@ -1249,6 +1329,7 @@ function submitExam(auto) {
   const hist = examHistory(); hist.push({ d: dkey(), ts: Date.now(), got: got, ms: ms });
   save(K.exam, hist.slice(-40));
   S.i = S.queue.length;
+  closeModal();          // 自动交卷可能正好砸在答题卡/确认框上，先收掉遮罩与滚动锁
   go("examResult");
 }
 
@@ -1372,8 +1453,12 @@ function judge() {
   if (!ok && S.mode !== "seq") {
     const rest = S.queue.length - S.i - 1;
     const gap = clamp(Math.ceil(rest / 2), 1, 5);
-    S.queue.splice(Math.min(S.queue.length, S.i + 1 + gap), 0,
+    const at = Math.min(S.queue.length, S.i + 1 + gap);
+    S.queue.splice(at, 0,
       { q: it.q, retry: true, answered: false, sel: [], ok: false, counted: false });
+    // 插在 frontier 之前时后面所有条目都往后挪了一格：
+    // 不修 frontier，「回到当前题」和「回看中」标记就会落到另一道题上
+    if (at <= S.frontier) S.frontier++;
   }
 
   $$("#app .opt").forEach((b, i) => {
@@ -1526,14 +1611,19 @@ function vHome() {
   const cover = total ? Math.round(covered / total * 100) : 0; // 空题库时不要算出 NaN
 
   const dd = daysToExam();
-  const hist = examHistory();
-  const lastScore = hist.length ? hist[hist.length - 1].got : null;
+  // 存储被手改坏时 got 可能不是数字：只认像样的记录，免得首页显示「上次模考 undefined 分」
+  const hist = examHistory().filter(x => x && Number.isFinite(Number(x.got)));
+  const lastScore = hist.length ? Number(hist[hist.length - 1].got) : null;
 
   let h = "";
-  if (!storeOK) {
-    h += '<div class="warnbar"><b>⚠️ 进度无法保存：' + esc(storeWhy) + "</b>" +
-      '<div class="xs mut" style="margin-top:6px">刷新后数据丢失。' +
-      "请双击打开本文件，或用线上地址访问。</div></div>";
+  if (!storeOK || storeBad) {
+    h += '<div class="warnbar"><b>⚠️ ' +
+      (storeOK ? "本地记录损坏，已重置" : "进度无法保存：" + esc(storeWhy)) + "</b>" +
+      '<div class="xs mut" style="margin-top:6px">' +
+      (storeOK
+        ? "损坏的那份已留底（键名 " + esc(storeBadKey) + "），本次从空白开始。"
+        : "刷新后数据丢失。请双击打开本文件，或用线上地址访问。") +
+      "</div></div>";
   }
 
   // —— 状态条：考试倒计时 + 进度，取代原来堆在一起的标题/KPI/环形图 ——
@@ -1700,7 +1790,10 @@ function bindQuiz() {
   }
 
   if (isRecite()) {                       // 背题模式：只有翻页
-    markSeen(q);
+    // 同一题在一次背题会话里只记一次：bindQuiz 每次 render 都会跑，
+    // 开关答题卡、来回翻页都会让 recite 重复 +1 并整表落盘
+    if (!S.reciteDone) S.reciteDone = {};
+    if (!S.reciteDone[S.i]) { S.reciteDone[S.i] = true; markSeen(q); }
     const fb2 = $("#favBtn");
     if (fb2) fb2.onclick = () => { const on = toggleFav(q.id);
       fb2.innerHTML = on ? ICON.starOn : ICON.star; toast(on ? "已收藏" : "已取消收藏"); };
@@ -1942,7 +2035,8 @@ function vStats() {
 function bindStats() {
   const b = $("#resetBtn");
   if (b) b.onclick = () => ask("清空刷题记录？", "错题本、统计与模考历史全部清空，题库保留。", () => {
-    prog = {}; daily = {}; saveProg(); saveDaily();
+    prog = {}; daily = {};
+    writeProg(); writeDaily();       // 用不合并的直写，别让合并逻辑把旧记录并回来
     save("mil.cursor", "");          // 顺序刷题的游标也要归零，否则会从旧位置接着刷
     save(K.exam, []);               // 模考历史属于统计的一部分，一并清掉
     toast("记录已清空"); render();
@@ -2030,7 +2124,9 @@ function vMe() {
     '<div class="sm mut">' + BANK.questions.length + " 题 · 已刷 " +
       BANK.questions.filter(q => P(q.id).seen).length + " 题 · 错题 " + wrongList().length + " 题</div>" +
     '<div class="sm mut" style="margin-top:6px">' +
-      (storeOK ? "进度存在本机浏览器" : "⚠️ " + esc(storeWhy) + "，刷新即丢失") + "</div>" +
+      (storeOK
+        ? (storeBad ? "⚠️ 本地记录曾损坏并已重置（留底键 " + esc(storeBadKey) + "）" : "进度存在本机浏览器")
+        : "⚠️ " + esc(storeWhy) + "，刷新即丢失") + "</div>" +
     '<div class="grid2" style="margin-top:14px">' +
       '<button class="btn" id="expBtn">导出备份</button>' +
       '<button class="btn" id="impBtn">恢复备份</button>' +
@@ -2077,7 +2173,10 @@ function bindMe() {
     // 只导出真正有内容的题目记录（同 saveProg 的口径），否则备份文件白白胖一圈
     const slim = {};
     Object.keys(prog).forEach(id => { if (progHasData(prog[id])) slim[id] = prog[id]; });
-    const text = JSON.stringify({ app: "军事理论刷题", v: 1, prog: slim, daily, cfg }, null, 1);
+    const text = JSON.stringify({
+      app: "军事理论刷题", v: 1, prog: slim, daily, cfg,
+      exam: examHistory(), cursor: load("mil.cursor", "")
+    }, null, 1);
     try {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
@@ -2095,39 +2194,66 @@ function bindMe() {
       const f = inp.files[0]; if (!f) return;
       const rd = new FileReader();
       rd.onload = () => {
-        try {
-          const d = JSON.parse(String(rd.result));
-          if (!d || typeof d !== "object") { toast("文件格式不对"); return; }
-          // 只接受形状正确的数据；cfg 只白名单合并，避免 __proto__ 之类污染原型
-          if (d.prog && typeof d.prog === "object" && !Array.isArray(d.prog)) { prog = d.prog; saveProg(); }
-          if (d.daily && typeof d.daily === "object" && !Array.isArray(d.daily)) {
-            const clean = {};                       // 只收形状正确的日期条目
-            Object.keys(d.daily).forEach(k => {
-              const v = d.daily[k];
-              if (v && typeof v === "object" && !Array.isArray(v) && Number.isFinite(v.n)) {
-                clean[k] = { n: v.n, r: Number.isFinite(v.r) ? v.r : 0 };
-              }
-            });
-            daily = clean; saveDaily();
-          }
-          if (d.cfg && typeof d.cfg === "object" && !Array.isArray(d.cfg)) {
-            const src = d.cfg;
-            ["theme", "skin", "sound", "auto", "shuffle", "scope", "examDate"].forEach(k => {
-              if (typeof src[k] === "string" || typeof src[k] === "boolean") cfg[k] = src[k];
-            });
-            ["font", "size", "examPass", "examMinutes"].forEach(k => {
-              if (Number.isFinite(src[k])) cfg[k] = src[k];
-            });
-            sanitizeCfg();
-            saveCfg(); applyTheme(); applyFont();
-          }
-          toast("已恢复"); render();
-        } catch (e) { toast("文件格式不对"); }
+        let d = null;
+        try { d = JSON.parse(String(rd.result)); } catch (e) { d = null; }
+        if (!d || typeof d !== "object" || Array.isArray(d)) { toast("这不是备份文件（格式不对）"); return; }
+        const progOK = d.prog && typeof d.prog === "object" && !Array.isArray(d.prog);
+        if (!progOK && !d.daily && !d.cfg) { toast("文件里没有可恢复的内容"); return; }
+        const n = progOK ? Object.keys(d.prog).filter(k => k !== "__proto__").length : 0;
+        // 恢复是整表替换，先让用户看清楚会覆盖掉什么（否则一个 {"prog":{}} 就能清零全部进度）
+        ask("恢复备份？",
+          "备份里有 " + n + " 题记录。本机现有 " +
+          BANK.questions.filter(q => P(q.id).seen).length + " 题已刷记录会被覆盖。",
+          () => applyBackup(d), "覆盖恢复");
       };
       rd.readAsText(f, "utf-8");
     };
     inp.click();
   };
+}
+
+/* 恢复备份（整表替换，调用前已经过用户确认）。
+   - prog 逐条归一化：P() 会顺手把字段类型修好，避免坏备份让 weight() 算出 NaN
+   - 所有键都跳过 "__proto__"：对普通对象来说那是「改原型」而不是「存一个键」 */
+function applyBackup(d) {
+  if (d.prog && typeof d.prog === "object" && !Array.isArray(d.prog)) {
+    const clean = {};
+    Object.keys(d.prog).forEach(id => {
+      if (id === "__proto__") return;
+      const v = d.prog[id];
+      if (v && typeof v === "object" && !Array.isArray(v)) clean[id] = v;
+    });
+    prog = clean;
+    writeProg();                            // 直写：恢复备份是整表替换，不能与旧记录合并
+  }
+  if (d.daily && typeof d.daily === "object" && !Array.isArray(d.daily)) {
+    const clean = {};                       // 只收形状正确的日期条目
+    Object.keys(d.daily).forEach(k => {
+      if (k === "__proto__") return;
+      const v = d.daily[k];
+      if (v && typeof v === "object" && !Array.isArray(v) && Number.isFinite(Number(v.n))) {
+        clean[k] = { n: cntOf(v.n), r: cntOf(v.r) };
+      }
+    });
+    daily = clean; writeDaily();            // 同上，直写
+  }
+  if (d.cfg && typeof d.cfg === "object" && !Array.isArray(d.cfg)) {
+    const src = d.cfg;
+    ["theme", "skin", "sound", "auto", "shuffle", "scope", "examDate"].forEach(k => {
+      if (typeof src[k] === "string" || typeof src[k] === "boolean") cfg[k] = src[k];
+    });
+    ["font", "size", "examPass", "examMinutes"].forEach(k => {
+      if (Number.isFinite(src[k])) cfg[k] = src[k];
+    });
+    sanitizeCfg();
+    saveCfg(); applyTheme(); applyFont();
+  }
+  // 模考历史与顺序刷题游标：新备份格式才带，旧备份缺这两项就保持本机原样
+  if (Array.isArray(d.exam)) {
+    save(K.exam, d.exam.filter(x => x && Number.isFinite(Number(x.got))).slice(-40));
+  }
+  if (typeof d.cursor === "string") save("mil.cursor", d.cursor);
+  toast("已恢复"); render();
 }
 
 function emptyBlock(t, s) {
@@ -2155,18 +2281,13 @@ document.addEventListener("keydown", e => {
   if (e.key === "Escape") { closeModal(); return; }
   if ($("#modal").innerHTML) return;   // 弹层开着时键盘不作用于背后的题目
   if (view !== "quiz" || S.i >= S.queue.length) return;
-  if (!cur() || cur().answered) return; // 回看态不接受作答按键
+  if (!cur()) return;
   if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
-  const k = e.key;
-  if (k === "Enter" || k === " ") {
-    e.preventDefault();
-    if (S.locked) { const c = $("#cont"); if (c) c.click(); }
-    else { const s = $("#submit"); if (s && !s.disabled) s.click(); }
-    return;
-  }
+  const k = e.key, typing = (k === "Enter" || k === " ");
+
   if (isRecite()) {                    // 背题模式：左右键翻页，不接受作答键
     if (k === "ArrowLeft") { const p = $("#rprev"); if (p && !p.disabled) p.click(); }
-    else if (k === "ArrowRight" || k === "Enter" || k === " ") { e.preventDefault(); const n = $("#rnext"); if (n) n.click(); }
+    else if (k === "ArrowRight" || typing) { e.preventDefault(); const n = $("#rnext"); if (n) n.click(); }
     return;
   }
   if (isExam()) {
@@ -2180,6 +2301,18 @@ document.addEventListener("keydown", e => {
     }
     return;
   }
+  // Enter / 空格：已判题（或回看态）时=继续，还没判题时=确认答案。
+  // 这段必须放在「回看态早退」之前 —— 否则答完一题按 Enter 永远继续不了，
+  // 设置页宣传的「Enter／空格 确认 / 继续」只有前半句是真的。
+  if (typing) {
+    e.preventDefault();
+    const cont = $("#cont");
+    if (cont) { cont.click(); return; }
+    const s = $("#submit");
+    if (s && !s.disabled) s.click();
+    return;
+  }
+  if (cur().answered) return;          // 回看态不接受作答按键
   if (k === "ArrowLeft") { const p = $("#prev"); if (p && !p.disabled) p.click(); return; }
   let i = -1;
   if (/^[a-hA-H]$/.test(k)) i = k.toUpperCase().charCodeAt(0) - 65;
