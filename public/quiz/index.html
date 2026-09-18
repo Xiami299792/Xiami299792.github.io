@@ -429,6 +429,9 @@ input[type=range]{width:100%;height:44px;padding:14px 0;accent-color:var(--acc)}
 .keys button.w::after{content:"\2717";position:absolute;right:3px;bottom:1px;font-size:10px;line-height:1}
 .keys button.r{background:var(--ok);border-color:var(--ok);color:#fff}
 .keys button.w{background:var(--bad);border-color:var(--bad);color:#fff}
+/* 模拟考：已作答但未交卷 —— 不暗示对错，只表示「这题选过了」 */
+.keys button.a{background:var(--inv-bg);color:var(--inv-fg);border-color:var(--inv-bg)}
+.keys button.a::after{content:"";position:absolute;right:4px;top:4px;width:5px;height:5px;background:var(--acc)}
 .keys button.cur{outline:3px solid var(--warn);outline-offset:-5px}
 
 /* ---------- 战报 ---------- */
@@ -783,7 +786,7 @@ function closeIntro() {
 }
 let prog  = load(K.prog, {});    // { id: {seen,right,wrong,streak,lastAt,inWrong,ws} }
 let daily = load(K.daily, {});   // { 'YYYY-MM-DD': {n, r} }
-/* 皮肤：6 套预设，每套自带完整调色板与明暗基线 */
+/* 皮肤：4 套预设，每套自带完整调色板与明暗基线 */
 const SKINS = [
   { id: "ink",      nm: "构成红黑", theme: "light", bg: "#EFE6D4", rule: "#121212", acc: "#C02424" },
   { id: "voltage",  nm: "电压紫",   theme: "dark",  bg: "#0f0b1a", rule: "#3a2d5c", acc: "#c9a4ff" },
@@ -810,7 +813,9 @@ function sanitizeCfg() {
   cfg.auto    = cfg.auto !== false;
   cfg.shuffle = cfg.shuffle !== false;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(cfg.examDate))) cfg.examDate = "2026-09-19";
-  cfg.examPass = clamp(Number(cfg.examPass) || 60, 0, 100);
+  // 用 Number.isFinite 而不是 `|| 60`：及格线 0 分是合法输入，`||` 会把它悄悄改成 60
+  cfg.examPass = Number.isFinite(Number(cfg.examPass))
+    ? clamp(Math.round(Number(cfg.examPass)), 0, 100) : 60;
   cfg.examMinutes = [0, 30, 45, 60, 90, 120].indexOf(Number(cfg.examMinutes)) >= 0
     ? Number(cfg.examMinutes) : 90;
 }
@@ -1227,7 +1232,7 @@ function submitExam(auto) {
     byType[q.type][0] += pts; byType[q.type][1] += full;
     got += pts;
     const ok = pts === full;
-    applyAnswer(q, ok);
+    if (sel.length) applyAnswer(q, ok); else applyBlank(q);
     if (!ok) wrong.push(q);
   });
   const ms = Date.now() - S.startAt;
@@ -1244,7 +1249,8 @@ function vExamResult() {
   if (!r) return emptyBlock("还没有模考记录", "回首页开考");
   const pass = r.got >= cfg.examPass;
   const col = pass ? "var(--ok)" : "var(--acc)";
-  const mm = Math.floor(r.ms / 60000), ss = Math.round((r.ms % 60000) / 1000);
+  // 先算总秒数再拆分：用 Math.round(ms % 60000) 会算出「1 分 60 秒」
+  const sec = Math.round(r.ms / 1000), mm = Math.floor(sec / 60), ss = sec % 60;
   const row = (nm, g, tt) => '<div class="exam-row"><span class="nm">' + nm + "</span>" +
     '<span class="bar2"><i style="width:' + (tt ? g / tt * 100 : 0) + '%"></i></span>' +
     '<span class="sc">' + g + " / " + tt + "</span></div>";
@@ -1283,12 +1289,27 @@ function applyAnswer(q, ok) {
     p.wrong++; p.streak = 0; p.inWrong = true; p.ws = 0;
   }
   saveProg();
+  bumpDaily(ok);
+}
+
+/* 今日计数：applyAnswer 与 applyBlank 共用，免得两处各写一遍越写越不一致 */
+function bumpDaily(ok) {
   const k = dkey();
   if (!daily || typeof daily !== "object" || Array.isArray(daily)) daily = {};
   const day = daily[k];
   if (!day || typeof day !== "object" || Array.isArray(day)) daily[k] = { n: 0, r: 0 };
   daily[k].n++; if (ok) daily[k].r++;
   saveDaily();
+}
+
+/* 模拟考里空着没答的题：算「见过」（不再留在临阵磨枪的池子里）并进错题本，
+   但不记「答错」—— 从没作答过的题不该污染累计答错、分题型正确率和抽题权重 */
+function applyBlank(q) {
+  const p = P(q.id);
+  p.seen++; p.lastAt = Date.now();
+  p.streak = 0; p.inWrong = true; p.ws = 0;
+  saveProg();
+  bumpDaily(false);
 }
 
 function pick(i) {
@@ -1400,8 +1421,18 @@ function next() {
   S.locked = false; S.sel = [];
   S.i++;
   S.frontier = Math.max(S.frontier, S.i);
-  // 顺序刷题：把游标推到当前题，下次进来接着刷
-  if (S.mode === "seq" && S.queue[S.i]) save("mil.cursor", S.queue[S.i].q.id);
+  // 顺序刷题：把游标推到「下次该从哪一题开始」。
+  // 队列走完时 S.queue[S.i] 不存在，必须单独把游标推到最后那题的下一题，
+  // 否则每次新开一组都会把上一组的最后一题原样再刷一遍。
+  if (S.mode === "seq") {
+    const nxt = S.queue[S.i];
+    if (nxt) save("mil.cursor", nxt.q.id);
+    else {
+      const pool = scopeList(), lastQ = S.queue[S.queue.length - 1];
+      const idx = lastQ ? pool.findIndex(q => q.id === lastQ.q.id) : -1;
+      if (idx >= 0 && pool.length) save("mil.cursor", pool[(idx + 1) % pool.length].id);
+    }
+  }
   window.scrollTo(0, 0);
   render();
 }
@@ -1420,6 +1451,11 @@ const TABS = [
 
 function go(v) {
   clearTimeout(S.timer);              // 离开答题页时作废未触发的自动跳转
+  // 离开答题页就作废模拟考计时：否则 90 分钟后计时器会把正在看别的页面的用户强行拽去成绩页
+  if (v !== "quiz" && isExam()) {
+    S.examEnd = 0;
+    if (typeof clearInterval === "function") clearInterval(S.clock);
+  }
   S.token = (S.token || 0) + 1;
   S.locked = false;
   view = v; window.scrollTo(0, 0); render();
@@ -1754,9 +1790,11 @@ function bindSummary() {
     if (a === "home") { S.queue = []; go("home"); }
     else if (a === "miss") start("wrong", S._miss || [], "本轮错题");
     else if (a === "todo") start(S.mode || "smart", S._todo || [], "补做未答题");
-    else if (a === "quiznow") start("smart", buildSmart(), "智能刷题");
+    else if (a === "quiznow") startExam();   // 按钮写的是「直接开考」，就该真的开考
     else {
-      if (S.mode === "seq") start("seq", orderList(), "顺序刷题");
+      // 背题模式必须走 startRecite：用 start() 会把选项乱序，和「背下来的答案字母」对不上
+      if (S.mode === "recite") startRecite(scopeList(), "背题模式");
+      else if (S.mode === "seq") start("seq", orderList(), "顺序刷题");
       else if (S.mode === "random") start("random", randomList(), "随机刷题");
       else if (S.mode === "wrong") start("wrong", wrongList(), "错题重刷");
       else if (S.mode === "fresh") start("fresh", buildFresh(), "临阵磨枪");
@@ -1769,15 +1807,17 @@ function bindSummary() {
 function openSheet() {
   clearTimeout(S.timer);               // 弹层打开时不要偷偷跳题
   lockScroll();
+  const exam = isExam();               // 模拟考不揭晓对错，只能提示「已作答」
   let h = '<div class="sheet" data-c><div class="panel">' +
     '<div class="row"><b class="grow">答题卡</b>' +
-    '<span class="xs mut">勾=答对 叉=答错 黄框=当前</span>' +
+    '<span class="xs mut">' + (exam ? "实心=已作答 黄框=当前" : "勾=答对 叉=答错 黄框=当前") + '</span>' +
     '<button class="btn sm gh" data-c>关闭</button></div><div class="keys">';
   S.queue.forEach((it, i) => {
-    const c = [];
+    const c = [], picked = (it.sel || []).length;
     if (it.answered) c.push(it.ok ? "r" : "w");
+    else if (exam && picked) c.push("a");
     if (i === S.i) c.push("cur");
-    const st = it.answered ? (it.ok ? "答对" : "答错") : "未答";
+    const st = it.answered ? (it.ok ? "答对" : "答错") : (exam && picked ? "已作答" : "未答");
     h += '<button class="' + c.join(" ") + '" data-j="' + i + '" aria-label="第' + (i + 1) + "题 " + st + '">' +
       (i + 1) + "</button>";
   });
@@ -1892,8 +1932,10 @@ function vStats() {
 }
 function bindStats() {
   const b = $("#resetBtn");
-  if (b) b.onclick = () => ask("清空刷题记录？", "错题本和统计清空，题库保留。", () => {
-    prog = {}; daily = {}; saveProg(); saveDaily(); save("mil.cursor", 0);
+  if (b) b.onclick = () => ask("清空刷题记录？", "错题本、统计与模考历史全部清空，题库保留。", () => {
+    prog = {}; daily = {}; saveProg(); saveDaily();
+    save("mil.cursor", "");          // 顺序刷题的游标也要归零，否则会从旧位置接着刷
+    save(K.exam, []);               // 模考历史属于统计的一部分，一并清掉
     toast("记录已清空"); render();
   }, "清空");
 }
@@ -1971,7 +2013,7 @@ function vMe() {
       '<span class="pv" style="background:' + s.bg + ';border-color:' + s.rule + '">' +
         '<i style="background:' + s.acc + '"></i></span>' +
       '<span class="nm">' + s.nm + "</span></button>").join("") + "</div>" +
-    '<label class="f">字号 ' + esc(cfg.font) + "</label>" +
+    '<label class="f" id="fontLb">字号 ' + esc(cfg.font) + "</label>" +
     '<input type="range" id="fontRange" min="14" max="21" step="1" aria-label="正文字号"' +
     ' value="' + esc(cfg.font) + '">' +
   "</div>";
@@ -2008,17 +2050,29 @@ function bindMe() {
   };
   const ep = $("#examPass");
   if (ep) ep.onchange = () => {
-    cfg.examPass = clamp(Number(ep.value) || 60, 0, 100);
+    const raw = String(ep.value).trim(), v = Number(raw);
+    cfg.examPass = (raw === "" || !Number.isFinite(v)) ? 60 : clamp(Math.round(v), 0, 100);
     saveCfg(); toast("及格线：" + cfg.examPass + " 分"); render();
   };
   $$("#app [data-min]").forEach(b => b.onclick = () => {
     cfg.examMinutes = Number(b.dataset.min); saveCfg(); render();
   });
   const fr = $("#fontRange");
-  fr.oninput = () => { cfg.font = Number(fr.value); applyFont(); $("label.f").textContent = "字号 · " + cfg.font + "px"; };
+  // 注意：这里必须指名道姓选中字号那一行 —— $("label.f") 命中的是「考试日期」的标签
+  fr.oninput = () => {
+    cfg.font = Number(fr.value); applyFont();
+    const lb = $("#fontLb"); if (lb) lb.textContent = "字号 · " + cfg.font + "px";
+  };
   fr.onchange = saveCfg;
   $("#expBtn").onclick = () => {
-    const text = JSON.stringify({ app: "军事理论刷题", v: 1, prog, daily, cfg }, null, 1);
+    // 只导出真正有内容的题目记录：渲染时会给没碰过的题建空壳，否则备份文件白白胖一圈
+    const slim = {};
+    Object.keys(prog).forEach(id => {
+      const p = prog[id];
+      if (p && typeof p === "object" &&
+          (p.seen || p.right || p.wrong || p.recite || p.fav || p.inWrong)) slim[id] = p;
+    });
+    const text = JSON.stringify({ app: "军事理论刷题", v: 1, prog: slim, daily, cfg }, null, 1);
     try {
       const a = document.createElement("a");
       a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
