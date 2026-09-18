@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<!-- 字体：已去掉 Google Fonts 依赖（国内被墙，且是外链）。
+     四套皮肤的字体栈都自带系统回退（Songti SC / SimSun / Consolas / sans-serif），
+     去掉后自动降级，不需要额外字体文件。 -->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#EFE6D4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>军事理论 · 刷题</title>
+<!-- 非阻塞加载：字体拿不到（例如国内网络）时立刻回退系统字体，不拖慢首屏 -->
+<style>
+/* ============================================================
+   军事理论刷题 · 红黑构成主题
+   设计语言：构成主义海报 —— 米白 / 大红 / 纯黑，
+   2–3px 硬边框、零圆角、衬线标题、等宽数字、斜切色块。
+   ============================================================ */
+:root{
+  --bg:#EFE6D4; --surf:#F5EDDD; --surf2:#E6DCC6;
+  --rule:#121212; --line:#D5C9AE;
+  --tx:#121212; --dim:#6B6253; --dim2:#867C69;
+  --acc:#C02424; --acc-fg:#F6EFE1;
+  --inv-bg:#121212; --inv-fg:#EFE6D4;
+  --ok:#1A7643; --bad:#B01E18; --warn:#8B5F08;
+  --okbg:rgba(27,122,69,.10); --badbg:rgba(196,34,28,.10);
+  --f-head:'Noto Serif SC','Source Han Serif SC','Songti SC',SimSun,Georgia,serif;
+  --f-body:'Noto Serif SC','Source Han Serif SC','Songti SC',SimSun,Georgia,serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --fs:16px;
+  --tabsh:66px; --hdr-bg:#C02424; --hdr-fg:#F6EFE1;
+  --sh:3px 3px 0 rgba(18,18,18,.13);
+}
+html[data-theme="dark"]{
+  --bg:#141210; --surf:#1C1916; --surf2:#242019;
+  --rule:#EFE6D4; --line:#3A332B;
+  --tx:#EFE6D4; --dim:#9A8F7C; --dim2:#736B5B;
+  --acc:#EA533D; --acc-fg:#141210;
+  --inv-bg:#EFE6D4; --inv-fg:#141210;
+  --ok:#4FA96B; --bad:#EA533D; --warn:#D9A441;
+  --okbg:rgba(79,169,107,.14); --badbg:rgba(232,70,47,.14);
+  --sh:3px 3px 0 rgba(0,0,0,.4);
+}
+/* ============ 皮肤 A：Creative Voltage（深紫 · 电压条纹） ============ */
+html[data-skin="voltage"]{ --sh:3px 3px 0 rgba(0,0,0,.45);
+  --hdr-bg:#c9a4ff; --hdr-fg:#0f0b1a; --chip-bg:#ffb020; --chip-fg:#0f0b1a;
+  --bg:#0f0b1a; --surf:#181128; --surf2:#241c3a; --rule:#3a2d5c; --line:#241c3a;
+  --tx:#f2ecff; --dim:#9b8ec4; --dim2:#6d5f96;
+  --acc:#c9a4ff; --acc-fg:#0f0b1a; --inv-bg:#ffb020; --inv-fg:#0f0b1a;
+  --ok:#4ade80; --bad:#ff5ca8; --warn:#ffb020;
+  --okbg:rgba(74,222,128,.14); --badbg:rgba(255,92,168,.16);
+  --f-head:'Space Grotesk','Noto Sans SC',sans-serif;
+  --f-body:'Space Grotesk','Noto Sans SC',sans-serif; }
+html[data-skin="voltage"] .status{border-bottom:3px solid var(--warn);padding-bottom:14px}
+html[data-skin="voltage"] .track i{background:repeating-linear-gradient(135deg,#ffb020 0 6px,#ff5ca8 6px 12px)}
+html[data-skin="voltage"] .sec{color:#ff5ca8;font-family:var(--f-mono);letter-spacing:.24em;font-size:11px}
+html[data-skin="voltage"] .card,
+html[data-skin="voltage"] .c3,
+html[data-skin="voltage"] .item{border-left:4px solid var(--warn)}
+html[data-skin="voltage"] .hero-btn{background:var(--acc);color:var(--acc-fg)}
+html[data-skin="voltage"] .c3.on{background:var(--acc);color:var(--acc-fg);border-left-color:var(--acc-fg)}
+html[data-skin="voltage"] .c3.on .ds,html[data-skin="voltage"] .c3.on .n{color:var(--acc-fg);opacity:.7}
+html[data-skin="voltage"] .k4 div:nth-child(3),
+html[data-skin="voltage"] .kpis div:last-child{background:var(--warn);color:var(--acc-fg)}
+
+/* ============ 皮肤 B：Terminal Green（GitHub 暗 · 终端绿 · CRT） ============ */
+html[data-skin="terminal"]{ --sh:3px 3px 0 rgba(0,0,0,.5);
+  --hdr-bg:#0a1a0e; --hdr-fg:#39d353; --chip-bg:#f0b429; --chip-fg:#0d1117;
+  --bg:#0d1117; --surf:#0a1a0e; --surf2:#0f2415; --rule:#1f3d24; --line:#1f3d24;
+  --tx:#39d353; --dim:#2aa855; --dim2:#1e7a3c;
+  --acc:#39d353; --acc-fg:#0d1117; --inv-bg:#f0b429; --inv-fg:#0d1117;
+  --ok:#39d353; --bad:#ff6b6b; --warn:#f0b429;
+  --okbg:rgba(57,211,83,.12); --badbg:rgba(255,107,107,.14);
+  --f-head:'Share Tech Mono','Noto Sans SC',monospace;
+  --f-body:'Share Tech Mono','Noto Sans SC',monospace; }
+html[data-skin="terminal"] body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:998;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px);
+  transform:translateZ(0);will-change:transform;contain:strict}
+html[data-skin="terminal"] .brand .tx b,
+html[data-skin="terminal"] .sec{text-shadow:0 0 7px currentColor}
+html[data-skin="terminal"] .sec::before{content:"> ";color:var(--warn);font-family:var(--f-mono)}
+html[data-skin="terminal"] .sec{font-family:var(--f-mono);letter-spacing:.2em;font-size:11px;color:var(--dim)}
+html[data-skin="terminal"] .sec::after{background:var(--line);opacity:.9}
+html[data-skin="terminal"] .card,
+html[data-skin="terminal"] .qcard,
+html[data-skin="terminal"] .status{border-style:dashed}
+html[data-skin="terminal"] .c3 .nm{font-family:var(--f-mono);letter-spacing:.06em}
+html[data-skin="terminal"] .c3.on{background:rgba(57,211,83,.14);color:var(--tx)}
+html[data-skin="terminal"] .k4 div:nth-child(3),
+html[data-skin="terminal"] .kpis div:last-child{background:transparent;color:var(--warn);
+  box-shadow:inset 0 0 0 2px var(--warn)}
+
+/* ============ 皮肤 C：Split Pastel（浅色 · 分栏柔彩） ============ */
+html[data-skin="pastel"]{ --sh:0 3px 10px rgba(80,70,110,.08);
+  --hdr-bg:#a06cd5; --hdr-fg:#ffffff; --chip-bg:#e0f7f5; --chip-fg:#1d6b66;
+  --bg:#fdfcfb; --surf:#ffffff; --surf2:#f6f4fb; --rule:#e8e4f0; --line:#efeaf7;
+  --tx:#22212b; --dim:#7a7286; --dim2:#a9a3b6;
+  --acc:#a06cd5; --acc-fg:#ffffff; --inv-bg:#a06cd5; --inv-fg:#ffffff;
+  --ok:#2f9e78; --bad:#d64570; --warn:#c98a1e;
+  --okbg:rgba(47,158,120,.10); --badbg:rgba(214,69,112,.10);
+  --f-head:'Space Grotesk','Noto Sans SC',sans-serif;
+  --f-body:'Space Grotesk','Noto Sans SC',sans-serif; }
+html[data-skin="pastel"] .status{background:linear-gradient(90deg,#ffe0f0 0 50%,#e0f0ff 50% 100%);
+  border:0;border-radius:14px}
+html[data-skin="pastel"] .status .track{background:rgba(255,255,255,.75)}
+html[data-skin="pastel"] .track i{background:var(--acc)}
+html[data-skin="pastel"] .sec{color:#3aa6a0;letter-spacing:.14em}
+html[data-skin="pastel"] .sec::after{background:linear-gradient(90deg,#3aa6a0,#a06cd5);opacity:.45}
+html[data-skin="pastel"] .card,
+html[data-skin="pastel"] .hero-btn,
+html[data-skin="pastel"] .status{border:0;border-radius:14px}
+html[data-skin="pastel"] .card,
+html[data-skin="pastel"] .hero-btn{box-shadow:0 8px 22px rgba(160,108,213,.18)}
+html[data-skin="pastel"] .c3,
+html[data-skin="pastel"] .item,
+html[data-skin="pastel"] .param-panel,
+html[data-skin="pastel"] .sk{border:0;border-radius:12px;
+  box-shadow:0 3px 10px rgba(80,70,110,.08)}
+html[data-skin="pastel"] .c3.on{background:#e0f7f5;color:var(--tx);box-shadow:0 6px 18px rgba(58,166,160,.25)}
+html[data-skin="pastel"] .c3.on .ds,html[data-skin="pastel"] .c3.on .n{color:#1d6b66;opacity:.8}
+html[data-skin="pastel"] .k4 div:nth-child(3),
+html[data-skin="pastel"] .kpis div:last-child{background:#e0f7f5;color:#1d6b66}
+html[data-skin="pastel"] .k4,html[data-skin="pastel"] .kpis{gap:6px;background:transparent;border:0}
+html[data-skin="pastel"] .k4 div,html[data-skin="pastel"] .kpis div{border-radius:10px}
+
+.skins{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.sk{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 4px 9px;
+  background:transparent;border:2px solid var(--line);cursor:pointer;font:inherit;
+  color:var(--dim);font-size:12px;font-weight:700;transition:.16s}
+.sk .pv{width:100%;height:34px;border:2px solid;display:grid;place-items:center;transition:.16s}
+.sk .pv i{width:15px;height:15px;border-radius:50%;display:block}
+.sk:active{transform:scale(.97)}
+.sk.on{border-color:var(--acc);color:var(--tx)}
+.sk.on .pv{box-shadow:0 0 0 2px var(--acc)}
+
+
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--tx); font-family:var(--f-body);
+  font-size:var(--fs); line-height:1.75; min-height:100vh; min-height:100dvh;
+  text-rendering:optimizeLegibility;
+  overscroll-behavior-y:contain; overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+/* 纸张纹理：极淡的横向纤维 */
+body::after{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
+  background-image:repeating-linear-gradient(0deg,var(--line) 0 1px,transparent 1px 4px);
+  -webkit-mask-image:radial-gradient(ellipse 100% 45% at 50% 0%,#000,transparent 75%);
+  mask-image:radial-gradient(ellipse 100% 45% at 50% 0%,#000,transparent 75%);
+}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+b,strong{font-weight:900}
+code{font-family:var(--f-mono);background:var(--surf2);border:1px solid var(--line);
+  padding:1px 5px;font-size:.88em}
+/* 图标必须显式限尺寸：<svg> 无宽高默认会撑成 300x150，直接撑爆移动端布局 */
+/* 默认尺寸兜底：<svg> 无宽高会被撑成 300x150，这已经坑过两次，这里一次性兜住 */
+/* 收藏星：实心态必须用 class 覆盖，表现属性 fill= 打不过上面的 svg{fill:none} */
+svg.faved{fill:currentColor;stroke:currentColor;color:var(--acc)}
+#favBtn:active{transform:scale(.92)}
+#favBtn{transition:transform .12s}
+svg{display:block;flex:0 0 auto;width:18px;height:18px;fill:none;stroke:currentColor;
+  stroke-width:2;stroke-linecap:square;stroke-linejoin:miter}
+.btn>svg{width:18px;height:18px}
+.btn .ic svg{width:17px;height:17px}
+.verdict .vt>svg{width:19px;height:19px;stroke-width:2.4}
+.tabs svg{width:17px;height:17px;stroke-width:1.9}
+.empty .mk svg{width:20px;height:20px;stroke-width:1.7}
+.qtop .nav svg{width:16px;height:16px}
+
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;
+  padding:0 calc(20px + env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) calc(20px + env(safe-area-inset-left))}
+@media(min-width:560px){.wrap{padding-left:26px;padding-right:26px}}
+
+/* ---------- 顶部：红头文件 ---------- */
+/* 顶部栏：品牌 + 导航 + 答题操作条全部固定在屏幕最上方，避免被浏览器/宿主底栏遮挡 */
+.topbar{position:sticky;top:0;z-index:90;background:var(--bg);
+  padding-top:env(safe-area-inset-top)}
+.hdr{background:var(--hdr-bg,var(--acc));
+  color:var(--hdr-fg,var(--acc-fg))}
+.hdr .in{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:9px;
+  padding:8px calc(18px + env(safe-area-inset-right)) 7px calc(18px + env(safe-area-inset-left))}
+@media(min-width:560px){.hdr .in{padding-left:26px;padding-right:26px}}
+.brand{display:flex;align-items:center;gap:9px;line-height:1}
+.brand .mark{width:12px;height:12px;flex:0 0 auto;background:currentColor}
+.brand .tx b{font-family:var(--f-head);font-weight:900;font-size:15px;letter-spacing:.16em}
+.brand .tx small{display:block;font-family:var(--f-mono);font-size:9px;letter-spacing:.22em;
+  opacity:1;margin-top:3px;font-weight:400}
+.spacer{flex:1}
+.chip{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.04em;
+  background:var(--chip-bg,var(--inv-bg));color:var(--chip-fg,var(--inv-fg));
+  padding:4px 9px;white-space:nowrap}
+.chip.on{background:var(--chip-bg,var(--inv-bg));color:var(--chip-fg,var(--inv-fg))}
+
+/* ---------- 底部导航 ---------- */
+.tabs{background:var(--bg);border-bottom:2px solid var(--rule)}
+.tabs .in{max-width:720px;margin:0 auto;display:grid;
+  grid-auto-flow:column;grid-auto-columns:1fr;   /* 跟随标签数量，不再写死 4 列 */
+  min-height:var(--tabsh);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+.tabs button{padding:6px 1px 7px;display:flex;flex-direction:column;align-items:center;gap:1px;
+  color:var(--dim);font-size:10.5px;font-weight:700;letter-spacing:.02em;position:relative;
+  min-width:0;white-space:nowrap}
+.tabs button.on{color:var(--acc-fg);background:var(--acc)}
+html[data-theme="dark"] .tabs button.on{color:var(--acc-fg);background:var(--acc)}
+.badge{position:absolute;top:5px;left:calc(50% + 7px);min-width:16px;height:16px;padding:0 4px;
+  background:var(--bad);color:#fff;font-family:var(--f-mono);font-size:9px;line-height:16px;
+  text-align:center;font-weight:600}
+
+/* ---------- 通用块 ---------- */
+.card{position:relative;background:var(--surf);border:2px solid var(--rule);padding:17px}
+.card+.card{margin-top:14px}
+.sec{font-family:var(--f-head);font-weight:900;font-size:12px;letter-spacing:.22em;
+  color:var(--acc);margin:30px 0 12px;display:flex;align-items:center;gap:12px;line-height:1.4}
+.sec::after{content:"";flex:1;height:2px;background:var(--rule);opacity:.22}
+.mut{color:var(--dim)} .sm{font-size:.86em} .xs{font-size:.76em}
+.row{display:flex;align-items:center;gap:10px}
+.grow{flex:1}
+.stack>*+*{margin-top:11px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;
+  min-height:54px;padding:12px 16px;background:var(--surf);border:2px solid var(--rule);
+  color:var(--tx);font-family:var(--f-head);font-weight:900;font-size:16px;
+  letter-spacing:.04em;text-align:center;transition:.12s;box-shadow:var(--sh)}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+.btn.pri{background:var(--inv-bg);color:var(--inv-fg);border-color:var(--inv-bg);box-shadow:none}
+.btn.pri:active{background:var(--acc);color:var(--acc-fg);border-color:var(--acc)}
+.btn.dg{color:var(--bad);border-color:var(--bad);box-shadow:none}
+.btn.sm{min-height:44px;padding:9px 13px;font-size:14px;box-shadow:none;font-family:var(--f-body)}
+.btn.gh{background:transparent;box-shadow:none;border-width:2px}
+.btn.wide{width:100%}
+.btn[disabled]{opacity:.35;pointer-events:none}
+
+/* ---------- 首页 ---------- */
+.hero{position:relative;background:var(--surf);border:2px solid var(--rule);
+  padding:22px 20px 18px;overflow:hidden}
+/* 斜切红块：构成主义签名 */
+.hero::before{content:"";position:absolute;top:0;right:0;width:118px;height:118px;
+  background:var(--acc);clip-path:polygon(100% 0,100% 100%,0 0);opacity:.14}
+.hero::after{content:"";position:absolute;left:0;bottom:0;width:64px;height:5px;background:var(--acc)}
+.hero h1{font-family:var(--f-head);font-weight:900;font-size:calc(var(--fs) * 1.875);line-height:1.2;
+  margin:0 0 12px;letter-spacing:-.012em}
+.hero h1 .hl{color:var(--acc)}
+.hero .sub{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.18em;
+  color:var(--dim);border-top:3px solid var(--rule);padding-top:8px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:var(--rule);
+  border:3px solid var(--rule);margin-top:20px}
+.kpis div{background:var(--surf);padding:14px 4px;text-align:center}
+.kpis div:last-child{background:var(--inv-bg);color:var(--inv-fg)}
+.kpis b{display:block;font-family:var(--f-mono);font-size:calc(var(--fs) * 1.56);font-weight:600;
+  line-height:1.2;font-variant-numeric:tabular-nums}
+.kpis span{font-size:10.5px;letter-spacing:.1em;opacity:.75}
+.ring{display:flex;align-items:center;gap:15px;margin-top:19px;padding-top:17px;
+  border-top:3px solid var(--rule)}
+.dial{width:58px;height:58px;flex:0 0 auto;display:grid;place-items:center;position:relative;
+  border:2px solid var(--rule);
+  background:conic-gradient(var(--acc) calc(var(--p)*1%),var(--surf2) 0)}
+.dial::after{content:"";position:absolute;inset:6px;background:var(--surf)}
+.dial b{position:relative;z-index:1;font-family:var(--f-mono);font-size:14px;font-weight:600}
+.ring .rt b{display:block;font-family:var(--f-head);font-weight:900;font-size:15px}
+.ring .rt span{font-size:12px;color:var(--dim)}
+
+/* ---------- 答题 ---------- */
+.qtop{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.qtop .nav{width:44px;height:44px;border:2px solid var(--rule);background:var(--surf);
+  display:grid;place-items:center;flex:0 0 auto}
+.qtop .nav[disabled]{opacity:.3}
+.qtop .nav:not([disabled]):active{background:var(--acc);color:var(--acc-fg)}
+.track{flex:1;height:10px;background:var(--surf2);border:2px solid var(--rule)}
+.track i{display:block;height:100%;background:var(--acc);transition:width .3s cubic-bezier(.4,0,.2,1)}
+.count{font-family:var(--f-mono);font-size:12px;color:var(--dim);white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.count b{color:var(--tx);font-weight:600}
+
+.tags{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:11px}
+.tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;padding:3px 8px;
+  border:2px solid var(--rule);color:var(--dim)}
+.tag.t1{color:var(--acc);border-color:var(--acc)}
+.tag.t2{color:var(--inv-fg);background:var(--inv-bg);border-color:var(--inv-bg)}
+.tag.t3{color:var(--warn);border-color:var(--warn)}
+.tag.hot{color:var(--bad);border-color:var(--bad)}
+
+.qcard{background:var(--surf);border:2px solid var(--rule);padding:19px 18px}
+.stem{font-family:var(--f-head);font-weight:700;font-size:calc(var(--fs) * 1.19);
+  line-height:1.85;margin:14px 0 20px;letter-spacing:.01em;word-break:break-word;
+  text-wrap:pretty}
+.stem .no{display:block;font-family:var(--f-mono);font-size:11px;font-weight:600;
+  color:var(--acc);letter-spacing:.14em;margin-bottom:7px}
+
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:grid;grid-template-columns:44px 1fr;align-items:stretch;text-align:left;
+  background:var(--surf);border:2px solid var(--rule);min-height:58px;transition:.12s}
+.opt .k{display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;
+  font-size:15px;border-right:2px solid var(--rule);background:var(--surf2)}
+.opt .v{padding:14px 15px;line-height:1.7;word-break:break-word;font-size:calc(var(--fs) * .97)}
+.opt:active{background:var(--surf2)}
+.opt.sel{background:var(--inv-bg);color:var(--inv-fg);border-color:var(--inv-bg)}
+.opt.sel .k{background:var(--acc);color:var(--acc-fg);border-right-color:var(--acc)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.ok .k{background:var(--ok);color:#fff;border-right-color:var(--ok)}
+.opt.no{border-color:var(--bad);background:var(--badbg)}
+.opt.no .k{background:var(--bad);color:#fff;border-right-color:var(--bad)}
+.opt.lock{pointer-events:none}
+.opt.dim{opacity:.42}
+
+.verdict{margin-top:18px;border:3px solid var(--rule);background:var(--surf);padding:15px 16px;
+  animation:rise .22s cubic-bezier(.2,.8,.3,1)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.verdict .vt{display:flex;align-items:center;gap:9px;font-family:var(--f-head);font-weight:900;
+  font-size:calc(var(--fs) * 1.125);margin-bottom:9px;letter-spacing:.03em}
+.verdict .vt.y{color:var(--ok)} .verdict .vt.n{color:var(--bad)}
+.verdict .ans{font-family:var(--f-mono);font-size:12px;color:var(--dim);font-weight:500;
+  letter-spacing:.04em}
+.verdict .why{font-size:15px;line-height:1.72;border-top:2px solid var(--rule);padding-top:9px}
+.pills{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.pill{font-family:var(--f-mono);font-size:11.5px;padding:3px 8px;border:2px solid var(--rule);
+  color:var(--dim)}
+.pill.g{color:var(--ok);border-color:var(--ok);background:var(--okbg)}
+.pill.r{color:var(--bad);border-color:var(--bad);background:var(--badbg)}
+.pill.y{color:var(--warn);border-color:var(--warn)}
+/* 暗色下浅绿底配白字只有 2.91:1，改深色字 */
+html[data-theme="dark"] .opt.ok .k,
+html[data-theme="dark"] .keys button.r{color:#141210}
+
+/* 判定印章：红章方框 */
+.stamp{position:fixed;left:50%;top:29%;width:132px;height:132px;margin:-66px 0 0 -66px;
+  border:7px solid currentColor;display:grid;place-items:center;z-index:90;pointer-events:none;
+  font-family:var(--f-head);font-weight:900;font-size:66px;line-height:1;opacity:0}
+.stamp.go{animation:stamp .66s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes stamp{
+  0%{opacity:0;transform:rotate(-11deg) scale(1.5)}
+  26%{opacity:.96;transform:rotate(-11deg) scale(.93)}
+  56%{opacity:.96;transform:rotate(-11deg) scale(1)}
+  100%{opacity:0;transform:rotate(-11deg) scale(1.04)}
+}
+.stamp.y{color:var(--ok)} .stamp.n{color:var(--bad)}
+@keyframes shake{0%,100%{transform:translateX(0)}18%{transform:translateX(-6px)}
+  38%{transform:translateX(6px)}58%{transform:translateX(-3px)}78%{transform:translateX(2px)}}
+.shake{animation:shake .38s}
+
+/* ---------- 底部操作条 ---------- */
+.dock{background:var(--bg);border-top:2px solid var(--rule)}
+.dock .in{max-width:720px;margin:0 auto;display:flex;gap:10px;align-items:center;
+  padding:8px calc(18px + env(safe-area-inset-right)) 8px calc(18px + env(safe-area-inset-left))}
+@media(min-width:560px){.dock .in{padding-left:26px;padding-right:26px}}
+.dock .in>.btn{flex:1}
+
+/* ---------- 清单 ---------- */
+.item{border:2px solid var(--rule);background:var(--surf);padding:13px 14px;margin-bottom:10px;
+  content-visibility:auto;contain-intrinsic-size:auto 108px}  /* 长错题本只渲染视口内的条目 */
+.item .s{line-height:1.75;word-break:break-word;text-wrap:pretty}
+.item .m{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px;
+  font-family:var(--f-mono);font-size:11px;color:var(--dim)}
+.item .acts{display:flex;gap:9px;margin-top:11px}
+.item .acts .btn{flex:1}
+
+/* ---------- 统计 ---------- */
+.k4{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;background:var(--rule);
+  border:3px solid var(--rule)}
+@media(min-width:520px){.k4{grid-template-columns:repeat(4,1fr)}}
+.k4 div{background:var(--surf);padding:15px 6px;text-align:center}
+.k4 div:nth-child(3){background:var(--acc);color:var(--acc-fg)}
+.k4 b{display:block;font-family:var(--f-mono);font-size:calc(var(--fs) * 1.69);font-weight:600;line-height:1.15;
+  font-variant-numeric:tabular-nums}
+.k4 span{font-size:10.5px;letter-spacing:.08em;opacity:.78}
+.bars{margin-top:2px}
+.bar{display:grid;grid-template-columns:66px 1fr 56px;gap:11px;align-items:center;
+  font-size:14px;padding:7px 0}
+.bar .nm{color:var(--dim);font-size:12.5px}
+.bar .bg{height:12px;background:var(--surf2);border:2px solid var(--rule)}
+.bar .bg i{display:block;height:100%;background:var(--acc);transition:width .5s}
+.bar .n{text-align:right;font-family:var(--f-mono);font-size:13px;color:var(--dim);
+  font-variant-numeric:tabular-nums}
+.spark{display:flex;align-items:flex-end;gap:6px;height:96px;margin-top:10px;padding-bottom:24px}
+.spark div{flex:1;background:var(--surf2);border:2px solid var(--rule);position:relative;
+  display:flex;align-items:flex-end;min-height:6px}
+.spark div i{display:block;width:100%;background:var(--acc)}
+.spark div span{position:absolute;bottom:-22px;left:-2px;right:-2px;text-align:center;
+  font-family:var(--f-mono);font-size:9.5px;color:var(--dim)}
+
+/* ---------- 表单 ---------- */
+label.f{display:block;margin:17px 0 8px;font-family:var(--f-mono);font-size:11px;
+  letter-spacing:.14em;color:var(--dim)}
+input[type=number],input[type=text],select,textarea{
+  width:100%;background:var(--surf);border:2px solid var(--rule);color:var(--tx);
+  padding:12px 13px;font:inherit;font-size:15px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+input[type=range]{width:100%;height:44px;padding:14px 0;accent-color:var(--acc)}
+.sw{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:2px solid var(--line)}
+.sw:last-child{border-bottom:0}
+.sw .tx{flex:1;min-width:0}
+.sw .tx .d{font-size:12.5px;color:var(--dim);margin-top:2px;line-height:1.55}
+.tg{flex:0 0 auto;width:48px;height:28px;background:var(--surf2);border:2px solid var(--rule);
+  position:relative;cursor:pointer}
+.tg::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;background:var(--dim);
+  transition:.16s}
+.tg.on{background:var(--acc);border-color:var(--acc)}
+.tg.on::after{left:22px;background:var(--acc-fg)}
+.tg::before{content:"";position:absolute;inset:-10px -8px}   /* 视觉不变，热区扩到 48x48 */
+.seg{display:grid;grid-auto-flow:column;gap:3px;background:var(--rule);border:3px solid var(--rule)}
+.seg button{background:var(--surf);padding:11px 4px;font-size:13.5px;font-weight:700;
+  color:var(--dim);letter-spacing:.02em;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.seg button.on{background:var(--acc);color:var(--acc-fg);font-weight:900}
+
+/* ---------- 弹层 ---------- */
+.mask{position:fixed;inset:0;z-index:200;background:rgba(18,18,18,.62);backdrop-filter:blur(2px);
+  display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--surf);border:3px solid var(--rule);width:100%;max-width:440px;
+  padding:24px 24px 22px;box-shadow:6px 6px 0 rgba(18,18,18,.3);animation:rise .18s}
+.modal h3{font-family:var(--f-head);font-weight:900;margin:0 0 9px;font-size:calc(var(--fs) * 1.25);
+  letter-spacing:.02em;border-bottom:3px solid var(--acc);padding-bottom:9px;display:inline-block}
+.sheet{position:fixed;inset:0;z-index:200;background:rgba(18,18,18,.62);backdrop-filter:blur(2px);
+  display:flex;align-items:flex-end}
+.sheet .panel{background:var(--bg);border-top:3px solid var(--rule);width:100%;
+  max-width:720px;margin:0 auto;padding:19px 20px calc(26px + env(safe-area-inset-bottom));
+  max-height:84vh;max-height:84dvh;overflow:auto;overscroll-behavior:contain;
+  animation:up .22s cubic-bezier(.2,.8,.3,1)}
+@keyframes up{from{transform:translateY(28px);opacity:.5}to{transform:none;opacity:1}}
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;margin-top:16px}
+.keys button{position:relative;aspect-ratio:1;border:2px solid var(--rule);background:var(--surf);
+  font-family:var(--f-mono);font-weight:600;font-size:14px;display:grid;place-items:center}
+.keys button.r::after{content:"\2713";position:absolute;right:3px;bottom:1px;font-size:10px;line-height:1}
+.keys button.w::after{content:"\2717";position:absolute;right:3px;bottom:1px;font-size:10px;line-height:1}
+.keys button.r{background:var(--ok);border-color:var(--ok);color:#fff}
+.keys button.w{background:var(--bad);border-color:var(--bad);color:#fff}
+.keys button.cur{outline:3px solid var(--warn);outline-offset:-5px}
+
+/* ---------- 战报 ---------- */
+.sum{text-align:center;padding:4px 2px 2px}
+.sum .big{font-family:var(--f-mono);font-size:calc(var(--fs) * 3.6);font-weight:600;line-height:1;
+  color:var(--acc);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.sum .lb{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;color:var(--dim);
+  margin-top:9px;text-transform:uppercase}
+.sum .row4{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;background:var(--rule);
+  border:3px solid var(--rule);margin:22px 0}
+@media(min-width:480px){.sum .row4{grid-template-columns:repeat(4,1fr)}}
+.sum .row4 div{background:var(--surf);padding:14px 5px}
+.sum .row4 b{display:block;font-family:var(--f-mono);font-size:23px;font-weight:600;
+  font-variant-numeric:tabular-nums}
+.sum .row4 span{font-size:10.5px;color:var(--dim);letter-spacing:.06em}
+
+/* ---------- 其他 ---------- */
+.empty{text-align:center;padding:62px 20px;color:var(--dim)}
+.empty .mk{width:56px;height:56px;margin:0 auto 18px;border:3px solid var(--rule);
+  display:grid;place-items:center;background:var(--surf)}
+.warnbar{border:3px solid var(--warn);background:var(--surf);padding:14px 15px;margin-bottom:14px}
+.warnbar b{color:var(--warn);font-size:15px;font-weight:900}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));
+  transform:translate(-50%,14px);z-index:300;background:var(--inv-bg);color:var(--inv-fg);
+  padding:11px 20px;font-size:14px;font-weight:700;opacity:0;transition:.2s;
+  pointer-events:none;max-width:86vw;text-align:center;border:2px solid var(--rule)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.hide{display:none!important}
+.view{animation:fade .18s ease-out}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ---------- 首页：状态条 / 主按钮 / 模式胶囊 / 参数行 ---------- */
+.status{background:var(--surf);border:2px solid var(--rule);padding:16px 18px;margin-bottom:16px}
+.status .top{display:flex;align-items:baseline;gap:10px;margin-bottom:11px}
+.status .top b{font-family:var(--f-head);font-weight:900;font-size:calc(var(--fs) * 1.06);line-height:1.3}
+.status .top span{margin-left:auto;font-family:var(--f-mono);font-size:11.5px;color:var(--dim);white-space:nowrap}
+.status .sub{font-family:var(--f-mono);font-size:11.5px;color:var(--dim);margin-top:10px;
+  display:flex;flex-wrap:wrap;gap:4px 12px}
+.status .sub b{color:var(--tx);font-weight:600}
+.status.examday{border-color:var(--acc);background:var(--acc);color:var(--acc-fg)}
+.status.examday .top b,.status.examday .top span,.status.examday .sub{color:var(--acc-fg)}
+.status.examday .track{background:rgba(255,255,255,.28);border-color:rgba(255,255,255,.5)}
+.status.examday .track i{background:var(--acc-fg)}
+
+.hero-btn{display:block;width:100%;text-align:left;background:var(--acc);color:var(--acc-fg);
+  border:2px solid var(--rule);padding:20px;margin-bottom:22px;box-shadow:var(--sh);
+  transition:.12s;font:inherit;cursor:pointer}
+.hero-btn:active{transform:translate(2px,2px);box-shadow:none}
+.hero-btn .t{display:block;font-family:var(--f-head);font-weight:900;
+  font-size:calc(var(--fs) * 1.35);line-height:1.25;letter-spacing:.01em}
+.hero-btn .s{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.05em;
+  margin-top:8px;opacity:.9;line-height:1.7}
+
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{min-height:44px;padding:0 15px;display:inline-flex;align-items:center;gap:7px;
+  background:var(--surf);border:2px solid var(--rule);font-family:var(--f-head);
+  font-weight:700;font-size:14.5px;cursor:pointer;transition:.12s;color:var(--tx)}
+.chip:active{background:var(--acc);color:var(--acc-fg);border-color:var(--acc)}
+.chip .n{font-family:var(--f-mono);font-size:11.5px;font-weight:600;color:var(--acc)}
+.chip:active .n{color:var(--acc-fg)}
+.chip>svg{width:16px;height:16px}
+
+.params{display:flex;gap:9px;margin-top:18px}
+.pchip{flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;
+  background:transparent;border:1px dashed var(--line2,var(--line));color:var(--dim);
+  font-size:13.5px;font-weight:700;font-family:var(--f-body);cursor:pointer}
+.pchip.open{border-style:solid;border-color:var(--rule);color:var(--tx);background:var(--surf)}
+.param-panel{margin-top:12px;background:var(--surf);border:2px solid var(--rule);padding:15px 16px}
+.param-panel .lb{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--dim);
+  margin-bottom:8px}
+.param-panel .hint{font-family:var(--f-mono);font-size:11px;color:var(--dim);margin-top:11px}
+
+/* ---------- 模拟考 ---------- */
+.timer{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--acc);
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+.timer.low{color:var(--bad)}
+.exam-res{text-align:center;padding:6px 2px}
+.exam-res .score{font-family:var(--f-mono);font-size:calc(var(--fs) * 4.2);font-weight:600;
+  line-height:1;font-variant-numeric:tabular-nums}
+.exam-res .verdict{display:inline-block;margin-top:12px;font-family:var(--f-head);font-weight:900;
+  font-size:calc(var(--fs) * 1.2);padding:5px 16px;border:3px solid currentColor;letter-spacing:.1em}
+.exam-res .meta{font-family:var(--f-mono);font-size:11.5px;color:var(--dim);margin-top:12px;
+  letter-spacing:.08em}
+.exam-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);
+  font-size:14.5px}
+.exam-row:last-child{border-bottom:0}
+.exam-row .nm{flex:1}
+.exam-row .sc{font-family:var(--f-mono);font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.exam-row .bar2{width:96px;height:9px;background:var(--surf2);border:1px solid var(--line)}
+.exam-row .bar2 i{display:block;height:100%;background:var(--acc)}
+
+/* ---------- 开场说明弹窗 ---------- */
+.intro-hd{background:var(--acc);color:var(--acc-fg);margin:-24px -24px 0;padding:18px 24px 15px;
+  border-bottom:3px solid var(--rule)}
+.intro-hd h3{color:var(--acc-fg);border:0;padding:0;margin:0;
+  font-size:calc(var(--fs) * 1.15);letter-spacing:.08em}
+.intro-bd{max-height:54vh;max-height:54dvh;overflow:auto;margin:18px 0 0;
+  font-size:14.5px;line-height:1.9;overscroll-behavior:contain}
+/* 分节：标签式标题 + 细分隔线，扫一眼就知道有几块 */
+.intro-bd h4{font-family:var(--f-mono);font-weight:600;font-size:10.5px;letter-spacing:.22em;
+  color:var(--acc);margin:20px 0 9px;padding-bottom:6px;border-bottom:1px solid var(--line);
+  text-transform:uppercase}
+.intro-bd h4:first-child{margin-top:0}
+.intro-bd p{margin:0 0 9px;text-indent:0}
+.intro-bd p:last-child{margin-bottom:0}
+.intro-bd b{font-weight:900}
+.intro-bd ul{padding:0;margin:0;list-style:none}
+.intro-bd li{position:relative;padding-left:15px;margin:0 0 8px;line-height:1.85}
+.intro-bd li:last-child{margin-bottom:0}
+.intro-bd li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;
+  background:var(--acc);border-radius:50%}
+/* 整段都是名字的「鸣谢」条目，用悬挂缩进对齐更整齐 */
+.intro-bd .who{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0 0 9px}
+.intro-bd .who b{grid-row:span 2;align-self:start;color:var(--acc)}
+.intro-bd .who span{grid-column:2;font-size:13.5px;color:var(--dim)}
+.intro-bd table{width:100%;border-collapse:collapse;margin:8px 0;font-size:13.5px}
+.intro-bd th,.intro-bd td{border:1px solid var(--line);padding:6px 9px;text-align:left}
+.intro-bd th{background:var(--surf2);font-size:12px}
+.intro-ft{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:15px;
+  border-top:3px solid var(--rule)}
+.intro-ft .chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);cursor:pointer}
+.intro-ft .box{width:22px;height:22px;border:2px solid var(--rule);display:grid;place-items:center;
+  font-size:14px;line-height:1}
+.intro-ft .box.on{background:var(--rule);color:var(--bg)}
+
+
+/* ---------- 日常练习：3D 圆柱轮播（圆柱本身不可见） ---------- */
+.carousel{position:relative;height:236px;margin:0 -20px;perspective:900px;
+  perspective-origin:50% 42%;touch-action:pan-y;user-select:none}
+.carousel .stage{position:absolute;left:50%;top:0;width:0;height:0;
+  transform-style:preserve-3d;
+  transition:transform .52s cubic-bezier(.22,.86,.26,1)}
+.carousel.dragging .stage{transition:none}
+.c3{position:absolute;left:-95px;top:12px;width:190px;height:166px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:var(--surf);border:2px solid var(--rule);cursor:pointer;font:inherit;color:var(--tx);
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  transition:background .28s,border-color .28s,color .28s,box-shadow .28s}
+.c3 .ic,.c3 .nm,.c3 .ds,.c3 .n{opacity:var(--dim,1);transition:opacity .28s}
+.c3 .ic svg{width:32px;height:32px;stroke-width:1.7}
+.c3 .nm{font-family:var(--f-head);font-weight:900;font-size:17.5px;letter-spacing:.02em;line-height:1}
+.c3 .ds{font-family:var(--f-mono);font-size:10.5px;color:var(--dim);letter-spacing:.03em;
+  text-align:center;line-height:1.55;padding:0 12px}
+.c3 .n{position:absolute;top:9px;right:10px;font-family:var(--f-mono);font-size:11px;
+  font-weight:600;color:var(--acc)}
+.c3.on{background:var(--acc);color:var(--acc-fg);border-color:var(--acc);box-shadow:var(--sh)}
+.c3.on .ds{color:var(--acc-fg);opacity:.88}
+.c3.on .n{color:var(--acc-fg)}
+.car-hint{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;
+  font-family:var(--f-mono);font-size:11px;color:var(--dim);letter-spacing:.06em}
+.dots{display:flex;gap:8px}
+.dots i{width:8px;height:8px;border:1.5px solid var(--rule);cursor:pointer;transition:.2s}
+.dots i.on{background:var(--acc);border-color:var(--acc);transform:scale(1.15)}
+
+/* ---------- 动效优化 ---------- */
+@media(prefers-reduced-motion:no-preference){
+  .qcard{animation:qin .26s cubic-bezier(.22,.9,.3,1) both}
+  @keyframes qin{from{opacity:0;transform:translateY(10px) scale(.995)}to{opacity:1;transform:none}}
+  .opt{transition:background .12s,border-color .12s,transform .1s}
+  .opt:active{transform:scale(.988)}
+  .opt.ok,.opt.no{animation:mark .2s ease-out both}
+  @keyframes mark{from{transform:scale(.985)}to{transform:none}}
+  .btn,.chip,.pchip,.hero-btn{transition:transform .1s,background .14s,border-color .14s,color .14s,box-shadow .14s}
+  .status .track i{transition:width .6s cubic-bezier(.22,.9,.3,1)}
+  .dial{transition:background .6s ease}
+}
+@media(prefers-reduced-motion:reduce){
+  .carousel .stage{transition:none}
+}
+
+pre.fmt{background:var(--surf2);border:2px solid var(--rule);padding:12px;overflow:auto;
+  font-family:var(--f-mono);font-size:11.5px;line-height:1.6;margin:9px 0 0}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--rule);opacity:.4}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <header class="hdr"><div class="in">
+    <div class="brand">
+      <span class="mark"></span>
+      <span class="tx"><b>军事理论</b><small>DRILL TERMINAL</small></span>
+    </div>
+    <span class="spacer"></span>
+    <span class="chip" id="hdrChip">240 题</span>
+  </div></header>
+  <nav class="tabs"><div class="in" id="tabs"></div></nav>
+  <div class="dock" id="dock"></div>
+</div>
+
+<main class="wrap" id="app"></main>
+<div id="modal"></div>
+<div id="stamp" class="stamp"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* ===========================================================================
+   军事理论刷题 · 单文件应用
+   题库内嵌，无网络依赖；数据存 localStorage（不可用时自动降级为内存）。
+   =========================================================================== */
+
+const BANK = {"name":"2026军事理论课题库","questions":[{"id":"s001","type":"single","stem":"我国是一个陆海兼备的国家，陆地边界线总长约为（）。","options":["2.2万千米","1.8万千米","1.4万千米","3.2万千米"],"answer":[0]},{"id":"s002","type":"single","stem":"习近平总书记指出，我们捍卫和平、维护安全、慑止战争的手段和选择有多种多样，但（）始终是保底手段。","options":["外交手段","经济手段","军事手段","舆论手段"],"answer":[2]},{"id":"s003","type":"single","stem":"《中华人民共和国国防动员法》于哪一年由全国人大常委会审议通过？","options":["2008年","2010年","2012年","2015年"],"answer":[1]},{"id":"s004","type":"single","stem":"信息化作战平台的核心是（）。","options":["运载投送功能","信息化武器控制系统","隐身设计","大载弹量"],"answer":[1]},{"id":"s005","type":"single","stem":"演习环境下，敌方实施电磁干扰，会直接造成（）。","options":["我方无线电通信、导航、雷达信号受到扰乱压制","直接摧毁我方硬件装备","消除战场一切噪音","自动破译我方全部密码"],"answer":[0]},{"id":"s006","type":"single","stem":"我国国防活动实行的领导方式是（）。","options":["分散领导","统一领导","分区领导","自主领导"],"answer":[1]},{"id":"s007","type":"single","stem":"我国在海上与（）个国家相邻或相向。","options":["7","8","6","9"],"answer":[1]},{"id":"s008","type":"single","stem":"第一次技术革命标志是蒸汽机发明应用，促使战争形态向（）过渡。","options":["冷兵器战争","热兵器战争","机械化战争","信息化战争"],"answer":[1]},{"id":"s009","type":"single","stem":"我国大陆海岸线总长约为（）。","options":["2.2万千米","1.4万千米","1.8万千米","3.6万千米"],"answer":[2]},{"id":"s010","type":"single","stem":"下列不属于新军事革命带来军队体制编制变革的是（）。","options":["军队规模适度化","指挥体制扁平化","作战编制模块化","军队人员全部文职化"],"answer":[3]},{"id":"s011","type":"single","stem":"传统安全威胁一般是指（）所面临的外部武力威胁。","options":["国家经济发展","国家文化繁荣","国家主权独立、领土完整","国家社会稳定"],"answer":[2]},{"id":"s012","type":"single","stem":"新军事革命是以（）为核心广泛应用，引起军事领域多方面根本变革。","options":["生物技术","信息技术","航天技术","微电子技术"],"answer":[1]},{"id":"s013","type":"single","stem":"我国陆地与（）个国家相接壤。","options":["13","15","16","14"],"answer":[3]},{"id":"s014","type":"single","stem":"我军战斗机的命名代号是（）。","options":["J","JH","H","KJ"],"answer":[0]},{"id":"s015","type":"single","stem":"一切国家机关和武装力量、各政党和各人民团体、企业事业组织、社会组织和其他组织，都应当支持和依法参与（）。","options":["经济建设","国防建设","文化建设","社会建设"],"answer":[1]},{"id":"s016","type":"single","stem":"中华人民共和国奉行的国防政策是（）。","options":["进攻性国防政策","防御性国防政策","中立性国防政策","扩张性国防政策"],"answer":[1]},{"id":"s017","type":"single","stem":"要坚持用打仗的标准推进军事斗争准备，不断强化官兵当兵打仗、带兵打仗、练兵打仗思想，坚持从（）从难从严训练部队，打赢信息化条件下局部战争能力为核心的完成多样化任务能力。","options":["实战需要出发","未来局部冲突出发","未来大战出发","复杂电磁化战争"],"answer":[0]},{"id":"s018","type":"single","stem":"军事革命相较于军事变革，内容和范畴（）。","options":["更加宽泛复杂","完全等同","范围更小","没有本质区别"],"answer":[0]},{"id":"s019","type":"single","stem":"下列哪项不属于第四代战斗机的典型特征？","options":["隐身","超音速巡航","超机动性","以机炮为主要武器"],"answer":[3]},{"id":"s020","type":"single","stem":"国防动员的核心是（）。","options":["国民经济动员","人民防空动员","武装力量动员","政治动员"],"answer":[2]},{"id":"s021","type":"single","stem":"《中华人民共和国国防法》于哪一年修订通过？","options":["1997年","2009年","2020年","2021年"],"answer":[2]},{"id":"s022","type":"single","stem":"国家的主权、统一、领土完整、安全和发展利益遭受威胁时，由（）决定全国总动员或者局部动员。","options":["国务院","中央军事委员会","全国人民代表大会常务委员会","国家主席"],"answer":[2]},{"id":"s023","type":"single","stem":"我国首款第四代重型隐身战斗机是（）。","options":["歼-10","歼-11","歼-16","歼-20"],"answer":[3]},{"id":"s024","type":"single","stem":"轰-6K/N\"战神\"中型轰炸机的最大载弹量为（）。","options":["5吨","10吨","15吨","20吨"],"answer":[2]},{"id":"s025","type":"single","stem":"国防的主体是（）。","options":["中国共产党","国家","人民军队","全体公民"],"answer":[1]},{"id":"s026","type":"single","stem":"保卫祖国、抵抗侵略是中华人民共和国（）的神圣职责。","options":["每一个军人","每一个公民","每一个党员","每一个干部"],"answer":[1]},{"id":"s027","type":"single","stem":"航空母舰飞行甲板被毁伤后，最直接的后果是（）。","options":["舰体下沉","舰载机无法起降，丧失作战能力","动力系统失效","雷达损坏"],"answer":[1]},{"id":"s028","type":"single","stem":"党的二十大报告指出：要研究掌握（）战争特点规律，创新军事战略指导，发展人民战争战略战术。","options":["实战化科技化","实战化智能化","信息化科技化","信息化智能化"],"answer":[3]},{"id":"s029","type":"single","stem":"当前我国科技安全面临的威胁与挑战，主要包括科技基础薄弱、科技信息泄露、风险防范能力不足及（）等。","options":["人才流失","粮食短缺","能源枯竭","环境污染"],"answer":[0]},{"id":"s030","type":"single","stem":"全国总动员或者局部动员的动员令由（）发布。","options":["国务院总理","中央军委主席","中华人民共和国主席","全国人大常委会委员长"],"answer":[2]},{"id":"s031","type":"single","stem":"国防是国家（）的安全保障。","options":["生存与发展","经济与政治","文化与教育","科技与军事"],"answer":[0]},{"id":"s032","type":"single","stem":"福建舰相对于山东舰最大的技术进步是（）。","options":["核动力","电磁弹射器","排水量增大","隐身舰岛"],"answer":[1]},{"id":"s033","type":"single","stem":"我国\"福建\"号航空母舰配备的弹射器数量为（）。","options":["2部蒸汽弹射器","3部电磁弹射器","4部蒸汽弹射器","4部电磁弹射器"],"answer":[1]},{"id":"s034","type":"single","stem":"越南战争中，美军使用（），仅出动12架次F-4战机就彻底炸毁清化大桥。","options":["普通航空炸弹","灵巧炸弹","巡航导弹","高超音速导弹"],"answer":[1]},{"id":"s035","type":"single","stem":"国家的主权、统一、领土完整、安全和发展利益遭受直接威胁必须立即采取应对措施时，（）可以根据应急处置的需要，采取本法规定的必要的国防动员措施，同时向全国人民代表大会常务委员会报告。","options":["国家主席","全国人大常委会","国务院、中央军事委员会","国家国防动员委员会"],"answer":[2]},{"id":"s036","type":"single","stem":"我国实行以（）为主体的志愿兵役与义务兵役相结合的兵役制度。","options":["志愿兵役","义务兵役","雇佣兵役","民兵役"],"answer":[0]},{"id":"s037","type":"single","stem":"全民国防教育日由（）决定设立。","options":["国务院","中央军事委员会","全国人民代表大会常务委员会","国家主席"],"answer":[2]},{"id":"s038","type":"single","stem":"为适应现代化军事变革，我军提出了（）","options":["提高信息化能力，发展信息化能力","建设信息化军队国防，发展信息化军队","提高信息化能力，打赢信息化战争","建设信息化军队，打赢信息化战争"],"answer":[3]},{"id":"s039","type":"single","stem":"我军\"双重历史任务\"是指（）","options":["质量建军与科技强军","机械化建设与信息化建设","革命化与现代化","打得赢、不变质"],"answer":[1]},{"id":"s040","type":"single","stem":"在国家安全体系中居于核心地位和最高层次，是国家安全的根本，决定和影响着其他各领域安全的是（）。","options":["军事安全","经济安全","国土安全","政治安全"],"answer":[3]},{"id":"s041","type":"single","stem":"《中华人民共和国兵役法》规定，兵役分为（）和预备役。","options":["现役","常备役","后备役","民兵役"],"answer":[0]},{"id":"s042","type":"single","stem":"根据2026年新修订的《中华人民共和国国防动员法》，国家实行国防动员规划制度和国防动员实施预案制度，并（）。","options":["建立国防动员计划体系","开展国防动员潜力统计调查","实行国防动员计划管理","建立国防动员数据平台"],"answer":[1]},{"id":"s043","type":"single","stem":"我国山东舰的起飞方式是（）。","options":["蒸汽弹射","电磁弹射","滑跃起飞","垂直起降"],"answer":[2]},{"id":"s044","type":"single","stem":"电子对抗是信息化战争重要手段，争夺电磁空间主动权，下列哪项技术属于典型国防电子对抗范畴？","options":["坦克装甲冶金","舰炮弹药装填","雷达干扰、通信抗干扰","火箭推进剂合成"],"answer":[2]},{"id":"s045","type":"single","stem":"政治安全是国家安全的根本，最核心的是（）。","options":["领土安全和主权安全","政权安全和制度安全","经济安全和军事安全","文化安全和意识形态安全"],"answer":[1]},{"id":"s046","type":"single","stem":"C4KISR系统中K代表（）。","options":["杀伤","指挥","计算机","监视"],"answer":[0]},{"id":"s047","type":"single","stem":"国防动员按规模可分为（）。","options":["武装力量动员和经济动员","全国总动员和局部动员","政治动员和军事动员","平时动员和战时动员"],"answer":[1]},{"id":"s048","type":"single","stem":"国防动员按领域划分，以下不属于国防动员范畴的是（）。","options":["武装力量动员","国民经济动员","人民防空动员","外交动员"],"answer":[3]},{"id":"s049","type":"single","stem":"主战坦克ZTZ-99A的火控系统属于（）。","options":["简单光学瞄准","上反稳像式火控","雷达制导","手动计算"],"answer":[1]},{"id":"s050","type":"single","stem":"《中华人民共和国国防教育法》规定，国防教育以（）为核心。","options":["集体主义","爱国主义","国际主义","英雄主义"],"answer":[1]},{"id":"s051","type":"single","stem":"量子通信被视作保密通信新路径，服务国防信息安全，其实现防窃听的核心物理原理是？","options":["量子超光速传输","量子提升算力","量子不可克隆、窃听可感知","量子替代无线电"],"answer":[2]},{"id":"s052","type":"single","stem":"精确制导武器，若将导弹精度提高1倍，杀伤力大约提高（）。","options":["40%","100%","400%","200%"],"answer":[2]},{"id":"s053","type":"single","stem":"我国ZTZ-99A主战坦克的乘员人数为（）。","options":["2名","3名","4名","5名"],"answer":[1]},{"id":"s054","type":"single","stem":"全民国防教育日是每年的（）。","options":["9月第二个星期六","9月第三个星期六","10月第一个星期六","8月第三个星期六"],"answer":[1]},{"id":"s055","type":"single","stem":"我们要正确把握国防和军队现代化的时代内涵，坚持以（）为基础、（）为主导、（）为方向，加快机械化信息化智能化融合发展。","options":["信息化、智能化、机械化","信息化、机械化、智能化","机械化、信息化、智能化","机械化、智能化、信息化"],"answer":[2]},{"id":"s056","type":"single","stem":"军事安全是国家安全诸因素中的（），是维护国家安全的重要托底。","options":["基础因素","首要因素","一般因素","决定因素"],"answer":[1]},{"id":"s057","type":"single","stem":"《中华人民共和国兵役法》规定，普通高等学校的学生在就学期间，（）。","options":["可以选择是否参加军事训练","必须接受基本军事训练","可以免修军事训练","只需参加理论课学习"],"answer":[1]},{"id":"s058","type":"single","stem":"《中华人民共和国国防教育法》最初于哪一年通过？","options":["1999年","2000年","2001年","2002年"],"answer":[2]},{"id":"s059","type":"single","stem":"根据《联合国海洋法公约》，应划归中国管辖的海洋国土，除内水、领海、毗连区外，还包括（）。","options":["公海和国际海底区域","群岛水域","大陆架和专属经济区","海峡和航道"],"answer":[2]},{"id":"s060","type":"single","stem":"中国特色军事变革的本质特征和核心内容是（）。","options":["机械化","信息化","兵力规模扩张","大力发展核武"],"answer":[1]},{"id":"s061","type":"single","stem":"全日制在校退役士兵学生全部享受本专科生国家助学金，标准为每生每年（）。","options":["3000元","3300元","3700元","4000元"],"answer":[2]},{"id":"s062","type":"single","stem":"根据《中华人民共和国退役军人保障法》，现役军人入伍前已被普通高等学校录取或者是正在普通高等学校就学的学生，服现役期间保留入学资格或者学籍，退役后（）内允许入学或者复学。","options":["一年","两年","三年","五年"],"answer":[1]},{"id":"s063","type":"single","stem":"国防教育是建设和巩固国防的（）。","options":["基础","核心","保障","前提"],"answer":[0]},{"id":"s064","type":"single","stem":"党的十八届三中全会决定设立（），完善国家安全体制和国家安全战略，确保国家安全。","options":["中央国家安全委员会","中央网络安全和信息化委员会","中央军民融合发展委员会","中央外事工作委员会"],"answer":[0]},{"id":"s065","type":"single","stem":"国家对应征入伍服兵役的高校学生实行学费补偿或助学贷款代偿，研究生每生每年最高不超过（）。","options":["20000元","22000元","25000元","30000元"],"answer":[2]},{"id":"s066","type":"single","stem":"信息化装备的特征不包括（）。","options":["网络化","集成化","大型化","精确化"],"answer":[2]},{"id":"s067","type":"single","stem":"五环打击理论中，第一环打击目标是（）。","options":["指挥、控制和通信系统","生产设施","基础设施","野战部队"],"answer":[0]},{"id":"s068","type":"single","stem":"根据《中华人民共和国兵役法》，普通高等学校本专科毕业生和研究生 的征集年龄可分别放宽至（）。","options":["22周岁和24周岁","23周岁和25周岁","24周岁和26周岁","24周岁和28周岁"],"answer":[2]},{"id":"s069","type":"single","stem":"下列属于水面战斗舰艇的是（）。","options":["补给舰","运输舰","驱逐舰","医院船"],"answer":[2]},{"id":"s070","type":"single","stem":"学校国防教育是（）的基础。","options":["全民国防教育","军事教育","爱国主义教育","素质教育"],"answer":[0]},{"id":"s071","type":"single","stem":"2014年4月15日，习近平总书记在中央国家安全委员会第一次全体会议上强调，要坚持（），走出一条中国特色国家安全道路。","options":["总体国家安全观","全球治理观","正确义利观","新发展理念"],"answer":[0]},{"id":"s072","type":"single","stem":"阅兵当中装备展示的惯例，一般是（）。","options":["核武器在前，战略核武器压轴","常规武器在前，战略核武器压轴","只展示战略武器","只展示常规武器"],"answer":[1]},{"id":"s073","type":"single","stem":"高校学生应征入伍服义务兵役，享有“四个优先\"政策，包括优先报名应征、优先体检政审、优先审批定兵和（）。","options":["优先选拔使用","优先安排使用","优先升学深造","优先就业安置"],"answer":[1]},{"id":"s074","type":"single","stem":"我国055型驱逐舰首舰的名称是（）。","options":["昆明号","南昌号","拉萨号","大连号"],"answer":[1]},{"id":"s075","type":"single","stem":"美国GPS全球卫星定位系统基本星座设计由（）颗卫星组成。","options":["2","6","24","32"],"answer":[2]},{"id":"s076","type":"single","stem":"普及和加强国防教育是（）的共同责任。","options":["全社会","军队","学校","政府"],"answer":[0]},{"id":"s077","type":"single","stem":"国防现代化是新时代国防建设的主要任务，当前国防现代化的核心是（），并坚持以机械化为基础、信息化为主导、智能化融合发展。","options":["做好军事斗争准备","全面推进信息化建设","搞好国防经济建设","深度抓好军民融合"],"answer":[1]},{"id":"s078","type":"single","stem":"维护国家文化安全，就是保障和捍卫国家（）的独立性和自主性。","options":["经济主权","文化主权","网络主权","资源主权"],"answer":[1]},{"id":"s079","type":"single","stem":"《国防动员法》规定，国家建立适应国防动员需要的数据服务保障制度，依法收集、使用与国防动员密切相关的数据，并保障（）。","options":["数据公开","数据共享","数据安全","数据完整"],"answer":[2]},{"id":"s080","type":"single","stem":"新修订的《国防动员法》自（）起施行。","options":["2026年8月28日","2026年9月1日","2026年10月1日","2027年1月1日"],"answer":[2]},{"id":"s081","type":"single","stem":"2019年国庆阅兵，（）是全球首款公开亮相的实战化部署的高超音速滑翔飞行器。","options":["鹰击-21","东风-17","东风-41","锆石"],"answer":[1]},{"id":"s082","type":"single","stem":"国家对应征入伍服兵役的高校学生，在入伍时对其在校期间缴纳的学费实行一次性补偿或用于学费的国家助学贷款实行代偿，本专科生每生每年最高不超过（）。","options":["10000元","15000元","20000元","25000元"],"answer":[2]},{"id":"s083","type":"single","stem":"中华人民共和国公民（）有接受国防教育的权利和义务。","options":["部分","成年后","都","在校期间"],"answer":[2]},{"id":"s084","type":"single","stem":"我国国防和军队现代化建设目标，到（）基本实现国防和军队现代化。","options":["2020年","2027年","2035年","本世纪中叶"],"answer":[2]},{"id":"s085","type":"single","stem":"信息化战争，是指依托网络化信息系统，使用信息化武器装备及相应作战方法，在陆、海、空、天和网络、电磁等空间及认知领域进行的以（）为主要形式的战争，是信息时代战争的基本形态。","options":["体系对抗","体力对抗","火力对抗","能量对抗"],"answer":[0]},{"id":"s086","type":"single","stem":"新兴领域的国家安全主要包括太空安全、深海安全、极地安全和（）。","options":["核安全","网络安全","生物安全","科技安全"],"answer":[2]},{"id":"s087","type":"single","stem":"我国国防活动坚持（）的国防政策。","options":["积极防御","消极防御","主动进攻","先发制人"],"answer":[0]},{"id":"s088","type":"single","stem":"随着空间技术的不断发展，（）已成为国际战略竞争的制高点。","options":["深海","极地","网络空间","太空"],"answer":[3]},{"id":"s089","type":"single","stem":"（）是建军之本、强军之魂。","options":["能打胜仗","作风优良","党对人民军队的绝对领导","科技强军"],"answer":[2]},{"id":"s090","type":"single","stem":"退役大学生士兵达到全国硕士研究生招生考试报考条件后，3年内参加全国硕士研究生招生考试，初试总分加（），同等条件下优先录取。","options":["5分","8分","10分","15分"],"answer":[2]},{"id":"s091","type":"single","stem":"大学生士兵退役后复学，经学校同意，可（）。","options":["免修所有课程","转入本校其他专业学习","直接毕业","免试攻读研究生"],"answer":[1]},{"id":"s092","type":"single","stem":"退役复学后，大学生士兵可免修（）等课程，可直接获得学分。","options":["专业课程","公共体育、军事技能、军事理论","所有公共课","选修课程"],"answer":[1]},{"id":"s093","type":"single","stem":"我军运-20运输机的战略用途是（）。","options":["战术空投","战略远程快速机动","电子战","空中加油"],"answer":[1]},{"id":"s094","type":"single","stem":"国防法规体系中，由全国人民代表大会及其常务委员会制定的是（）。","options":["国防法律","国防行政法规","军事法规","军事规章"],"answer":[0]},{"id":"s095","type":"single","stem":"根据《国防动员法》，公民和组织在和平时期应当（）完成国防动员准备工作。","options":["自愿","依法","选择性","视情况"],"answer":[1]},{"id":"s096","type":"single","stem":"中国的人民防空坚持长期准备、重点建设、平战结合的方针，立足于做好（）条件下防突袭斗争准备。","options":["信息化","机械化","制空权","电子对抗"],"answer":[0]},{"id":"s097","type":"single","stem":"根据《全国硕士研究生招生工作管理规定》及相关政策，退役人员在部队服役期间符合以下哪项条件，可申请免初试攻读硕士研究生？","options":["荣立三等功一次","荣立二等功一次","获得嘉奖两次以上","获得\"四有\"优秀士兵一次"],"answer":[1]},{"id":"s098","type":"single","stem":"高校学生（含高校新生）服役期间按国家有关规定保留学籍或入学资格，退役后（）内允许复学或入学。","options":["1年","2年","3年","5年"],"answer":[1]},{"id":"s099","type":"single","stem":"我国既是一个陆地型大国，也是一个海洋型大国，海域总面积约为（）。","options":["300万平方千米","960万平方千米","473万平方千米","600万平方千米"],"answer":[2]},{"id":"s100","type":"single","stem":"根据《中华人民共和国兵役法》，普通高等学校在学生兵役工作方面负有以下哪项法定职责？","options":["仅负责政策宣传，无需设立专门机构","应当有负责兵役工作的机构","征兵工作由属地兵役机关全权负责，学校无需参与","仅需配合属地兵役机关完成体检工作"],"answer":[1]},{"id":"m001","type":"multi","stem":"我国既拥有广阔的陆地，又濒临辽阔的海域，主要包括（）。","options":["渤海","黄海","东海","南海"],"answer":[0,1,2,3]},{"id":"m002","type":"multi","stem":"新军事革命是社会由工业化向信息化演变过程中，军事领域多方面根本性变革，包含（）。","options":["军事技术、武器装备","体制编制、战争形态","军事理论、作战方式","军事训练"],"answer":[0,1,2,3]},{"id":"m003","type":"multi","stem":"以下属于国防动员领域的有（）。","options":["武装力量动员","政治动员","国民经济动员","人民防空动员"],"answer":[0,1,2,3]},{"id":"m004","type":"multi","stem":"信息化作战平台与传统作战平台相比，主要优势包括（）。","options":["网络化信息共享","精确制导能力","隐身突防能力","更大的弹药携带量"],"answer":[0,1,2]},{"id":"m005","type":"multi","stem":"《中华人民共和国国防法》的立法目的包括（）。","options":["建设和巩固国防","保障改革开放和社会主义现代化建设的顺利进行","实现中华民族伟大复兴","提高国际地位"],"answer":[0,1,2]},{"id":"m006","type":"multi","stem":"习近平总书记强调：要坚持用打仗的标准推进军事斗争准备，不断强化官兵（）思想，坚持从实战需要出发从难从严训练部队，坚持以军事斗争准备为龙头带动现代化建设，全面提高部队以打赢信息化条件下局部战争能力为核心的完成多样化军事任务能力。","options":["当兵打仗","带兵打仗","练兵打仗","带兵打赢"],"answer":[0,1,2]},{"id":"m007","type":"multi","stem":"根据《联合国海洋法公约》，应划归中国管辖的海洋国土包括（）。","options":["内水","领海","毗连区","大陆架和专属经济区"],"answer":[0,1,2,3]},{"id":"m008","type":"multi","stem":"三次技术革命对军事革命影响巨大，第三次技术革命主要标志包含（）。","options":["原子能","电子计算机","空间技术","生物工程"],"answer":[0,1,2,3]},{"id":"m009","type":"multi","stem":"现代战争中，制信息权的争夺手段包括（）。","options":["电子干扰","网络战","情报侦察","心理战"],"answer":[0,1,2,3]},{"id":"m010","type":"multi","stem":"根据2026年新修订的《中华人民共和国国防动员法》，国防动员遵循的原则包括（）。","options":["统一领导、全民参与","长期准备、重点建设","统筹兼顾、高效持续","分工协作、分级负责"],"answer":[0,1,2,3]},{"id":"m011","type":"multi","stem":"下列属于第四代战斗机典型代表的有（）。","options":["F-22","F-35","歼-20","苏-57"],"answer":[0,1,2,3]},{"id":"m012","type":"multi","stem":"根据《国防法》，国防活动适用的领域包括与军事有关的（）。","options":["政治","经济","外交","科技和教育"],"answer":[0,1,2,3]},{"id":"m013","type":"multi","stem":"下列属于非传统安全威胁的有（）。","options":["恐怖主义","重大自然灾害","传染病疫情","外国军事入侵"],"answer":[0,1,2]},{"id":"m014","type":"multi","stem":"新军事革命发展演变分为哪几个阶段（）。","options":["起步阶段","展开阶段","完成阶段","成熟终结阶段"],"answer":[0,1,2]},{"id":"m015","type":"multi","stem":"我军战斗机命名中，下列对应正确的有（）。","options":["歼-11——重型多用途战斗机","歼-10——轻型多用途战斗机","歼-16——战斗轰炸机","歼-20——隐身战斗机"],"answer":[0,1,2,3]},{"id":"m016","type":"multi","stem":"根据《国防法》，国家对国防活动实行统一领导，坚持（）。","options":["全民国防","积极防御","独立自主、自力更生","对外开放"],"answer":[0,1,2]},{"id":"m017","type":"multi","stem":"相较于传统舆论宣传与认知对抗模式，现代战争信息化认知博弈具备哪些新型特征？","options":["依托短视频、社交平台算法精准推送信息","平战结合、全天候不间断开展渗透博弈","受众覆盖军民群体，全网无传播死角","信息传播速度快、辐射覆盖面大"],"answer":[0,1,2,3]},{"id":"m018","type":"multi","stem":"新形势下，维护国家政治安全可以通过以下途径实现（）。","options":["加强党的建设","抵制意识形态渗透","坚决抵御\"颜色革命\"","放弃意识形态领域斗争"],"answer":[0,1,2]},{"id":"m019","type":"multi","stem":"属于新军事革命起步阶段典型战例的有（）。","options":["贝卡谷地空战","美军空袭利比亚","伊拉克战争","海湾战争"],"answer":[0,1]},{"id":"m020","type":"multi","stem":"以下关于脉冲多普勒雷达的描述正确的有（）。","options":["可利用多普勒效应滤除地面杂波","只能探测高空目标","具备下视下射能力","可同时跟踪多个目标"],"answer":[0,2,3]},{"id":"m021","type":"multi","stem":"中国人民解放军现役部队包括（）。","options":["陆军","海军","空军","火箭军"],"answer":[0,1,2,3]},{"id":"m022","type":"multi","stem":"当前，我国经济安全面临的威胁与挑战包括（）。","options":["国际经济金融动荡","国际经济秩序面临变革","金融安全面临风险","粮食安全风险上升"],"answer":[0,1,2,3]},{"id":"m023","type":"multi","stem":"高校学生应征入伍服义务兵役享有的\"四个优先\"政策包括（）。","options":["优先报名应征","优先体检政审","优先审批定兵","优先安排使用"],"answer":[0,1,2,3]},{"id":"m024","type":"multi","stem":"下列属于国防法规的是（）。","options":["《中华人民共和国国防法》","《中华人民共和国兵役法》","《中华人民共和国国防教育法》","《中华人民共和国国防动员法》"],"answer":[0,1,2,3]},{"id":"m025","type":"multi","stem":"北斗三号作为自主可控全球导航系统，兼顾国防安全和国计民生，它可以提供哪些核心服务？","options":["全球定位导航服务","高精度授时服务","短报文通信服务","直接替代雷达完成空中侦察"],"answer":[0,1,2]},{"id":"m026","type":"multi","stem":"当前，我国文化安全面临的威胁与挑战包括（）。","options":["西方文化和意识形态侵蚀","消极娱乐、享乐和消费文化盛行","文化传统与文化符号被恶意解构","中华优秀传统文化得到全面保护与弘扬"],"answer":[0,1,2]},{"id":"m027","type":"multi","stem":"军事技术革新主要包含（）。","options":["军事微电子技术","军事计算机技术","军事光电子技术","军事航天技术"],"answer":[0,1,2,3]},{"id":"m028","type":"multi","stem":"电子战飞机的主要任务包括（）。","options":["电子干扰","反辐射攻击","电子侦察","空中格斗"],"answer":[0,1,2,3]},{"id":"m029","type":"multi","stem":"轰-6K/N轰炸机可使用的弹药类型包括（）。","options":["激光制导炸弹","卫星制导炸弹","巡航导弹","普通航弹"],"answer":[0,1,2]},{"id":"m030","type":"multi","stem":"《中华人民共和国兵役法》规定，中华人民共和国公民服兵役的义务（）。","options":["不分民族","不分种族","不分职业","不分家庭出身"],"answer":[0,1,2,3]},{"id":"m031","type":"multi","stem":"电磁频谱监测主要能够完成以下哪项工作？","options":["发现不明异常无线电信号","定位不明信号发射源位置","直接物理销毁敌方雷达装备","排查信号干扰源"],"answer":[0,1,3]},{"id":"m032","type":"multi","stem":"武器装备智能化发展包含以下哪些方面（）。","options":["信息化主战平台","精确制导武器","军用无人系统","综合电子信息系统"],"answer":[0,1,2,3]},{"id":"m033","type":"multi","stem":"以下关于大学生应征入伍国家资助政策的说法，正确的有（）。","options":["国家对应征入伍服兵役的高校学生实行学费一次性补偿","国家对应征入伍服兵役的高校学生实行国家助学贷款代偿","退役后自愿复学或入学的，国家实行学费减免","本专科生每生每年最高不超过20000元"],"answer":[0,1,2,3]},{"id":"m034","type":"multi","stem":"主战坦克的“三大性能”通常指（）。","options":["火力","防护","机动","信息力"],"answer":[0,1,2]},{"id":"m035","type":"multi","stem":"我军99A主战坦克配备的信息化设备包括（）。","options":["热成像观测仪","激光测距仪","北斗卫星导航系统","激光对抗压制系统"],"answer":[0,1,2,3]},{"id":"m036","type":"multi","stem":"国防教育贯彻的方针包括（）。","options":["全民参与","长期坚持","讲求实效","重点突破"],"answer":[0,1,2]},{"id":"m037","type":"multi","stem":"按照信息处理流程，C4ISR系统的基本功能环节包括（）。","options":["信息搜集","信息传递","信息处理和信息显示","决策监控和执行"],"answer":[0,1,2,3]},{"id":"m038","type":"multi","stem":"为保护生态环境、维护生态安全，我国应采取的措施包括（）。","options":["加强宣传教育，提高全民环境保护意识","倡导新的生产和生活方式","完善生态环境保护制度体系，划定生态保护红线","强化生态风险的预警和防控，加强国际合作"],"answer":[0,1,2,3]},{"id":"m039","type":"multi","stem":"精确制导武器的发展方向有（）。","options":["新制导手段不断应用","由单一制导向复合制导发展","模块化、系列化发展","完全抛弃卫星制导"],"answer":[0,1,2]},{"id":"m040","type":"multi","stem":"国防教育实行的原则包括（）。","options":["经常教育与集中教育相结合","普及教育与重点教育相结合","理论教育与行为教育相结合","学校教育与社会教育相结合"],"answer":[0,1,2]},{"id":"m041","type":"multi","stem":"信息时代由于信息技术的发展而发生了质的变化，主要表现在（）","options":["作战平台的信息化","精确制导弹药将普遍应用","电子计算机成为重要软杀伤武器","军队的规模加速小型化"],"answer":[0,1,2]},{"id":"m042","type":"multi","stem":"维护核安全，必须践行的“四个强化\"包括（）。","options":["强化政治投入","强化国家责任","强化国际合作","强化核安全文化"],"answer":[0,1,2,3]},{"id":"m043","type":"multi","stem":"新军事革命下军队体制编制变革主要体现在（）。","options":["军队规模适度化","军队结构合理化","指挥体制扁平化","作战编制模块化、保障体制精确化"],"answer":[0,1,2,3]},{"id":"m044","type":"multi","stem":"航空母舰编队中常见的护航舰艇有（）。","options":["巡洋舰","驱逐舰","护卫舰","补给舰"],"answer":[0,1,2,3]},{"id":"m045","type":"multi","stem":"信息空间包括（）","options":["心理空间","作战空间","网络空间","电磁空间"],"answer":[0,2,3]},{"id":"m046","type":"multi","stem":"作为与国家安全密切相关的新兴领域，应具有的特征包括（）。","options":["高技术性","战略影响性","相对独立性","相互交融性"],"answer":[0,1,2]},{"id":"m047","type":"multi","stem":"下列属于航母易损部位的有（）。","options":["飞行甲板","舰桥","机库","升降机"],"answer":[0,1,2,3]},{"id":"m048","type":"multi","stem":"学校国防教育的形式包括（）。","options":["课堂教学","军事训练","课外活动","少年军校活动"],"answer":[0,1,2,3]},{"id":"m049","type":"multi","stem":"精确制导武器包括（）","options":["导弹","原子弹","精确制导弹药","狙击步枪"],"answer":[0,2]},{"id":"m050","type":"multi","stem":"下列属于我国新兴领域国家安全的有（）。","options":["太空安全","深海安全","极地安全","核安全"],"answer":[0,1,2]},{"id":"m051","type":"multi","stem":"新军事革命催生的军事理论创新主要有（）。","options":["联合作战理论","体系战争理论","信息战争理论","未来战争理论"],"answer":[0,1,2,3]},{"id":"m052","type":"multi","stem":"阅兵承载的核心功能有（）。","options":["国家实力展示窗口","技术验证关键节点","军事外交重要舞台","单纯节日娱乐表演"],"answer":[0,1,2]},{"id":"m053","type":"multi","stem":"关于我国航母发展，说法正确的有（）。","options":["辽宁舰由瓦良格号改装","山东舰为国产首艘航母","福建舰采用电磁弹射","三艘航母均为常规动力"],"answer":[0,1,2,3]},{"id":"m054","type":"multi","stem":"国防法规的作用包括（）。","options":["规范国防建设活动","保障公民国防权利","明确公民国防义务","促进国防现代化"],"answer":[0,1,2,3]},{"id":"m055","type":"multi","stem":"雷达可用于探测以下哪些目标？","options":["飞机","轮船","水下100米的潜艇","人造地球卫星"],"answer":[0,1,3]},{"id":"m056","type":"multi","stem":"维护生物安全应当贯彻总体国家安全观，统筹发展和安全，坚持以人为本、（）的原则。","options":["风险预防","分类管理","协同配合","经济利益优先"],"answer":[0,1,2]},{"id":"m057","type":"multi","stem":"课程总结四大军事技术发展趋势包括（）。","options":["无人化与智能化作战","高超音速与精确打击能力跃升","隐身技术全链扩展","信息化与体系作战深度融合"],"answer":[0,1,2,3]},{"id":"m058","type":"multi","stem":"现代驱逐舰的主要作战任务包括（）。","options":["防空","反潜","反舰","对陆攻击（巡航导弹）"],"answer":[0,1,2,3]},{"id":"m059","type":"multi","stem":"根据《国防法》，公民的国防义务包括（）。","options":["依法履行国防义务","保卫祖国、抵抗侵略","支持和参与国防建设","拒绝服兵役"],"answer":[0,1,2]},{"id":"m060","type":"multi","stem":"关于国家安全形势，下列说法正确的有（）。","options":["国家安全形势是国家在一定时期内所面临的影响和平稳定的外部及内部条件的总和","国家安全形势对国防具有直接影响","排除对国家安全的威胁、创建良好的国家安全形势，是国防的基本任务","国家安全形势固定不变，无需经常进行安全形势判断"],"answer":[0,1,2]},{"id":"m061","type":"multi","stem":"全球卫星导航系统有：（）","options":["美国的GPS","俄罗斯的格洛纳斯","欧洲的伽利略","中国的北斗"],"answer":[0,1,2,3]},{"id":"m062","type":"multi","stem":"维护我国海外利益安全，应当（）。","options":["以日益提升的综合国力和社会主义制度优势为依托","健全相应工作机制","深化国际安全合作，强化海外非战争军事行动","构建全面的海外安全保护体系"],"answer":[0,1,2,3]},{"id":"m063","type":"multi","stem":"课程预判未来战争演进方向有（）。","options":["全谱化作战","无人化","超高速化","认知化"],"answer":[0,1,2,3]},{"id":"m064","type":"multi","stem":"《国防动员法》规定，国防动员实施预案与突发事件应急处置预案应当在（）等方面相互衔接。","options":["指挥","力量使用","信息","保障"],"answer":[0,1,2,3]},{"id":"m065","type":"multi","stem":"以下哪些属于陆战武器平台的发展趋势？","options":["信息化转型","轻型化、快速化","无人化","增大吨位以加强防护"],"answer":[0,1,2]},{"id":"m066","type":"multi","stem":"我国国防法规体系中的法律主要包括（）。","options":["国防法","兵役法","国防动员法","人民武装警察法"],"answer":[0,1,2,3]},{"id":"m067","type":"multi","stem":"信息化战争的基本特征有（）","options":["战场空间多维化","作战节奏快速化","指挥控制智能化","武器装备信息化"],"answer":[0,1,2,3]},{"id":"m068","type":"multi","stem":"当前，我国周边安全情况比较复杂，主要表现在（）。","options":["来自海洋方向的威胁逐渐增多","陆地方向也有安全隐患","非传统安全威胁不断增多","周边安全环境总体良好，威胁基本消除"],"answer":[0,1,2]},{"id":"m069","type":"multi","stem":"新时代推进强军事业必须坚持（）。","options":["政治建军","改革强军","科技强军、人才强军","依法治军"],"answer":[0,1,2,3]},{"id":"m070","type":"multi","stem":"关于“忠诚僚机”概念，正确的有（）。","options":["无人驾驶","与有人机协同作战","可承担侦察、干扰、攻击任务","完全取代有人机"],"answer":[0,1,2]},{"id":"m071","type":"multi","stem":"以下关于国防动员与突发事件应急管理关系的说法，正确的有（）。","options":["国防动员体系与突发事件应急机制相衔接","国防动员实施预案与突发事件应急处置预案应当相互衔接","两者在指挥、力量使用、信息和保障等方面应当相互衔接","两者是完全相同的制度"],"answer":[0,1,2]},{"id":"m072","type":"multi","stem":"全民国防教育日的设立依据包括（）。","options":["《中华人民共和国国防教育法》","全国人大常委会的决定","《中华人民共和国国防法》","国务院的决定"],"answer":[0,1]},{"id":"m073","type":"multi","stem":"电子对抗具有哪些特点（）。","options":["呈现全面渗透、广泛对抗的态势","具有软、硬杀伤的双重战斗功能","主要目标是C4ISR系统和防空系统","电子对抗技术、战术发展变化迅速"],"answer":[0,1,2,3]},{"id":"m074","type":"multi","stem":"我国国防和军队现代化建设“三步走”战略构想，描述正确的有（）。","options":["2020年基本实现机械化，信息化建设取得重大进展","2035年基本实现国防和军队现代化","本世纪中叶把人民军队全面建成世界一流军队","2027年实现完全智能化作战"],"answer":[1,2]},{"id":"m075","type":"multi","stem":"2026年新修订的《国防动员法》规定，国家推进先进技术在国防动员中的应用，发展新兴领域国防动员力量。以下属于该法鼓励发展的新兴领域方向的有（）。","options":["网络空间动员","太空动员","电磁频谱动员","传统武装力量动员"],"answer":[0,1,2]},{"id":"m076","type":"multi","stem":"党的二十大报告提出军队建设要（）。","options":["机械化信息化智能化融合发展","加快军事理论现代化","加快武器装备现代化","实现建军一百年奋斗目标"],"answer":[0,1,2,3]},{"id":"m077","type":"multi","stem":"国防法规与普通法律相比，具有以下特点（）。","options":["调整对象的特殊性","法律效力的优先性","处罚措施的严厉性","适用范围的一般性"],"answer":[0,1,2]},{"id":"m078","type":"multi","stem":"根据《中华人民共和国兵役法》及高校学生应征入伍相关政策，以下关于大学生士兵优待政策的说法，正确的有（）。","options":["服役期间保留入学资格或者学籍","退出现役后两年内允许入学或者复学","退役复学后可享受学费减免优待","符合条件的可优先选拔为军官"],"answer":[0,1,2,3]},{"id":"m079","type":"multi","stem":"国防动员能力检验评估机制的作用包括（）。","options":["检验国防动员准备成效","评估国防动员潜力","发现国防动员工作薄弱环节","促进国防动员能力提升"],"answer":[0,1,2,3]},{"id":"m080","type":"multi","stem":"以下属于信息化战争中出现的新的作战方式的有（）。","options":["运动战","软杀战","太空战","心理战"],"answer":[1,2,3]},{"id":"j001","type":"judge","stem":"我国大陆海岸线总长约2.2万千米。（）","options":["正确","错误"],"answer":[1]},{"id":"j002","type":"judge","stem":"中华人民共和国奉行进攻性国防政策。（）","options":["正确","错误"],"answer":[1]},{"id":"j003","type":"judge","stem":"美国的“战斧”巡航导弹在第二次世界大战中大显身手。","options":["正确","错误"],"answer":[1]},{"id":"j004","type":"judge","stem":"政治安全是国家安全的根本，其核心是政权安全和制度安全。（）","options":["正确","错误"],"answer":[0]},{"id":"j005","type":"judge","stem":"军事革命只是武器装备的更新换代，不需要改变军事理论与组织体制。（）","options":["正确","错误"],"answer":[1]},{"id":"j006","type":"judge","stem":"国防动员只包括武装力量动员，不包括经济动员和人民防空动员。（）","options":["正确","错误"],"answer":[1]},{"id":"j007","type":"judge","stem":"信息化作战平台仅指装备有精确制导武器的载具。（）","options":["正确","错误"],"answer":[1]},{"id":"j008","type":"judge","stem":"《中华人民共和国国防法》是根据宪法制定的。（）","options":["正确","错误"],"answer":[0]},{"id":"j009","type":"judge","stem":"信息化战争中仍然需要对突袭目标实施“地毯式”轰炸。","options":["正确","错误"],"answer":[1]},{"id":"j010","type":"judge","stem":"军事安全是国家安全诸因素中的首要因素，是维护国家安全的重要托底。（）","options":["正确","错误"],"answer":[0]},{"id":"j011","type":"judge","stem":"信息技术改变了现代战争的方式和形态。","options":["正确","错误"],"answer":[0]},{"id":"j012","type":"judge","stem":"普通高等学校的学生在就学期间，必须接受基本军事训练。（）","options":["正确","错误"],"answer":[0]},{"id":"j013","type":"judge","stem":"F-15战斗机在空战中从未被击落过。（）","options":["正确","错误"],"answer":[0]},{"id":"j014","type":"judge","stem":"我国陆地与14个国家相接壤，在海上与8个国家相邻或相向。（）","options":["正确","错误"],"answer":[0]},{"id":"j015","type":"judge","stem":"恩格斯提出：技术进步一旦用于军事目的，会强制引起作战方式的改变甚至变革。（）","options":["正确","错误"],"answer":[0]},{"id":"j016","type":"judge","stem":"我军歼-11战斗机是引进苏-27技术后国产化的重型战斗机。（）","options":["正确","错误"],"answer":[0]},{"id":"j017","type":"judge","stem":"我国国防活动实行分散领导，各部门自行其是。（）","options":["正确","错误"],"answer":[1]},{"id":"j018","type":"judge","stem":"没有网络安全就没有国家安全，没有信息化就没有现代化。","options":["正确","错误"],"answer":[0]},{"id":"j019","type":"judge","stem":"传统安全与非传统安全不仅有产生先后、表现形式不同的区分，也有轻重的区分。（）","options":["正确","错误"],"answer":[1]},{"id":"j020","type":"judge","stem":"海湾战争被称作世界第一场真正意义上完全成熟的信息战争。（）","options":["正确","错误"],"answer":[1]},{"id":"j021","type":"judge","stem":"综合电子信息系统是夺取信息优势、决策优势和全维优势的主要装备。（）","options":["正确","错误"],"answer":[0]},{"id":"j022","type":"judge","stem":"大学生入伍后，其在高校的学籍将被自动取消。（）","options":["正确","错误"],"answer":[1]},{"id":"j023","type":"judge","stem":"航空母舰的飞行甲板是最薄弱且最重要的部位之一。（）","options":["正确","错误"],"answer":[0]},{"id":"j024","type":"judge","stem":"国防教育只在军队中开展，普通公民不需要接受国防教育。（）","options":["正确","错误"],"answer":[1]},{"id":"j025","type":"judge","stem":"美军在越南战争中使用的精确制导武器“宝石路”采用的是激光制导技术。","options":["正确","错误"],"answer":[0]},{"id":"j026","type":"judge","stem":"国土安全是国家安全的核心内容，是国家利益的最高表现形式之一。（）","options":["正确","错误"],"answer":[0]},{"id":"j027","type":"judge","stem":"无人系统就是完全不需要人参与，全程自主进行作战。（）","options":["正确","错误"],"answer":[1]},{"id":"j028","type":"judge","stem":"退役大学生士兵参加全国硕士研究生招生考试，初试总分可以加15分。（）","options":["正确","错误"],"answer":[1]},{"id":"j029","type":"judge","stem":"所有主战坦克都采用有人炮塔设计。（）","options":["正确","错误"],"answer":[1]},{"id":"j030","type":"judge","stem":"体系对抗理论中，把作战双方看作系统，既要优化己方系统运行，也要破坏敌方系统运转。（）","options":["正确","错误"],"answer":[0]},{"id":"j031","type":"judge","stem":"国防动员经费按照统一管理的原则，全部列入中央财政预算。（）","options":["正确","错误"],"answer":[1]},{"id":"j032","type":"judge","stem":"电子战飞机只能进行干扰，不具备攻击能力。（）","options":["正确","错误"],"answer":[1]},{"id":"j033","type":"judge","stem":"全民国防教育日是每年九月的第三个星期六。（）","options":["正确","错误"],"answer":[0]},{"id":"j034","type":"judge","stem":"无人化兵器登上战争舞台，必将对传统的军事思想、作战理论、作战样式、军事组织结构和武器装备发展等带来一系列新的变革和挑战。","options":["正确","错误"],"answer":[0]},{"id":"j035","type":"judge","stem":"网络空间是经济社会发展新支柱和国家安全新领域，已成为世界强国竞相争夺的战略制高点。（）","options":["正确","错误"],"answer":[0]},{"id":"j036","type":"judge","stem":"美国拥有大规模常设阅兵传统，阅兵是美国传递威慑信号最主要方式。（）","options":["正确","错误"],"answer":[1]},{"id":"j037","type":"judge","stem":"信息战作战形式包含电子战、情报战、网络战、心理舆论战等。（）","options":["正确","错误"],"answer":[0]},{"id":"j038","type":"judge","stem":"大学生士兵退役后复学，不可以申请转专业。（）","options":["正确","错误"],"answer":[1]},{"id":"j039","type":"judge","stem":"运输机分为战略运输机和战术运输机两类。（）","options":["正确","错误"],"answer":[0]},{"id":"j040","type":"judge","stem":"我国福建舰满载排水量超过8万吨，采用电磁弹射。（）","options":["正确","错误"],"answer":[0]},{"id":"j041","type":"judge","stem":"学校国防教育是全民国防教育的基础。（）","options":["正确","错误"],"answer":[0]},{"id":"j042","type":"judge","stem":"国防法规只包括法律，不包括行政法规和规章。（）","options":["正确","错误"],"answer":[1]},{"id":"j043","type":"judge","stem":"在信息化战争中，信息优势取代火力、机动力成为衡量双方力量优劣的首要标志。","options":["正确","错误"],"answer":[0]},{"id":"j044","type":"judge","stem":"新兴领域的国家安全主要包括太空安全、深海安全、极地安全和核安全。（）","options":["正确","错误"],"answer":[1]},{"id":"j045","type":"judge","stem":"公民拒绝履行国防义务的，依法追究法律责任。（）","options":["正确","错误"],"answer":[0]},{"id":"j046","type":"judge","stem":"学费补偿、国家助学贷款代偿以及学费减免标准，本专科生每生每年最高不超过25000元。（）","options":["正确","错误"],"answer":[1]},{"id":"j047","type":"judge","stem":"坦克的稳像式火控系统仅用于夜间作战。（）","options":["正确","错误"],"answer":[1]},{"id":"j048","type":"judge","stem":"信息化战争战场空间广阔的特征表现在陆地、海洋、空中的三维空间。","options":["正确","错误"],"answer":[1]},{"id":"j049","type":"judge","stem":"社会安全是国家安全的重要组成部分，直接影响人民群众的幸福感和满意度，维护社会安全是国家改革发展的重要保障。（）","options":["正确","错误"],"answer":[0]},{"id":"j050","type":"judge","stem":"新时代国防和军队建设是以习近平强军思想作为指导思想。（）","options":["正确","错误"],"answer":[0]},{"id":"j051","type":"judge","stem":"兵役制度只包括义务兵役，不包括志愿兵役。（）","options":["正确","错误"],"answer":[1]},{"id":"j052","type":"judge","stem":"深海是深度超过500米的海洋区域，空间广大，蕴藏着人类可持续发展所必需的资源，具有较强的军事价值。（）","options":["正确","错误"],"answer":[0]},{"id":"j053","type":"judge","stem":"军民融合发展是兴国之举、强军之策。（）","options":["正确","错误"],"answer":[0]},{"id":"j054","type":"judge","stem":"我军规定正常排水量500吨以上的水面舰艇称为“舰”，500吨以下的称为“艇”。（）","options":["正确","错误"],"answer":[0]},{"id":"j055","type":"judge","stem":"国防教育是增强民族凝聚力、提高全民素质的重要途径。（）","options":["正确","错误"],"answer":[0]},{"id":"j056","type":"judge","stem":"信息化战争不再是核威慑下的高技术常规战争。","options":["正确","错误"],"answer":[1]},{"id":"j057","type":"judge","stem":"国防动员工作坚持中国共产党的领导，贯彻习近平强军思想。（）","options":["正确","错误"],"answer":[0]},{"id":"j058","type":"judge","stem":"全日制在校退役士兵学生全部享受本专科生国家助学金。（）","options":["正确","错误"],"answer":[0]},{"id":"j059","type":"judge","stem":"国防动员只适用于战争状态，不适用于非战争军事行动。（）","options":["正确","错误"],"answer":[1]},{"id":"j060","type":"judge","stem":"国家的主权、统一、领土完整、安全和发展利益遭受直接威胁必须立即采取应对措施时，国务院、中央军事委员会可以根据应急处置需要，采取国防动员措施。（）","options":["正确","错误"],"answer":[0]}]};
+
+/* ---------------- 工具 ---------------- */
+const $  = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function shuffle(a) {                       // 返回打乱后的新数组
+  const r = a.slice();
+  for (let i = r.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [r[i], r[j]] = [r[j], r[i]]; }
+  return r;
+}
+const DAY = 86400000;
+const dkey = (d) => { d = d || new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+const LET = "ABCDEFGH";
+
+const ICON = {
+  back:  '<svg viewBox="0 0 24 24"><path d="M15 4L7 12l8 8"/></svg>',
+  next:  '<svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg>',
+  check: '<svg viewBox="0 0 24 24"><path d="M4 12.5l5.5 5.5L20 7"/></svg>',
+  cross: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  home:  '<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9H3z"/><path d="M9 20v-6h6v6"/></svg>',
+  book:  '<svg viewBox="0 0 24 24"><path d="M4 4h7v16H4zM13 4h7v16h-7z"/></svg>',
+  chart: '<svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  gear:  '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>',
+  sword: '<svg viewBox="0 0 24 24"><path d="M14 4l6 6-9 9H6v-5z"/><path d="M4 20l4-4"/></svg>',
+  target: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>',
+  repeat: '<svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 0 1 13-3.5L20 9"/><path d="M20 5v4h-4"/><path d="M20 14a8 8 0 0 1-13 3.5L4 15"/><path d="M4 19v-4h4"/></svg>',
+  shuffle:'<svg viewBox="0 0 24 24"><path d="M4 7h3.5l8 10H20"/><path d="M4 17h3.5l2.2-2.8"/><path d="M15 4l4 3-4 3M15 14l4 3-4 3"/></svg>',
+  layer:  '<svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>',
+  list:   '<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+  star:   '<svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 16.8 6.7 19.6l1.1-6L3.4 9.4l6-.8z"/></svg>',
+  starOn: '<svg class="faved" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6 .8-4.4 4.2 1.1 6L12 16.8 6.7 19.6l1.1-6L3.4 9.4l6-.8z"/></svg>',
+  crown:  '<svg viewBox="0 0 24 24"><path d="M3 8l4 3 5-6 5 6 4-3-2 11H5z"/></svg>',
+  empty: '<svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 10h8M8 14h5"/></svg>'
+};
+
+/* ---------------- 存储（沙箱降级） ---------------- */
+const mem = {};
+let storeOK = true, storeWhy = "";
+try { localStorage.setItem("__t", "1"); localStorage.removeItem("__t"); }
+catch (e) {
+  storeOK = false;
+  storeWhy = /sandbox|opaque|Security|denied/i.test(String(e.name) + e.message)
+    ? "浏览器禁止了本地存储" : "浏览器禁用了本地存储";
+}
+function load(k, def) {
+  if (!storeOK) return (k in mem) ? mem[k] : def;
+  let raw = null;
+  try { raw = localStorage.getItem(k); }
+  catch (e) {                       // 存储本身不可用（沙箱 / 被禁用）
+    storeOK = false;
+    storeWhy = storeWhy || "浏览器禁止了本地存储";
+    return (k in mem) ? mem[k] : def;
+  }
+  if (raw == null) return (k in mem) ? mem[k] : def;
+  try { return JSON.parse(raw); }
+  catch (e) {                       // 只是这一个键坏了：清掉它，不要拖累其它键的读写
+    try { localStorage.removeItem(k); } catch (_) {}
+    storeWhy = "本地数据损坏，已重置";
+    return (k in mem) ? mem[k] : def;
+  }
+}
+function save(k, v) {
+  mem[k] = v;
+  if (!storeOK) return;
+  try { localStorage.setItem(k, JSON.stringify(v)); }
+  catch (e) { storeOK = false; storeWhy = "本地存储写入失败（可能空间已满）"; }
+}
+
+const K = { prog: "mil.prog.v1", daily: "mil.daily.v1", cfg: "mil.cfg.v1", exam: "mil.exam.v1" };
+
+
+/* 试卷设置：80 道客观题，满分 100 分
+   单选 40 × 1 分 = 40 ；判断 20 × 1 分 = 20 ；多选 20 × 2 分 = 40
+   多选题：错选不得分，漏选得 1 分 */
+const EXAM = {
+  single: 40, judge: 20, multi: 20,
+  pt: { single: 1, judge: 1, multi: 2 },
+  multiPartial: 1,
+  total: 100, pass: 60, minutes: 90
+};
+
+/* ===========================================================================
+   ★ 开发者的话 —— 下面这段文字你自己改（改 html 里的内容即可，标签可自由增删）
+   支持的标签：<h4>小标题</h4> <p>段落</p> <ul><li>条目</li></ul> <b>加粗</b>
+   =========================================================================== */
+const INTRO_TITLE = "开发者的话";
+const INTRO_HTML = `
+<h4>开发</h4>
+<p>本网页由 <b>传奇 DSH 驾驶员田飞扬</b> 独立制作，<br>
+题目来源于“<b>京工小蓝岚</b>”提供的 2026 年军理题库。</p>
+<h4>测试</h4>
+<p><b>潘炳杉</b>、<b>严子豪</b>、<b>惠湛然</b> 参与了早期 bug 测试。</p>
+<h4>鸣谢</h4>
+<div class="who"><b>林姿含</b><span>使用“你要气死妈妈吗？”对开发者进行了充分的鞭策</span></div>
+<div class="who"><b>曲高歌</b><span>参与了特立书院的宣发</span></div>
+<div class="who"><b>睿信科协</b><span>参与了睿信书院的宣发<br>请关注睿信科协的第二次面试！</span></div>
+<h4>转发 · 反馈</h4>
+<p>希望大家转发给需要的人！</p>
+<p class="mono" style="font-size:15px">bug 反馈与技术交流：<b>2476839118</b></p>
+`;
+
+
+/* ---------------- 开场说明弹窗 ---------------- */
+function openIntro(force) {
+  $("#modal").innerHTML =
+    '<div class="mask" data-x><div class="modal" style="max-width:520px">' +
+      '<div class="intro-hd"><h3>' + esc(INTRO_TITLE) + "</h3></div>" +
+      '<div class="intro-bd">' + INTRO_HTML + "</div>" +
+      '<div class="intro-ft">' +
+        '<div class="chk" id="introChk"><span class="box' + (introNoShow ? " on" : "") +
+          '" id="introBox">' + (introNoShow ? "✓" : "") + "</span>下次打开不再显示</div>" +
+        '<span class="spacer"></span>' +
+        '<button class="btn pri" id="introOk">开始刷题</button>' +
+      "</div>" +
+    "</div></div>";
+  $$("#modal [data-x]").forEach(el => el.onclick = e => { if (e.target === el) closeIntro(); });
+  $("#introChk").onclick = () => {
+    introNoShow = !introNoShow;
+    $("#introBox").className = "box" + (introNoShow ? " on" : "");
+    $("#introBox").textContent = introNoShow ? "✓" : "";
+  };
+  $("#introOk").onclick = closeIntro;
+  lockScroll();
+}
+let introNoShow = false;
+function closeIntro() {
+  if (introNoShow) save("mil.intro.v1", true);
+  closeModal();
+}
+let prog  = load(K.prog, {});    // { id: {seen,right,wrong,streak,lastAt,inWrong,ws} }
+let daily = load(K.daily, {});   // { 'YYYY-MM-DD': {n, r} }
+/* 皮肤：6 套预设，每套自带完整调色板与明暗基线 */
+const SKINS = [
+  { id: "ink",      nm: "构成红黑", theme: "light", bg: "#EFE6D4", rule: "#121212", acc: "#C02424" },
+  { id: "voltage",  nm: "电压紫",   theme: "dark",  bg: "#0f0b1a", rule: "#3a2d5c", acc: "#c9a4ff" },
+  { id: "terminal", nm: "终端绿",   theme: "dark",  bg: "#0d1117", rule: "#1f3d24", acc: "#39d353" },
+  { id: "pastel",   nm: "柔彩分栏", theme: "light", bg: "#fdfcfb", rule: "#e8e4f0", acc: "#a06cd5" }
+];
+const skinOf = id => SKINS.filter(s => s.id === id)[0] || SKINS[0];
+
+let cfg   = Object.assign({
+  // shuffle 默认开：题库答案位置有系统性偏差（单选 A/B/C/D=20/39/32/9，
+  // 多选 78/80 含 A），固定选项顺序会让人靠位置蒙对，必须打乱
+  theme: "light", font: 16, sound: true, auto: true, shuffle: true,
+  size: 20, scope: "all", skin: "ink", examDate: "2026-09-19", examPass: 60, examMinutes: 90
+}, load(K.cfg, {}));
+
+// 存储里/备份里的值一律当作不可信输入：逐项校验并夹紧
+function sanitizeCfg() {
+  cfg.skin    = SKINS.some(s => s.id === cfg.skin) ? cfg.skin : "ink";
+  cfg.theme   = skinOf(cfg.skin).theme;          // theme 由皮肤决定（兼容旧的深色判断）
+  cfg.font    = clamp(Number(cfg.font) || 16, 14, 21);
+  cfg.size    = [0, 10, 20, 30].indexOf(cfg.size) >= 0 ? cfg.size : 20;
+  cfg.scope   = ["all", "single", "multi", "judge"].indexOf(cfg.scope) >= 0 ? cfg.scope : "all";
+  cfg.sound   = cfg.sound !== false;
+  cfg.auto    = cfg.auto !== false;
+  cfg.shuffle = cfg.shuffle !== false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(cfg.examDate))) cfg.examDate = "2026-09-19";
+  cfg.examPass = clamp(Number(cfg.examPass) || 60, 0, 100);
+  cfg.examMinutes = [0, 30, 45, 60, 90, 120].indexOf(Number(cfg.examMinutes)) >= 0
+    ? Number(cfg.examMinutes) : 90;
+}
+sanitizeCfg();
+const saveProg = () => save(K.prog, prog);
+const saveDaily = () => save(K.daily, daily);
+const saveCfg  = () => save(K.cfg, cfg);
+
+function P(id) {
+  // 恢复备份/存储被外部改动后 prog 可能不是合法对象，这里兜底重建
+  if (!prog || typeof prog !== "object" || Array.isArray(prog)) prog = {};
+  const p = prog[id];
+  if (!p || typeof p !== "object" || Array.isArray(p)) {
+    prog[id] = { seen: 0, right: 0, wrong: 0, streak: 0, lastAt: 0, inWrong: false, ws: 0 };
+  }
+  return prog[id];
+}
+
+/* ---------------- 音效 ---------------- */
+let actx = null;
+function beep(ok) {
+  if (!cfg.sound) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === "suspended") actx.resume();
+    const seq = ok ? [[660, 0], [990, .075]] : [[190, 0], [140, .085]];
+    seq.forEach(([f, d]) => {
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = ok ? "triangle" : "sawtooth";
+      o.frequency.value = f;
+      const t0 = actx.currentTime + d;
+      g.gain.setValueAtTime(.0001, t0);
+      g.gain.exponentialRampToValueAtTime(ok ? .11 : .07, t0 + .012);
+      g.gain.exponentialRampToValueAtTime(.0001, t0 + .15);
+      o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + .18);
+    });
+  } catch (e) {}
+}
+
+/* ---------------- 弹层 ---------------- */
+function closeModal() {
+  $("#modal").innerHTML = "";
+  document.documentElement.style.overflow = "";   // 解除滚动锁
+}
+function lockScroll() { document.documentElement.style.overflow = "hidden"; }
+function toast(m, ms) {
+  const t = $("#toast"); t.textContent = m; t.classList.add("on");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("on"), ms || 1800);
+}
+function say(title, bodyHTML, btn) {
+  $("#modal").innerHTML =
+    '<div class="mask" data-x><div class="modal">' +
+      '<h3>' + esc(title) + "</h3>" +
+      '<div class="sm">' + bodyHTML + "</div>" +
+      '<div style="margin-top:18px"><button class="btn pri wide" data-x>' + esc(btn || "知道了") + "</button></div>" +
+    "</div></div>";
+  $$("#modal [data-x]").forEach(el => el.onclick = e => { if (e.target === el || el.tagName === "BUTTON") closeModal(); });
+  lockScroll();
+}
+function ask(title, msg, onYes, yes) {
+  $("#modal").innerHTML =
+    '<div class="mask" data-x><div class="modal">' +
+      '<h3>' + esc(title) + "</h3>" +
+      '<div class="sm mut">' + esc(msg) + "</div>" +
+      '<div class="grid2" style="margin-top:18px">' +
+        '<button class="btn" data-no>取消</button>' +
+        '<button class="btn pri" data-yes>' + esc(yes || "确定") + "</button>" +
+      "</div>" +
+    "</div></div>";
+  $$("#modal [data-x]").forEach(el => el.onclick = e => { if (e.target === el) closeModal(); });
+  $("[data-no]").onclick = closeModal;
+  $("[data-yes]").onclick = () => { closeModal(); onYes && onYes(); };
+  lockScroll();
+}
+function stamp(ok) {
+  const s = $("#stamp");
+  s.className = "stamp " + (ok ? "y" : "n");
+  s.textContent = ok ? "✓" : "✗";
+  void s.offsetWidth;
+  s.classList.add("go");
+}
+
+/* ===========================================================================
+   选 题 算 法
+   无记忆曲线。核心是「反复刷」：错得越多越常出现，连对多了自动降频，
+   没刷过的优先，错题本里的题加权最高。加权轮盘赌，组内不重复。
+   =========================================================================== */
+function weight(q) {
+  const p = P(q.id);
+  let w = 10;
+  if (!p.seen) w += 26;                       // 没刷过 → 优先见一面
+  w += Math.min(p.wrong, 8) * 11;             // 错误次数：主要权重来源
+  if (p.inWrong) w += 34;                     // 错题本：最高优先
+  if (p.fav) w += 16;                         // 收藏：你点名要重点看的
+  w -= Math.min(p.streak, 6) * 3.2;           // 连对越多，出现越少
+  if (p.lastAt) w += Math.min(14, (Date.now() - p.lastAt) / 86400000 * 2.2);  // 久没碰的提权
+  w += Math.random() * 7;                     // 抖动，避免固定顺序
+  return Math.max(1, w);
+}
+function pickWeighted(pool, n) {
+  const rest = pool.slice(), out = [];
+  while (out.length < n && rest.length) {
+    const ws = rest.map(weight);
+    let total = 0; for (const x of ws) total += x;
+    let r = Math.random() * total, k = 0;
+    for (; k < rest.length - 1; k++) { r -= ws[k]; if (r <= 0) break; }
+    out.push(rest.splice(k, 1)[0]);
+  }
+  return out;
+}
+function scopeList() {
+  if (cfg.scope === "single") return BANK.questions.filter(q => q.type === "single");
+  if (cfg.scope === "multi")  return BANK.questions.filter(q => q.type === "multi");
+  if (cfg.scope === "judge")  return BANK.questions.filter(q => q.type === "judge");
+  return BANK.questions.slice();
+}
+const wrongList = () => BANK.questions.filter(q => P(q.id).inWrong);
+const favList   = () => BANK.questions.filter(q => P(q.id).fav);
+function toggleFav(id) { const p = P(id); p.fav = !p.fav; saveProg(); return p.fav; }
+function buildSmart() {
+  const pool = scopeList();
+  const n = cfg.size === 0 ? pool.length : Math.min(cfg.size, pool.length);
+  // 错题 + 收藏先占前 1/3 席位，剩下加权随机：保证「该刷的一定刷得到」
+  const must = pool.filter(q => P(q.id).inWrong || P(q.id).fav);
+  const rest = pool.filter(q => !(P(q.id).inWrong || P(q.id).fav));
+  const head = pickWeighted(must, Math.min(must.length, Math.ceil(n / 3)));
+  const tail = pickWeighted(rest, n - head.length);
+  return shuffle(head.concat(tail));
+}
+function orderList() {                      // 顺序刷：从上次位置继续
+  const pool = scopeList();
+  if (!pool.length) return [];
+  // 游标记「题目 id」而不是下标：切换刷题范围时位置不会错乱，题库增删也不会越界
+  const lastId = load("mil.cursor", "");
+  let start = pool.findIndex(q => q.id === lastId);
+  if (start < 0) start = 0;
+  const n = cfg.size === 0 ? pool.length : Math.min(cfg.size, pool.length);
+  const out = [];
+  for (let i = 0; i < n; i++) out.push(pool[(start + i) % pool.length]);
+  // 游标不在这里推进：改成「边刷边推进」，中途退出下次能接着刷（见 next()）
+  return out;
+}
+function randomList() {
+  const pool = scopeList().slice();
+  for (let i = pool.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  return pool.slice(0, cfg.size === 0 ? pool.length : Math.min(cfg.size, pool.length));
+}
+
+/* ===========================================================================
+   会 话
+   =========================================================================== */
+const S = { mode: "", label: "", queue: [], i: 0, planned: 0, resolved: 0, frontier: 0,
+            attempts: 0, correct: 0, sel: [], locked: false,
+            first: {}, last: {}, chosen: {}, startAt: 0 };
+
+function shuffleOpts(q) {
+  if (!cfg.shuffle || q.type === "judge" || q.options.length < 2) return q;
+  const idx = q.options.map((_, i) => i);
+  for (let i = idx.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  return Object.assign({}, q, {
+    options: idx.map(i => q.options[i]),
+    answer: q.answer.map(a => idx.indexOf(a)).sort((x, y) => x - y)
+  });
+}
+function start(mode, list, label) {
+  if (!list || !list.length) return toast("没有可刷的题目");
+  S.mode = mode; S.label = label;
+  S.queue = list.map(q => ({ q: shuffleOpts(q), retry: false,
+                             answered: false, sel: [], ok: false, counted: false }));
+  S.i = 0; S.frontier = 0; S.planned = S.queue.length; S.resolved = 0;
+  S.attempts = 0; S.correct = 0; S.sel = []; S.locked = false;
+  S.first = {}; S.last = {}; S.startAt = Date.now();
+  S.token = (S.token || 0) + 1;        // 会话令牌：旧定时器跨会话作废
+  clearTimeout(S.timer);
+  go("quiz");
+}
+const cur = () => S.queue[S.i];
+
+/* 背题模式：不判题、直接显示答案，用于考前快速过一遍。
+   只看不答，所以只计入「已覆盖」，不影响正确率。 */
+function startRecite(list, label) {
+  if (!list || !list.length) return toast("没有可背的题目");
+  S.mode = "recite"; S.label = label || "背题模式";
+  // 背题模式固定用题库原始选项顺序：乱序会让「背下来的答案字母」每次都对不上
+  S.queue = list.map(q => ({ q: q, retry: false,
+                             answered: false, sel: [], ok: false, counted: false }));
+  S.i = 0; S.frontier = 0; S.planned = S.queue.length; S.resolved = 0;
+  S.attempts = 0; S.correct = 0; S.sel = []; S.locked = false;
+  S.first = {}; S.last = {}; S.startAt = Date.now();
+  S.token = (S.token || 0) + 1;
+  clearTimeout(S.timer);
+  go("quiz");
+}
+/* 背过 ≠ 答过：单独记 recite，不能污染「已刷过 / 正确率」这两个指标 */
+function markSeen(q) {
+  const p = P(q.id);
+  p.recite = (p.recite || 0) + 1;
+  p.lastRecite = Date.now();
+  saveProg();
+}
+const isRecite = () => S.mode === "recite";
+const isExam = () => S.mode === "exam";
+const scopeName = () => ({ all: "全部", single: "单选", multi: "多选", judge: "判断" }[cfg.scope] || "全部");
+function daysToExam() {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(cfg.examDate || ""));
+  if (!m) return null;
+  const t = new Date(+m[1], +m[2] - 1, +m[3]); t.setHours(0, 0, 0, 0);
+  const n = new Date(); n.setHours(0, 0, 0, 0);
+  return Math.round((t - n) / DAY);
+}
+const examLabel = () => { const m = /^\d{4}-(\d{2})-(\d{2})$/.exec(cfg.examDate); return m ? (+m[1]) + "." + (+m[2]) : ""; };
+function examHistory() { const h = load(K.exam, []); return Array.isArray(h) ? h : []; }
+
+/* 点卡片会立刻渲染新页面；浏览器随后补发的 click 是按「当前 DOM」重新命中测试的，
+   于是落在新页面上（用户感受就是「莫名其妙把第一题选了」）。吞掉紧随其后的那一次。 */
+function swallowClick() {
+  const h = ev => { ev.stopPropagation(); ev.preventDefault(); };
+  document.addEventListener("click", h, true);
+  setTimeout(() => document.removeEventListener("click", h, true), 400);
+}
+
+/* ---------------- 日常练习：3D 圆柱轮播 ---------------- */
+let carRot = 0, carDrag = false;          // carRot 是连续角度（不取模），所以可以一直往一个方向转
+const CAR_N = 5, CAR_DEG = 360 / CAR_N, CAR_R = 120;
+const carIdxNow = () => ((Math.round(carRot / CAR_DEG) % CAR_N) + CAR_N) % CAR_N;
+
+/* 顺序刷题的进度提示：让用户看到「接着哪刷」 */
+function seqHint() {
+  const pool = scopeList();
+  const i = pool.findIndex(q => q.id === load("mil.cursor", ""));
+  if (i <= 0) return "从第 1 题开始";
+  return "接着第 " + (i + 1) + " 题";
+}
+function carModes() {
+  const wn = wrongList().length;
+  return [
+    { id: "smart",  nm: "智能刷题", ds: "按错误次数抽题", ic: ICON.target },
+    { id: "wrong",  nm: "错题重刷", ds: wn ? "错题本 " + wn + " 题" : "暂无错题", ic: ICON.repeat, n: wn || 0 },
+    { id: "recite", nm: "背题模式", ds: "直接看答案", ic: ICON.layer },
+    { id: "seq",    nm: "顺序刷题", ds: seqHint(), ic: ICON.book },
+    { id: "random", nm: "随机刷题", ds: "打乱抽题", ic: ICON.shuffle }
+  ];
+}
+function carouselHTML() {
+  const ms = carModes();
+  return '<div class="carousel" id="car">' +
+    '<div class="stage" id="carStage" style="transform:rotateY(' + (-carRot) + 'deg)">' +
+      ms.map((m, i) =>
+        '<button type="button" class="c3" data-car="' + i + '" aria-label="' + esc(m.nm) + '"' +
+        ' style="transform:rotateY(' + (i * CAR_DEG) + "deg) translateZ(" + CAR_R + 'px)">' +
+          '<span class="ic">' + m.ic + "</span>" +
+          '<span class="nm">' + m.nm + "</span>" +
+          '<span class="ds">' + esc(m.ds) + "</span>" +
+          (m.n ? '<span class="n">' + m.n + "</span>" : "") +
+        "</button>").join("") +
+    "</div></div>" +
+    '<div class="car-hint"><span>滑动切换</span><span class="dots" id="carDots">' +
+      ms.map((m, i) => '<i data-dot="' + i + '" class="' + (i === carIdxNow() ? "on" : "") + '"></i>').join("") +
+    "</span><span>点击进入</span></div>";
+}
+function carApply() {
+  const stage = $("#carStage");
+  if (!stage) return;
+  stage.style.transform = "rotateY(" + (-carRot) + "deg)";
+  const cur = carIdxNow();
+  $$("#car .c3").forEach((c, i) => {
+    c.classList.toggle("on", i === cur);
+    // 卡片相对正面的角度是 (i*72 - carRot)：stage 转的是 -carRot，符号别写反
+    const a = ((i * CAR_DEG - carRot) % 360 + 540) % 360 - 180;          // -180..180
+    const d = Math.abs(a);
+    // 亮度作用在卡片内容上，不作用在卡片本身——否则 opacity 会把 3D 层拍平，遮挡关系就乱了
+    if (carDrag) return;                 // 拖拽中不逐帧改透明度，松手吸附时统一算一次
+    c.style.setProperty("--dim", d < 22 ? "1" : d > 100 ? "0" : (1 - (d - 22) / 78 * 0.5).toFixed(3));
+  });
+  $$("#carDots i").forEach((d, i) => d.className = i === cur ? "on" : "");
+}
+/* 把第 i 张转到正面，走最近的转向（不绕远路、也不回绕） */
+function carSpinTo(i) {
+  const cur = carIdxNow();
+  let d = ((i - cur) % CAR_N + CAR_N) % CAR_N;
+  if (d > CAR_N / 2) d -= CAR_N;
+  carRot += d * CAR_DEG;
+  carApply();
+}
+function bindCarousel() {
+  const car = $("#car"), stage = $("#carStage");
+  if (!car || !stage) return;
+  carApply();
+  $$("#carDots i").forEach(d => d.onclick = () => carSpinTo(Number(d.dataset.dot)));
+
+  let sx = 0, sy = 0, moved = false, fromRot = 0, lastX = 0, lastY = 0, raf = 0, pendingX = 0, downHit = null;
+  const paint = () => {
+    raf = 0;
+    stage.style.transform = "rotateY(" + (-(fromRot - (pendingX - sx) * 0.55)) + "deg)";
+  };
+  car.addEventListener("pointerdown", e => {
+    carDrag = true; moved = false; sx = lastX = e.clientX; sy = lastY = e.clientY;
+    fromRot = carRot; raf = 0;
+    // 必须在 setPointerCapture 之前取：捕获之后所有指针事件的 target 都会变成 car
+    downHit = e.target && e.target.closest ? e.target.closest("[data-car]") : null;
+    car.classList.add("dragging");
+    try { car.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  car.addEventListener("pointermove", e => {
+    if (!carDrag) return;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    // 阈值从 7px 收紧到 5px：稍微一动就算滑动，避免手抖被当成点击而误进模式
+    if (!moved && Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+    if (!moved && Math.abs(dy) > Math.abs(dx)) { carDrag = false; car.classList.remove("dragging"); return; }
+    moved = true; lastX = e.clientX; lastY = e.clientY; pendingX = e.clientX;
+    if (!raf && typeof requestAnimationFrame === "function") raf = requestAnimationFrame(paint);
+    else if (typeof requestAnimationFrame !== "function") paint();
+  });
+  const finish = e => {
+    if (!carDrag) return;
+    carDrag = false;
+    if (raf && typeof cancelAnimationFrame === "function") cancelAnimationFrame(raf);
+    raf = 0;
+    car.classList.remove("dragging");
+    void stage.offsetWidth;                       // 强制回流，让 transition 重新生效
+    if (moved) {
+      // 不做取模：角度持续累加，所以可以从第 5 张直接转到第 1 张而不会倒着甩一圈
+      carRot = Math.round((fromRot - (lastX - sx) * 0.55) / CAR_DEG) * CAR_DEG;
+      carApply();
+      return;
+    }
+    const hit = downHit;                 // 用 pointerdown 时记住的那张，pointerup 的 target 已被捕获改写
+    downHit = null;
+    if (!hit) return;
+    // 松手时再核一次真实位移：手指抖一下（>4px）就当作滑动，不触发进入
+    if (Math.abs(lastX - sx) > 4 || Math.abs(lastY - sy) > 4) return;
+    const i = Number(hit.dataset.car);
+    if (i === carIdxNow()) {                       // 点正中的卡片才进入
+      const m = carModes()[i];
+      if (m.id === "wrong" && !wrongList().length) return toast("错题本是空的");
+      swallowClick();                              // 先吞掉这次 click，再换页
+      if (m.id === "smart") start("smart", buildSmart(), "智能刷题");
+      else if (m.id === "wrong") start("wrong", wrongList(), "错题重刷");
+      else if (m.id === "recite") startRecite(scopeList(), "背题模式");
+      else if (m.id === "seq") start("seq", orderList(), "顺序刷题");
+      else if (m.id === "random") start("random", randomList(), "随机刷题");
+
+    } else { carSpinTo(i); }                       // 点两侧先把它转到正面（走最近方向）
+  };
+  car.addEventListener("pointerup", finish);
+  car.addEventListener("pointercancel", finish);
+  car.addEventListener("dragstart", e => e.preventDefault());
+}
+
+/* ---------------- 模拟考：按真实试卷组卷 ---------------- */
+function startExam() {
+  const take = (tp, n) => shuffle(BANK.questions.filter(q => q.type === tp))
+                            .slice(0, n).map(shuffleOpts);
+  const list = shuffle(take("single", EXAM.single)
+    .concat(take("judge", EXAM.judge), take("multi", EXAM.multi)));
+  if (!list.length) return toast("题库为空，无法组卷");
+  S.mode = "exam"; S.label = "模拟考";
+  S.queue = list.map(q => ({ q: q, retry: false, answered: false, sel: [], ok: false, counted: false }));
+  S.i = 0; S.frontier = 0; S.planned = S.queue.length; S.resolved = 0;
+  S.attempts = 0; S.correct = 0; S.sel = []; S.locked = false;
+  S.first = {}; S.last = {}; S.startAt = Date.now();
+  S.token = (S.token || 0) + 1; clearTimeout(S.timer);
+  S._submitted = false; S._examResult = null;
+  S.examEnd = cfg.examMinutes > 0 ? Date.now() + cfg.examMinutes * 60000 : 0;
+  tickExam();
+  go("quiz");
+}
+const examLeft = () => (S.examEnd ? S.examEnd - Date.now() : 0);
+function fmtClock(ms) {
+  if (ms <= 0) return "00:00";
+  const s = Math.floor(ms / 1000);
+  return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+}
+function tickExam() {
+  if (typeof setInterval !== "function") return;      // 测试环境无定时器
+  clearInterval(S.clock);
+  S.clock = setInterval(() => {
+    if (!isExam() || S._submitted) { clearInterval(S.clock); return; }
+    const left = examLeft(), el = $("#examClock");
+    if (el) { el.textContent = fmtClock(left); el.className = "timer" + (left < 300000 ? " low" : ""); }
+    if (S.examEnd && left <= 0) { clearInterval(S.clock); submitExam(true); }
+  }, 1000);
+}
+const examAnswered = () => S.queue.filter(it => (it.sel || []).length).length;
+
+/* 交卷判分：多选错选不得分、漏选得 EXAM.multiPartial 分 */
+function submitExam(auto) {
+  if (!isExam() || S._submitted) return;
+  S._submitted = true;
+  if (typeof clearInterval === "function") clearInterval(S.clock);
+  let got = 0, blank = 0;
+  const wrong = [], byType = { single: [0, 0], judge: [0, 0], multi: [0, 0] };
+  S.queue.forEach(it => {
+    const q = it.q, sel = it.sel || [], full = EXAM.pt[q.type];
+    let pts = 0;
+    if (!sel.length) blank++;
+    else {
+      const bad = sel.some(i => !q.answer.includes(i));       // 错选
+      const missed = q.answer.some(i => !sel.includes(i));    // 漏选
+      if (!bad && !missed) pts = full;
+      else if (q.type === "multi" && !bad && missed) pts = EXAM.multiPartial;
+    }
+    byType[q.type][0] += pts; byType[q.type][1] += full;
+    got += pts;
+    const ok = pts === full;
+    applyAnswer(q, ok);
+    if (!ok) wrong.push(q);
+  });
+  const ms = Date.now() - S.startAt;
+  S._examResult = { got: got, byType: byType, wrong: wrong, blank: blank, ms: ms, auto: !!auto };
+  const hist = examHistory(); hist.push({ d: dkey(), ts: Date.now(), got: got, ms: ms });
+  save(K.exam, hist.slice(-40));
+  S.i = S.queue.length;
+  go("examResult");
+}
+
+/* ---------------- 成绩页 ---------------- */
+function vExamResult() {
+  const r = S._examResult;
+  if (!r) return emptyBlock("还没有模考记录", "回首页开考");
+  const pass = r.got >= cfg.examPass;
+  const col = pass ? "var(--ok)" : "var(--acc)";
+  const mm = Math.floor(r.ms / 60000), ss = Math.round((r.ms % 60000) / 1000);
+  const row = (nm, g, tt) => '<div class="exam-row"><span class="nm">' + nm + "</span>" +
+    '<span class="bar2"><i style="width:' + (tt ? g / tt * 100 : 0) + '%"></i></span>' +
+    '<span class="sc">' + g + " / " + tt + "</span></div>";
+  return '<div class="card"><div class="exam-res">' +
+      '<div class="score" style="color:' + col + '">' + r.got + "</div>" +
+      '<div class="meta">满分 ' + EXAM.total + " · 及格线 " + cfg.examPass + "</div>" +
+      '<div class="verdict" style="color:' + col + '">' + (pass ? "通过" : "未通过") + "</div>" +
+      '<div class="meta">' + (r.auto ? "时间到自动交卷 · " : "") +
+        "用时 " + mm + " 分 " + ss + " 秒" + (r.blank ? " · 空着 " + r.blank + " 题" : "") + "</div>" +
+    "</div></div>" +
+    '<div class="card">' + row("单选题", r.byType.single[0], r.byType.single[1]) +
+      row("判断题", r.byType.judge[0], r.byType.judge[1]) +
+      row("多选题", r.byType.multi[0], r.byType.multi[1]) + "</div>" +
+    '<div class="stack" style="margin-top:14px">' +
+      (r.wrong.length ? '<button class="btn pri wide" data-e="wrong">重刷错题 ' + r.wrong.length + "</button>" : "") +
+      '<button class="btn wide" data-e="again">再考一套</button>' +
+      '<button class="btn gh wide" data-e="home">返回首页</button>' +
+    "</div>";
+}
+function bindExamResult() {
+  $$("#app [data-e]").forEach(b => b.onclick = () => {
+    const a = b.dataset.e;
+    if (a === "home") { S.queue = []; go("home"); }
+    else if (a === "again") startExam();
+    else if (a === "wrong") start("wrong", S._examResult.wrong, "模考错题");
+  });
+}
+
+function applyAnswer(q, ok) {
+  const p = P(q.id);
+  p.seen++; p.lastAt = Date.now();
+  if (ok) {
+    p.right++; p.streak = Math.min(p.streak + 1, 99);
+    if (p.inWrong) { p.ws++; if (p.ws >= 2) { p.inWrong = false; p.ws = 0; } }
+  } else {
+    p.wrong++; p.streak = 0; p.inWrong = true; p.ws = 0;
+  }
+  saveProg();
+  const k = dkey();
+  if (!daily || typeof daily !== "object" || Array.isArray(daily)) daily = {};
+  const day = daily[k];
+  if (!day || typeof day !== "object" || Array.isArray(day)) daily[k] = { n: 0, r: 0 };
+  daily[k].n++; if (ok) daily[k].r++;
+  saveDaily();
+}
+
+function pick(i) {
+  if (S.locked || isRecite() || S._submitted) return;
+  const it = cur();
+  if (!it) return;
+  const q = it.q;
+  if (isExam()) {                      // 模拟考：只记录选择，交卷前不揭晓
+    if (q.type === "multi") {          // 多选才累加/取消
+      const k = it.sel.indexOf(i);
+      k >= 0 ? it.sel.splice(k, 1) : it.sel.push(i);
+      it.sel.sort((a, b) => a - b);
+    } else {                           // 单选 / 判断：替换；再点同一项则取消
+      it.sel = it.sel.length === 1 && it.sel[0] === i ? [] : [i];
+    }
+    $$("#app .opt").forEach((b, bi) => b.classList.toggle("sel", it.sel.includes(bi)));
+    const c = $("#examCount");
+    if (c) c.textContent = examAnswered() + "/" + S.queue.length;
+    return;
+  }
+  if (it.answered) return;             // 回看态不可再作答（否则会二次计分、翻转判定）
+  if (q.type === "multi") {
+    const k = S.sel.indexOf(i);
+    k >= 0 ? S.sel.splice(k, 1) : S.sel.push(i);
+    S.sel.sort((a, b) => a - b);
+    $$("#app .opt").forEach((b, bi) => b.classList.toggle("sel", S.sel.includes(bi)));
+    const sb = $("#submit");
+    if (sb) sb.disabled = !S.sel.length;
+  } else { S.sel = [i]; judge(); }
+}
+
+function judge() {
+  if (S.locked || isRecite() || isExam()) return;
+  const it = cur();
+  if (!it || it.answered) return;      // 同一条目只判一次
+  const q = it.q;
+  const ok = S.sel.length === q.answer.length && S.sel.every(v => q.answer.includes(v));
+  S.locked = true; S.attempts++; if (ok) S.correct++;
+  S.judgedAt = Date.now();
+  // 作答状态存在「队列条目」上而不是按题目 id 存：同一道题在一组里出现两次
+  //（原题 + 答错后的重做）时，重做必须仍然是可作答状态
+  it.answered = true; it.sel = S.sel.slice(); it.ok = ok;
+  S.frontier = Math.max(S.frontier, S.i);
+  if (!(q.id in S.first)) S.first[q.id] = ok;
+  S.last[q.id] = ok;
+
+  applyAnswer(q, ok);
+  beep(ok); stamp(ok);
+
+  // 答错后重新排队：3~5 题后再考一次（记忆强化，非记忆曲线）
+  if (!ok && S.mode !== "seq") {
+    const rest = S.queue.length - S.i - 1;
+    const gap = clamp(Math.ceil(rest / 2), 1, 5);
+    S.queue.splice(Math.min(S.queue.length, S.i + 1 + gap), 0,
+      { q: it.q, retry: true, answered: false, sel: [], ok: false, counted: false });
+  }
+
+  $$("#app .opt").forEach((b, i) => {
+    b.classList.add("lock");
+    b.classList.remove("sel");
+    if (q.answer.includes(i)) b.classList.add("ok");
+    else if (S.sel.includes(i)) { b.classList.add("no"); }
+    else b.classList.add("dim");
+  });
+  if (!ok) { const c = $(".qcard"); if (c) { c.classList.add("shake"); setTimeout(() => c.classList.remove("shake"), 420); } }
+
+  $("#fb").innerHTML = feedback(q, ok);
+  const dock = $("#dock");
+  dock.innerHTML = '<div class="in"><button class="btn pri wide" id="cont">' +
+    (S.i + 1 >= S.queue.length ? "查看战报" : "继续") + " " + ICON.next + "</button></div>";
+  // 双击「确认答案」的第二下会落在原位换成「继续」的同一个按钮上，短时间忽略
+  $("#cont").onclick = () => { if (Date.now() - S.judgedAt < 260) return; next(); };
+  clearTimeout(S.timer);
+  if (ok && cfg.auto && S.mode !== "seq") {
+    const at = S.i, tk = S.token;
+    S.timer = setTimeout(() => {
+      if (S.locked && S.i === at && S.token === tk) next();
+    }, 780);
+  }
+}
+
+function feedback(q, ok, recite) {
+  const p = P(q.id);
+  const right = q.type === "judge" ? (q.answer[0] === 0 ? "正确" : "错误")
+                                   : q.answer.map(i => LET[i]).join("");
+  const pills = [];
+  if (ok && p.streak >= 3) pills.push('<span class="pill g">连对 ' + p.streak + " 次</span>");
+  if (!ok && !recite) pills.push('<span class="pill r">已进错题本</span>');
+  if (p.inWrong) pills.push('<span class="pill y">再对 ' + Math.max(0, 2 - p.ws) + " 次移出</span>");
+  if (p.wrong > 1) pills.push('<span class="pill">错 ' + p.wrong + " 次</span>");
+
+  const ansText = q.type === "judge" ? right
+    : q.answer.map(i => LET[i] + ". " + q.options[i]).join("　");
+  return '<div class="verdict">' +
+    '<div class="vt y">' + ICON.check + (recite ? "正确答案" : (ok ? "回答正确" : "回答错误")) +
+      '<span class="spacer"></span><span class="ans">' +
+      (recite ? (q.type === "judge" ? "" : "正确选项 ") + esc(right) : "正确答案 " + esc(right)) +
+      "</span></div>" +
+    '<div class="why">' + esc(ansText) + "</div>" +
+    (pills.length ? '<div class="pills">' + pills.join("") + "</div>" : "") +
+  "</div>";
+}
+
+function next() {
+  if (!S.locked) return;
+  const it = cur();
+  // 只统计一次：回看已答过的题再点「继续」不应重复计入进度
+  if (it && !it.retry && !it.counted) { S.resolved++; it.counted = true; }
+  S.locked = false; S.sel = [];
+  S.i++;
+  S.frontier = Math.max(S.frontier, S.i);
+  // 顺序刷题：把游标推到当前题，下次进来接着刷
+  if (S.mode === "seq" && S.queue[S.i]) save("mil.cursor", S.queue[S.i].q.id);
+  window.scrollTo(0, 0);
+  render();
+}
+
+/* ===========================================================================
+   视 图
+   =========================================================================== */
+let view = "home";
+const TABS = [
+  { k: "home",  t: "刷题", ic: ICON.home },
+  { k: "wrong", t: "错题", ic: ICON.book },
+  { k: "fav",   t: "收藏", ic: ICON.star },
+  { k: "stats", t: "统计", ic: ICON.list },
+  { k: "me",    t: "设置", ic: ICON.gear }
+];
+
+function go(v) {
+  clearTimeout(S.timer);              // 离开答题页时作废未触发的自动跳转
+  S.token = (S.token || 0) + 1;
+  S.locked = false;
+  view = v; window.scrollTo(0, 0); render();
+}
+
+function render() {
+  const wn = wrongList().length;       // 一次算完，别在渲染热路径里重复全量扫描
+  $("#hdrChip").textContent = wn ? "错题 " + wn : BANK.questions.length + " 题";
+  $("#hdrChip").className = "chip" + (wn ? " on" : "");
+  $("#tabs").innerHTML = TABS.map(t =>
+    '<button class="' + (view === t.k ? "on" : "") + '" data-tab="' + t.k + '">' +
+      '<span class="ic">' + t.ic + "</span><span>" + t.t + "</span>" +
+      (t.k === "wrong" && wn ? '<span class="badge">' + (wn > 99 ? "99+" : wn) + "</span>" : "") +
+    "</button>").join("");
+  $$("#tabs [data-tab]").forEach(b => b.onclick = () => {
+    const k = b.dataset.tab;
+    const mid = view === "quiz" && S.queue.length && S.i < S.queue.length;
+    if (mid && k !== "quiz") {
+      ask("离开本组练习？", "本组进度会丢失，已答记录保留。",
+        () => { S.queue = []; go(k); }, "离开");
+    } else { S.queue = []; go(k); }
+  });
+
+  const fn = { home: vHome, quiz: vQuiz, wrong: vWrong, stats: vStats, me: vMe,
+               fav: vFav, examResult: vExamResult }[view] || vHome;
+  $("#app").innerHTML = '<div class="view">' + fn() + "</div>";
+
+  const dock = $("#dock"); dock.innerHTML = "";
+  if (view === "quiz") {
+    if (isExam() && S._examResult) bindExamResult();
+    else if (S.i < S.queue.length) bindQuiz();
+    else bindSummary();
+  }
+  if (view === "home") bindHome();
+  if (view === "wrong") bindWrong();
+  if (view === "me") bindMe();
+  if (view === "stats") bindStats();
+  if (view === "examResult") bindExamResult();
+  if (view === "fav") bindFav();
+}
+
+/* ---------- 首页 ---------- */
+function vHome() {
+  const total = BANK.questions.length;
+  let done = 0, recited = 0, covered = 0;
+  BANK.questions.forEach(q => {
+    const p = P(q.id);
+    if (p.seen > 0) done++;
+    if (p.recite > 0) recited++;
+    if (p.seen > 0 || p.recite > 0) covered++;
+  });
+  const wn = wrongList().length;
+  let r = 0, w = 0;
+  BANK.questions.forEach(q => { r += P(q.id).right; w += P(q.id).wrong; });
+  const acc = (r + w) ? Math.round(r / (r + w) * 100) : 0;
+  const hasAcc = (r + w) > 0;                                 // 一题没答时别显示「0%」
+  const today = daily[dkey()] || { n: 0, r: 0 };
+  const tacc = today.n ? Math.round(today.r / today.n * 100) : 0;
+  const cover = total ? Math.round(covered / total * 100) : 0; // 空题库时不要算出 NaN
+
+  const dd = daysToExam();
+  const hist = examHistory();
+  const lastScore = hist.length ? hist[hist.length - 1].got : null;
+
+  let h = "";
+  if (!storeOK) {
+    h += '<div class="warnbar"><b>⚠️ 进度无法保存：' + esc(storeWhy) + "</b>" +
+      '<div class="xs mut" style="margin-top:6px">刷新后数据丢失。' +
+      "请双击打开本文件，或用线上地址访问。</div></div>";
+  }
+
+  // —— 状态条：考试倒计时 + 进度，取代原来堆在一起的标题/KPI/环形图 ——
+  h += '<div class="status' + (dd !== null && dd <= 3 && dd >= 0 ? " examday" : "") + '">' +
+    '<div class="top"><b>' +
+      (dd === null ? "备考进行中"
+        : dd > 0 ? "距 " + examLabel() + " 考试还有 " + dd + " 天"
+        : dd === 0 ? "今天就是 " + examLabel() + " 考试"
+        : "考试已过 " + (-dd) + " 天") +
+      '</b><span>已答 ' + done + "/" + total + "</span></div>" +
+    '<div class="track"><i style="width:' + cover + '%"></i></div>' +
+    '<div class="sub">' +
+      "<span>今日 <b>" + today.n + "</b></span>" +
+      "<span>背过 <b>" + recited + "</b></span>" +
+      (hasAcc ? "<span>正确率 <b>" + acc + "%</b></span>" : "") +
+      (lastScore !== null ? "<span>上次模考 <b>" + lastScore + "</b> 分</span>" : "") +
+    "</div></div>";
+
+  // —— 唯一的主按钮：模拟考 ——
+  h += '<button class="hero-btn" data-a="exam">' +
+    '<span class="t">开始模拟考</span>' +
+    '<span class="s">' + EXAM.single + " 单选 + " + EXAM.judge + " 判断 + " + EXAM.multi +
+      " 多选 · " + EXAM.total + " 分" +
+      (cfg.examMinutes ? " · " + cfg.examMinutes + " 分钟" : "") + "</span></button>";
+
+  // —— 日常练习：一节胶囊，不再是 4 个等重大按钮 ——
+  h += '<h2 class="sec">日常练习</h2>' + carouselHTML();
+
+  // —— 参数折叠成一行摘要 ——
+  h += '<div class="params"><button class="pchip' + (homeParams ? " open" : "") + '" id="pToggle">' +
+    "范围 · " + scopeName() + "　题量 · " + (cfg.size === 0 ? "全部" : cfg.size + " 题") +
+    (homeParams ? " ▲" : " ▼") + "</button></div>";
+  if (homeParams) {
+    const pool = scopeList().length;
+    const per = cfg.size === 0 ? pool : Math.min(cfg.size, pool);
+    h += '<div class="param-panel">' +
+      '<div class="lb">刷题范围</div><div class="seg">' +
+        [["all", "全部 " + total], ["single", "单选"], ["multi", "多选"], ["judge", "判断"]]
+          .map(([k, t2]) => '<button data-scope="' + k + '" class="' + (cfg.scope === k ? "on" : "") + '">' + t2 + "</button>").join("") +
+      "</div>" +
+      '<div class="lb" style="margin-top:14px">每组题量</div><div class="seg">' +
+        [[10, "10 题"], [20, "20 题"], [30, "30 题"], [0, "全部"]]
+          .map(([k, t2]) => '<button data-size="' + k + '" class="' + (cfg.size === k ? "on" : "") + '">' + t2 + "</button>").join("") +
+      "</div>" +
+      '<div class="hint">候选 ' + pool + " · 每组 " + per + "</div>" +
+    "</div>";
+  }
+  return h;
+}
+let homeParams = false;
+function bindHome() {
+  $$("#app [data-a]").forEach(b => b.onclick = () => {
+    const a = b.dataset.a;
+    if (a === "exam") startExam();
+    else if (a === "smart") start("smart", buildSmart(), "智能刷题");
+    else if (a === "seq") start("seq", orderList(), "顺序刷题");
+    else if (a === "random") start("random", randomList(), "随机刷题");
+    else if (a === "recite") startRecite(scopeList(), "背题模式");
+    else if (a === "fav") {
+      const l = favList();
+      if (!l.length) return toast("还没有收藏的题目");
+      start("smart", l, "收藏练习");
+    }
+    else if (a === "wrong") {
+      const list = wrongList().slice().sort((x, y) => {
+        const a = P(x.id), b = P(y.id);
+        return (b.wrong - a.wrong) || ((a.lastAt || 0) - (b.lastAt || 0));  // 错得多、久没练的靠前
+      });
+      if (!list.length) return toast("错题本是空的，先去刷题吧");
+      start("wrong", list.slice(0, cfg.size === 0 ? list.length : Math.min(cfg.size, list.length)), "错题重刷");
+    }
+  });
+  bindCarousel();
+  const pt = $("#pToggle");
+  if (pt) pt.onclick = () => { homeParams = !homeParams; render(); };
+  $$("#app [data-scope]").forEach(b => b.onclick = () => { cfg.scope = b.dataset.scope; saveCfg(); render(); });
+  $$("#app [data-size]").forEach(b => b.onclick = () => { cfg.size = Number(b.dataset.size); saveCfg(); render(); });
+}
+
+/* ---------- 答题页 ---------- */
+function vQuiz() {
+  if (!S.queue.length) return emptyBlock("还没有开始刷题", "回首页开始");
+  if (S.i >= S.queue.length) return (isExam() && S._examResult) ? vExamResult() : vSummary();
+
+  const it = cur(), q = it.q, p = P(q.id);
+  const pct = clamp(Math.round(S.resolved / Math.max(1, S.planned) * 100), 0, 100);
+  const tn = { single: "单选题", multi: "多选题", judge: "判断题" }[q.type];
+  const tc = { single: "t1", multi: "t2", judge: "t3" }[q.type];
+  const recite = isRecite(), exam = isExam();
+  const done = recite || (!exam && !!it.answered);   // 模拟考不揭晓
+  const picked = it.sel || [];
+  const selNow = exam ? picked : S.sel;
+
+  let h = '<div class="qtop">' +
+    '<button class="nav" id="prev" aria-label="上一题"' + (S.i === 0 ? " disabled" : "") + ">" + ICON.back + "</button>" +
+    '<div class="track"><i style="width:' + pct + '%"></i></div>' +
+    '<span class="count"><b>' + (S.i + 1) + "</b>/" + S.queue.length + "</span>" +
+    (exam && S.examEnd ? '<span class="timer" id="examClock">' + fmtClock(examLeft()) + "</span>" : "") +
+  "</div>";
+
+  h += '<div class="tags">' +
+    '<span class="tag ' + tc + '">' + tn + "</span>" +
+    (recite ? '<span class="tag t2">背题</span>' : "") +
+    (it.retry ? '<span class="tag hot">重做</span>' : "") +
+    (p.wrong ? '<span class="tag hot">错过 ' + p.wrong + " 次</span>" : "") +
+    (p.streak >= 2 ? '<span class="tag t1">连对 ' + p.streak + "</span>" : "") +
+    (exam ? '<span class="tag t2">已答 <b id="examCount">' + examAnswered() + "/" + S.queue.length + "</b></span>" : "") +
+    '<span class="spacer"></span>' +
+    (done && S.i !== S.frontier ? '<span class="tag">回看中</span>' : "") +
+    '<button class="btn sm gh" id="favBtn" aria-label="收藏">' + (P(q.id).fav ? ICON.starOn : ICON.star) + "</button>" +
+    '<button class="btn sm gh" id="sheetBtn">答题卡</button>' +
+    (exam ? '<button class="btn sm" id="submitExam">交卷</button>' : "") +
+  "</div>";
+
+  h += '<div class="qcard">' +
+    '<div class="stem"><span class="no">' + esc(q.id.toUpperCase()) + "</span>" + esc(q.stem) + "</div>" +
+    '<div class="opts">' + q.options.map((o, i) => {
+      const c = ["opt"];
+      if (done) {
+        if (q.answer.includes(i)) c.push("ok");
+        else if (picked.includes(i)) c.push("no");
+        else c.push("dim");
+        c.push("lock");
+      } else if (selNow.includes(i)) c.push("sel");
+      return '<button class="' + c.join(" ") + '" data-i="' + i + '"><span class="k">' + LET[i] +
+        '</span><span class="v">' + esc(o) + "</span></button>";
+    }).join("") + "</div>" +
+    '<div id="fb" aria-live="polite" aria-atomic="true">' + (done ? feedback(q, it.ok, recite) : "") + "</div>" +
+  "</div>";
+  return h;
+}
+function bindQuiz() {
+  const it = cur(), q = it.q;
+
+  if (isExam()) {                        // 模拟考：上一题 / 下一题 自由翻，可改答案
+    $("#sheetBtn").onclick = openSheet;
+    const fb0 = $("#favBtn");
+    if (fb0) fb0.onclick = () => { const on = toggleFav(q.id);
+      fb0.innerHTML = on ? ICON.starOn : ICON.star; toast(on ? "已收藏" : "已取消收藏"); };
+    const se = $("#submitExam");
+    if (se) se.onclick = () => ask("确认交卷？",
+      "本套 " + S.queue.length + " 题，你已作答 " + examAnswered() + " 题。交卷后不能再修改。",
+      () => submitExam(false), "交卷");
+    $$("#app .opt").forEach((b, i) => {
+      b.onclick = () => { if (!S._submitted) pick(i); };
+      b.classList.toggle("sel", (it.sel || []).includes(i));
+    });
+    const pv = $("#prev");
+    if (pv) pv.onclick = () => { if (S.i > 0) { S.i--; window.scrollTo(0, 0); render(); } };
+    const last = S.i + 1 >= S.queue.length;
+    $("#dock").innerHTML = '<div class="in">' +
+      '<button class="btn" id="eprev"' + (S.i === 0 ? " disabled" : "") + ">" + ICON.back + "</button>" +
+      '<button class="btn pri" id="esub" style="flex:1.4">提前交卷</button>' +
+      '<button class="btn" id="enext"' + (last ? " disabled" : "") + ">" + ICON.next + "</button></div>";
+    const doSub = () => ask("确认交卷？",
+      "已作答 " + examAnswered() + " / " + S.queue.length + " 题。交卷后不能修改。",
+      () => submitExam(false), "交卷");
+    $("#eprev").onclick = () => { if (S.i > 0) { S.i--; window.scrollTo(0, 0); render(); } };
+    $("#enext").onclick = () => { if (S.i + 1 < S.queue.length) { S.i++; window.scrollTo(0, 0); render(); } };
+    $("#esub").onclick = doSub;
+    if (se) se.onclick = doSub;
+    return;
+  }
+
+  if (isRecite()) {                       // 背题模式：只有翻页
+    markSeen(q);
+    const fb2 = $("#favBtn");
+    if (fb2) fb2.onclick = () => { const on = toggleFav(q.id);
+      fb2.innerHTML = on ? ICON.starOn : ICON.star; toast(on ? "已收藏" : "已取消收藏"); };
+    $("#sheetBtn").onclick = openSheet;
+    const pv = $("#prev");
+    if (pv) pv.onclick = () => { if (S.i > 0) { S.i--; window.scrollTo(0, 0); render(); } };
+    const last = S.i + 1 >= S.queue.length;
+    $("#dock").innerHTML = '<div class="in">' +
+      '<button class="btn" id="rprev"' + (S.i === 0 ? " disabled" : "") + ">" + ICON.back + " 上一题</button>" +
+      '<button class="btn pri" id="rnext">' + (last ? "背完了" : "下一题") + " " + ICON.next + "</button></div>";
+    $("#rprev").onclick = () => { if (S.i > 0) { S.i--; window.scrollTo(0, 0); render(); } };
+    $("#rnext").onclick = () => { S.i++; window.scrollTo(0, 0); render(); };
+    return;
+  }
+
+  const done = !!it.answered;
+
+  const pv = $("#prev");
+  if (pv) pv.onclick = () => { if (S.i > 0) { S.i--; S.locked = false; S.sel = []; render(); } };
+  const fb1 = $("#favBtn");
+  if (fb1) fb1.onclick = () => { const on = toggleFav(q.id);
+    fb1.innerHTML = on ? ICON.starOn : ICON.star; toast(on ? "已收藏" : "已取消收藏"); };
+  $("#sheetBtn").onclick = openSheet;
+
+  const dock = $("#dock");
+  if (done) {                       // 回看已答题目：不重新作答
+    const back = S.i !== S.frontier;
+    dock.innerHTML = '<div class="in"><button class="btn pri wide" id="cont">' +
+      (back ? "回到当前题" : (S.i + 1 >= S.queue.length ? "查看战报" : "继续")) + (back ? "" : " " + ICON.next) +
+      "</button></div>";
+    $("#cont").onclick = () => {
+      if (back) { S.i = S.frontier; S.locked = false; S.sel = []; window.scrollTo(0, 0); render(); }
+      else { S.locked = true; next(); }
+    };
+    return;
+  }
+  $$("#app .opt").forEach(b => b.onclick = () => pick(Number(b.dataset.i)));
+  if (q.type === "multi") {
+    dock.innerHTML = '<div class="in"><button class="btn pri wide" id="submit"' +
+      (S.sel.length ? "" : " disabled") + ">确认答案</button></div>";
+    $("#submit").onclick = judge;
+    $$("#app .opt").forEach((b, i) => b.classList.toggle("sel", S.sel.includes(i)));
+  } else {
+    dock.innerHTML = "";
+  }
+}
+
+function vSummary() {
+  if (isRecite()) {                        // 背题没有对错，不套用正确率
+    S._todo = [];
+    return '<div class="card"><div class="sum">' +
+      '<div class="big">' + S.planned + "</div>" +
+      '<div class="lb">' + esc(S.label) + " · 已背题数</div>" +
+      '<div class="row4">' +
+        "<div><b>" + BANK.questions.filter(q => P(q.id).seen || P(q.id).recite).length +
+          "</b><span>题库已覆盖</span></div>" +
+        "<div><b>" + BANK.questions.length + "</b><span>题库总量</span></div>" +
+      "</div></div>" +
+      '<div class="stack">' +
+        '<button class="btn pri wide" data-r="again">再背一遍</button>' +
+        '<button class="btn wide" data-r="quiznow">直接开考</button>' +
+        '<button class="btn gh wide" data-r="home">返回首页</button>' +
+      "</div></div>";
+  }
+  const acc = S.attempts ? Math.round(S.correct / S.attempts * 100) : 0;
+  const sec = Math.round((Date.now() - S.startAt) / 1000);
+  const mm = Math.floor(sec / 60), ss = sec % 60;
+  const firstOK = Object.keys(S.first).filter(k => S.first[k]).length;
+  const miss = Object.keys(S.last).filter(k => !S.last[k]);
+  const list = miss.map(id => BANK.questions.find(q => q.id === id)).filter(Boolean);
+  S._miss = list;
+  // 答题卡可以跳过中间题，战报必须如实反映「答了几题」而不是「发了几题」
+  const todo = S.queue.filter(x => !x.answered).map(x => x.q);
+  S._todo = todo;
+  const answered = S.planned - todo.length;
+
+  return '<div class="card"><div class="sum">' +
+    '<div class="big">' + acc + "%</div>" +
+    '<div class="lb">' + esc(S.label) + " · 正确率</div>" +
+    '<div class="row4">' +
+      "<div><b>" + answered + "/" + S.planned + "</b><span>已答/总题</span></div>" +
+      "<div><b>" + firstOK + "</b><span>一次答对</span></div>" +
+      "<div><b>" + miss.length + "</b><span>仍答错</span></div>" +
+      "<div><b>" + mm + ":" + String(ss).padStart(2, "0") + "</b><span>用时</span></div>" +
+    "</div></div>" +
+    '<div class="stack">' +
+      '<button class="btn pri wide" data-r="again">再来一组</button>' +
+      (todo.length ? '<button class="btn wide" data-r="todo">补做 ' + todo.length + " 题</button>" : "") +
+      (list.length ? '<button class="btn wide" data-r="miss">重刷错题 ' + list.length + "</button>" : "") +
+      '<button class="btn gh wide" data-r="home">返回首页</button>' +
+    "</div></div>";
+}
+function bindSummary() {
+  $$("#app [data-r]").forEach(b => b.onclick = () => {
+    const a = b.dataset.r;
+    if (a === "home") { S.queue = []; go("home"); }
+    else if (a === "miss") start("wrong", S._miss || [], "本轮错题");
+    else if (a === "todo") start(S.mode || "smart", S._todo || [], "补做未答题");
+    else if (a === "quiznow") start("smart", buildSmart(), "智能刷题");
+    else {
+      if (S.mode === "seq") start("seq", orderList(), "顺序刷题");
+      else if (S.mode === "random") start("random", randomList(), "随机刷题");
+      else if (S.mode === "wrong") start("wrong", wrongList(), "错题重刷");
+      else start("smart", buildSmart(), "智能刷题");
+    }
+  });
+}
+
+/* ---------- 答题卡 ---------- */
+function openSheet() {
+  clearTimeout(S.timer);               // 弹层打开时不要偷偷跳题
+  lockScroll();
+  let h = '<div class="sheet" data-c><div class="panel">' +
+    '<div class="row"><b class="grow">答题卡</b>' +
+    '<span class="xs mut">勾=答对 叉=答错 黄框=当前</span>' +
+    '<button class="btn sm gh" data-c>关闭</button></div><div class="keys">';
+  S.queue.forEach((it, i) => {
+    const c = [];
+    if (it.answered) c.push(it.ok ? "r" : "w");
+    if (i === S.i) c.push("cur");
+    const st = it.answered ? (it.ok ? "答对" : "答错") : "未答";
+    h += '<button class="' + c.join(" ") + '" data-j="' + i + '" aria-label="第' + (i + 1) + "题 " + st + '">' +
+      (i + 1) + "</button>";
+  });
+  h += "</div></div></div>";
+  $("#modal").innerHTML = h;
+  $$("#modal [data-c]").forEach(el => el.onclick = e => { if (e.target === el || el.tagName === "BUTTON") closeModal(); });
+  $$("#modal [data-j]").forEach(b => b.onclick = () => {
+    S.i = Number(b.dataset.j); S.locked = false; S.sel = [];
+    closeModal(); window.scrollTo(0, 0); render();
+  });
+}
+
+/* ---------- 错题本 ---------- */
+function vWrong() {
+  const list = wrongList().sort((a, b) => P(b.id).wrong - P(a.id).wrong || P(a.id).seen - P(b.id).seen);
+  if (!list.length) return emptyBlock("错题本是空的", "答错的题会自动进来");
+  let h = '<div class="card"><div class="row">' +
+    '<div class="grow"><div style="font-weight:700;font-size:1.06em">错题本</div>' +
+    '<div class="xs mut">' + list.length + " 题 · 连续答对 2 次自动移出</div></div>" +
+    '<button class="btn pri" id="runWrong">开始重刷</button></div></div>';
+
+  h += '<h2 class="sec">清单</h2>';
+  list.forEach(q => {
+    const p = P(q.id);
+    const ans = q.type === "judge" ? (q.answer[0] === 0 ? "正确" : "错误") : q.answer.map(i => LET[i]).join("");
+    h += '<div class="item">' +
+      '<div class="s">' + esc(q.stem) + "</div>" +
+      '<div class="m"><span class="pill r">错 ' + p.wrong + " 次</span>" +
+        '<span class="pill y">再对 ' + Math.max(0, 2 - p.ws) + " 次移出</span>" +
+        '<span class="pill">答案 ' + esc(ans) + "</span></div>" +
+      '<div class="acts"><button class="btn sm gh" data-one="' + esc(q.id) + '">只刷这题</button>' +
+        '<button class="btn sm gh" data-del="' + esc(q.id) + '">移出</button></div>' +
+    "</div>";
+  });
+  return h;
+}
+function bindWrong() {
+  const rw = $("#runWrong");           // 空错题本时该按钮不存在，必须判空
+  if (rw) rw.onclick = () => {
+    const l = wrongList();
+    if (l.length) start("wrong", l, "错题重刷");
+  };
+  $$("#app [data-one]").forEach(b => b.onclick = () => {
+    const q = BANK.questions.find(x => x.id === b.dataset.one);
+    if (q) start("wrong", [q], "单题重做");
+  });
+  $$("#app [data-del]").forEach(b => b.onclick = () => {
+    const p = P(b.dataset.del); p.inWrong = false; p.ws = 2; saveProg(); render(); toast("已移出错题本");
+  });
+}
+
+/* ---------- 统计 ---------- */
+function vStats() {
+  const total = BANK.questions.length;
+  let R = 0, W = 0, doneN = 0, recitedN = 0, wrong = 0;
+  const byType = { single: [0, 0], multi: [0, 0], judge: [0, 0] };
+  BANK.questions.forEach(q => {
+    const p = P(q.id);
+    R += p.right; W += p.wrong;
+    if (p.seen) doneN++;
+    if (p.recite) recitedN++;
+    if (p.inWrong) wrong++;
+    byType[q.type][0] += p.right; byType[q.type][1] += p.right + p.wrong;
+  });
+  const acc = (R + W) ? Math.round(R / (R + W) * 100) : 0;
+
+  let h = '<div class="k4">' +
+    "<div><b>" + R + "</b><span>累计答对</span></div>" +
+    "<div><b>" + W + "</b><span>累计答错</span></div>" +
+    "<div><b>" + acc + "%</b><span>总正确率</span></div>" +
+    "<div><b>" + doneN + "/" + total + "</b><span>已答过</span></div>" +
+    "<div><b>" + recitedN + "</b><span>背过</span></div>" +
+  "</div>";
+
+  h += '<h2 class="sec">分题型正确率</h2><div class="card"><div class="bars">' +
+    [["single", "单选题"], ["multi", "多选题"], ["judge", "判断题"]].map(([k, nm]) => {
+      const [r, t] = byType[k];
+      const pc = t ? Math.round(r / t * 100) : 0;
+      return '<div class="bar"><span class="nm">' + nm + "</span>" +
+        '<span class="bg"><i style="width:' + pc + '%"></i></span>' +
+        '<span class="n">' + (t ? pc + "%" : "—") + "</span></div>";
+    }).join("") + "</div></div>";
+
+  // 最近 7 天
+  const days = [];
+  const now = new Date(); now.setHours(0, 0, 0, 0);
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now); d.setDate(d.getDate() - i);   // 不能用毫秒减：跨夏令时会丢一天
+    days.push({ d, n: (daily[dkey(d)] || {}).n || 0 });
+  }
+  const mx = Math.max(1, ...days.map(x => x.n));
+  h += '<h2 class="sec">最近 7 天</h2><div class="card">' +
+    '<div class="spark">' + days.map(x =>
+      '<div title="' + dkey(x.d) + "：" + x.n + ' 题"><i style="height:' +
+      Math.max(2, x.n / mx * 52) + 'px"></i><span>' + (x.d.getMonth() + 1) + "/" + x.d.getDate() + "</span></div>"
+    ).join("") + "</div></div>";
+
+  const hot = BANK.questions.filter(q => P(q.id).wrong > 0)
+    .sort((a, b) => P(b.id).wrong - P(a.id).wrong).slice(0, 10);
+  if (hot.length) {
+    h += '<h2 class="sec">最常错的题</h2><div class="card">';
+    hot.forEach(q => {
+      h += '<div class="item"><div class="s">' + esc(q.stem.length > 60 ? q.stem.slice(0, 60) + "…" : q.stem) + "</div>" +
+        '<div class="m"><span class="pill r">错 ' + P(q.id).wrong + " 次</span>" +
+        '<span class="pill">' + (q.type === "single" ? "单选" : q.type === "multi" ? "多选" : "判断") + "</span></div></div>";
+    });
+    h += "</div>";
+  }
+
+  h += '<div style="margin-top:18px"><button class="btn dg wide" id="resetBtn">清空全部刷题记录</button></div>';
+  return h;
+}
+function bindStats() {
+  const b = $("#resetBtn");
+  if (b) b.onclick = () => ask("清空刷题记录？", "错题本和统计清空，题库保留。", () => {
+    prog = {}; daily = {}; saveProg(); saveDaily(); save("mil.cursor", 0);
+    toast("记录已清空"); render();
+  }, "清空");
+}
+
+/* ---------- 收藏 ---------- */
+function vFav() {
+  const list = favList();
+  if (!list.length) {
+    return '<div class="empty"><div class="i">☆</div><div style="font-weight:700">还没有收藏的题目</div>' +
+      '<div class="sm" style="margin-top:6px">刷题时点题目右上角的 ☆ 就能收藏</div></div>';
+  }
+  let h = '<div class="card"><div class="row">' +
+    '<div class="grow"><div style="font-weight:700;font-size:1.06em">收藏夹</div>' +
+    '<div class="xs mut">' + list.length + ' 题</div></div>' +
+    '<button class="btn pri" id="runFav">开始刷收藏</button></div></div>';
+  h += '<h2 class="sec">清单</h2>';
+  list.forEach(q => {
+    const p = P(q.id);
+    const ans = q.type === "judge" ? (q.answer[0] === 0 ? "正确" : "错误")
+                                   : q.answer.map(i => LET[i]).join("");
+    h += '<div class="item"><div class="s">' + esc(q.stem) + "</div>" +
+      '<div class="m"><span class="pill">' +
+        (q.type === "single" ? "单选" : q.type === "multi" ? "多选" : "判断") + '</span>' +
+        '<span class="pill">答案 ' + esc(ans) + "</span>" +
+        (p.wrong ? '<span class="pill r">错过 ' + p.wrong + " 次</span>" : "") +
+      "</div>" +
+      '<div class="acts"><button class="btn sm gh" data-fone="' + esc(q.id) + '">只刷这题</button>' +
+        '<button class="btn sm gh" data-fdel="' + esc(q.id) + '">取消收藏</button></div></div>';
+  });
+  return h;
+}
+function bindFav() {
+  const rf = $("#runFav");
+  if (rf) rf.onclick = () => start("smart", favList(), "收藏练习");
+  $$("#app [data-fone]").forEach(b => b.onclick = () => {
+    const q = BANK.questions.find(x => x.id === b.dataset.fone);
+    if (q) start("smart", [q], "单题练习");
+  });
+  $$("#app [data-fdel]").forEach(b => b.onclick = () => { toggleFav(b.dataset.fdel); toast("已取消收藏"); render(); });
+}
+
+/* ---------- 设置 ---------- */
+function vMe() {
+  const sw = (k, t, d) => '<div class="sw"><div class="tx"><div>' + t + '</div>' +
+    (d ? '<div class="d">' + d + "</div>" : "") + '</div>' +
+    '<button type="button" class="tg ' + (cfg[k] ? "on" : "") + '" data-tg="' + k + '"' +
+    ' role="switch" aria-checked="' + (cfg[k] ? "true" : "false") + '" aria-label="' + esc(t) + '"></button></div>';
+  let h = "";
+  h += '<h2 class="sec">刷题</h2><div class="card">' +
+    sw("auto", "答对自动下一题", "答错时停留") +
+    sw("shuffle", "选项乱序", "防止背位置") +
+    sw("sound", "答题音效") +
+  "</div>";
+  h += '<h2 class="sec">模拟考</h2><div class="card">' +
+    '<label class="f">考试日期</label>' +
+    '<input type="date" id="examDate" value="' + esc(cfg.examDate) + '">' +
+    '<label class="f">及格线</label>' +
+    '<input type="number" id="examPass" min="0" max="100" value="' + cfg.examPass + '">' +
+    '<label class="f">考试时长</label>' +
+    '<div class="seg" id="examMin">' +
+      [[0, "不限时"], [45, "45 分"], [60, "60 分"], [90, "90 分"], [120, "120 分"]]
+        .map(([k, t2]) => '<button data-min="' + k + '" class="' + (cfg.examMinutes === k ? "on" : "") + '">' + t2 + "</button>").join("") +
+    "</div>" +
+    '<div class="hint xs mut" style="margin-top:10px">' + EXAM.single + " 单选 · " + EXAM.judge +
+      " 判断 · " + EXAM.multi + " 多选 · " + EXAM.total + " 分<br>多选错选 0 分，漏选 " +
+      EXAM.multiPartial + " 分</div>" +
+  "</div>";
+
+  h += '<h2 class="sec">外观</h2><div class="card">' +
+    '<div class="lb" style="font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;' +
+      'color:var(--dim);margin-bottom:10px">皮肤</div>' +
+    '<div class="skins">' + SKINS.map(s =>
+      '<button type="button" class="sk' + (cfg.skin === s.id ? " on" : "") + '" data-sk="' + s.id +
+      '" aria-label="' + s.nm + '" aria-pressed="' + (cfg.skin === s.id ? "true" : "false") + '">' +
+      '<span class="pv" style="background:' + s.bg + ';border-color:' + s.rule + '">' +
+        '<i style="background:' + s.acc + '"></i></span>' +
+      '<span class="nm">' + s.nm + "</span></button>").join("") + "</div>" +
+    '<label class="f">字号 ' + esc(cfg.font) + "</label>" +
+    '<input type="range" id="fontRange" min="14" max="21" step="1" aria-label="正文字号"' +
+    ' value="' + esc(cfg.font) + '">' +
+  "</div>";
+  h += '<h2 class="sec">数据</h2><div class="card">' +
+    '<div class="sm mut">' + BANK.questions.length + " 题 · 已刷 " +
+      BANK.questions.filter(q => P(q.id).seen).length + " 题 · 错题 " + wrongList().length + " 题</div>" +
+    '<div class="sm mut" style="margin-top:6px">' +
+      (storeOK ? "进度存在本机浏览器" : "⚠️ " + esc(storeWhy) + "，刷新即丢失") + "</div>" +
+    '<div class="grid2" style="margin-top:14px">' +
+      '<button class="btn" id="expBtn">导出备份</button>' +
+      '<button class="btn" id="impBtn">恢复备份</button>' +
+    "</div>" +
+    '<button class="btn gh wide" id="introBtn" style="margin-top:11px">📄 开发者的话</button>' +
+  "</div>";
+  h += '<h2 class="sec">快捷键（电脑）</h2><div class="card sm mut">' +
+    "<div><code>A</code>–<code>D</code> 或 <code>1</code>–<code>4</code> 选择选项</div>" +
+    "<div><code>Enter</code>／<code>空格</code> 确认 / 继续</div>" +
+    "<div><code>←</code> 上一题　<code>Esc</code> 关闭弹层</div></div>";
+  return h;
+}
+function bindMe() {
+  $$("#app [data-sk]").forEach(b => b.onclick = () => {
+    cfg.skin = b.dataset.sk; sanitizeCfg(); saveCfg(); applyTheme(); render();
+  });
+  $$("#app [data-tg]").forEach(t => t.onclick = () => {
+    const k = t.dataset.tg;
+    cfg[k] = !cfg[k];
+    saveCfg(); render();
+  });
+  const ed = $("#examDate");
+  if (ed) ed.onchange = () => {
+    cfg.examDate = ed.value || "2026-09-19";
+    sanitizeCfg(); saveCfg(); toast("考试日期：" + examLabel()); render();
+  };
+  const ep = $("#examPass");
+  if (ep) ep.onchange = () => {
+    cfg.examPass = clamp(Number(ep.value) || 60, 0, 100);
+    saveCfg(); toast("及格线：" + cfg.examPass + " 分"); render();
+  };
+  $$("#app [data-min]").forEach(b => b.onclick = () => {
+    cfg.examMinutes = Number(b.dataset.min); saveCfg(); render();
+  });
+  const fr = $("#fontRange");
+  fr.oninput = () => { cfg.font = Number(fr.value); applyFont(); $("label.f").textContent = "字号 · " + cfg.font + "px"; };
+  fr.onchange = saveCfg;
+  $("#expBtn").onclick = () => {
+    const text = JSON.stringify({ app: "军事理论刷题", v: 1, prog, daily, cfg }, null, 1);
+    try {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([text], { type: "application/json" }));
+      a.download = "刷题记录-" + dkey() + ".json";
+      document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 3000);
+      toast("已导出");
+    } catch (e) { say("备份内容", '<pre class="fmt">' + esc(text.slice(0, 4000)) + "</pre>", "关闭"); }
+  };
+  const ib = $("#introBtn");
+  if (ib) ib.onclick = () => openIntro(true);
+  $("#impBtn").onclick = () => {
+    const inp = document.createElement("input");
+    inp.type = "file"; inp.accept = ".json,application/json";
+    inp.onchange = () => {
+      const f = inp.files[0]; if (!f) return;
+      const rd = new FileReader();
+      rd.onload = () => {
+        try {
+          const d = JSON.parse(String(rd.result));
+          if (!d || typeof d !== "object") { toast("文件格式不对"); return; }
+          // 只接受形状正确的数据；cfg 只白名单合并，避免 __proto__ 之类污染原型
+          if (d.prog && typeof d.prog === "object" && !Array.isArray(d.prog)) { prog = d.prog; saveProg(); }
+          if (d.daily && typeof d.daily === "object" && !Array.isArray(d.daily)) {
+            const clean = {};                       // 只收形状正确的日期条目
+            Object.keys(d.daily).forEach(k => {
+              const v = d.daily[k];
+              if (v && typeof v === "object" && !Array.isArray(v) && Number.isFinite(v.n)) {
+                clean[k] = { n: v.n, r: Number.isFinite(v.r) ? v.r : 0 };
+              }
+            });
+            daily = clean; saveDaily();
+          }
+          if (d.cfg && typeof d.cfg === "object" && !Array.isArray(d.cfg)) {
+            const src = d.cfg;
+            ["theme", "skin", "sound", "auto", "shuffle", "scope", "examDate"].forEach(k => {
+              if (typeof src[k] === "string" || typeof src[k] === "boolean") cfg[k] = src[k];
+            });
+            ["font", "size", "examPass", "examMinutes"].forEach(k => {
+              if (Number.isFinite(src[k])) cfg[k] = src[k];
+            });
+            sanitizeCfg();
+            saveCfg(); applyTheme(); applyFont();
+          }
+          toast("已恢复"); render();
+        } catch (e) { toast("文件格式不对"); }
+      };
+      rd.readAsText(f, "utf-8");
+    };
+    inp.click();
+  };
+}
+
+function emptyBlock(t, s) {
+  return '<div class="empty"><div class="mk">' + ICON.empty + "</div>" +
+    '<div style="font-weight:700;color:var(--tx)">' + esc(t) + "</div>" +
+    '<div class="sm" style="margin-top:5px">' + esc(s) + "</div></div>";
+}
+
+/* ===========================================================================
+   主题 / 键盘 / 启动
+   =========================================================================== */
+function applyTheme() {
+  const s = skinOf(cfg.skin);
+  document.documentElement.setAttribute("data-skin", s.id);
+  document.documentElement.setAttribute("data-theme", s.theme);
+  const m = document.querySelector('meta[name="theme-color"]');
+  if (m) m.setAttribute("content", s.bg);
+}
+function applyFont() {
+  cfg.font = clamp(Number(cfg.font) || 16, 14, 21);
+  document.documentElement.style.setProperty("--fs", cfg.font + "px");
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") { closeModal(); return; }
+  if ($("#modal").innerHTML) return;   // 弹层开着时键盘不作用于背后的题目
+  if (view !== "quiz" || S.i >= S.queue.length) return;
+  if (!cur() || cur().answered) return; // 回看态不接受作答按键
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  const k = e.key;
+  if (k === "Enter" || k === " ") {
+    e.preventDefault();
+    if (S.locked) { const c = $("#cont"); if (c) c.click(); }
+    else { const s = $("#submit"); if (s && !s.disabled) s.click(); }
+    return;
+  }
+  if (isRecite()) {                    // 背题模式：左右键翻页，不接受作答键
+    if (k === "ArrowLeft") { const p = $("#rprev"); if (p && !p.disabled) p.click(); }
+    else if (k === "ArrowRight" || k === "Enter" || k === " ") { e.preventDefault(); const n = $("#rnext"); if (n) n.click(); }
+    return;
+  }
+  if (isExam()) {
+    if (k === "ArrowLeft")  { const p = $("#eprev"); if (p && !p.disabled) p.click(); }
+    else if (k === "ArrowRight") { const n = $("#enext"); if (n && !n.disabled) n.click(); }
+    else {
+      let ei = -1;
+      if (/^[a-hA-H]$/.test(k)) ei = k.toUpperCase().charCodeAt(0) - 65;
+      else if (/^[1-8]$/.test(k)) ei = Number(k) - 1;
+      if (ei >= 0 && ei < cur().q.options.length) pick(ei);
+    }
+    return;
+  }
+  if (k === "ArrowLeft") { const p = $("#prev"); if (p && !p.disabled) p.click(); return; }
+  let i = -1;
+  if (/^[a-hA-H]$/.test(k)) i = k.toUpperCase().charCodeAt(0) - 65;
+  else if (/^[1-8]$/.test(k)) i = Number(k) - 1;
+  if (i >= 0 && i < cur().q.options.length) pick(i);
+});
+
+// 视图切换时清掉底部操作条
+applyTheme();
+applyFont();
+render();
+// 首次打开弹出「开发者的话」（可勾选「不再显示」，设置里也能再打开）
+if (!load("mil.intro.v1", false)) setTimeout(() => openIntro(), 120);
+</script>
+</body>
+</html>

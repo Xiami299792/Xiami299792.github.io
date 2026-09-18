@@ -1,15 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getProjects, projectPath } from '../../utils/projects';
+import { PROJECTS } from '../../data/projects';
 import { withBase } from '../../utils/url';
 
-const projects = await getProjects();
+// 项目不写介绍文档、也没有详情页 —— 卡片直接链到项目本身
+const projects = PROJECTS;
 ---
 
 <BaseLayout
   wide
   title="项目"
-  description="做过的东西：从想法到能用的成品，以及做完之后的复盘。"
+  description="做过的东西。点开就是成品，没有中间页。"
 >
   <h1 class="page-title">项目</h1>
   <p class="page-lead">共 {projects.length} 个</p>
@@ -20,20 +21,25 @@ const projects = await getProjects();
     ) : (
       <div class="projects">
         {projects.map((project, i) => (
-          <a class="project" href={withBase(projectPath(project))}>
+          <a
+            class="project"
+            href={project.external ? project.href : withBase(project.href)}
+            target={project.external ? '_blank' : undefined}
+            rel={project.external ? 'noopener noreferrer' : undefined}
+          >
             <span class="project__num">{String(i + 1).padStart(2, '0')}</span>
 
             <div class="project__body">
               <div class="project__head">
-                <h2 class="project__title">{project.data.title}</h2>
-                <span class="project__year">{project.data.year}</span>
+                <h2 class="project__title">{project.title}</h2>
+                <span class="project__year">{project.year}</span>
               </div>
 
-              <p class="project__summary">{project.data.summary}</p>
+              <p class="project__summary">{project.summary}</p>
 
               <div class="project__meta">
-                {project.data.status && <span class="project__status">{project.data.status}</span>}
-                {project.data.stack.map((tech) => (
+                {project.status && <span class="project__status">{project.status}</span>}
+                {project.stack.map((tech) => (
                   <span class="project__tech">{tech}</span>
                 ))}
               </div>
