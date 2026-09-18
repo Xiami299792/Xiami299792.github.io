@@ -603,6 +603,14 @@ pre.fmt{background:var(--surf2);border:2px solid var(--rule);padding:12px;overfl
   font-family:var(--f-mono);font-size:11.5px;line-height:1.6;margin:9px 0 0}
 ::-webkit-scrollbar{width:9px;height:9px}
 ::-webkit-scrollbar-thumb{background:var(--rule);opacity:.4}
+
+/* ---------- 页面最下方：公告 ---------- */
+/* 只写字号 / 间距 / 颜色，刻意不声明 font-family —— 继承页面现有字体 */
+.footnote{margin-top:30px;padding-top:15px;border-top:2px solid var(--rule);
+  text-align:center;font-size:12px;line-height:2;color:var(--dim);word-break:break-word}
+.footnote a{color:var(--acc);text-decoration:underline;text-underline-offset:3px}
+.footnote a:active{opacity:.7}
+
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
@@ -1513,6 +1521,13 @@ function vHome() {
       '<div class="hint">候选 ' + pool + " · 每组 " + per + "</div>" +
     "</div>";
   }
+
+  // —— 页面最下方：一条公告（只在「刷题」首页出现） ——
+  h += '<div class="footnote">' +
+    "本网页由DSH开发，作者的" +
+    '<a href="/series/dsh-guide/">《DSH使用指南》</a>' +
+    "正在收集您的阅读体验，<br>想成为DSH驾驶员吗？联系作者2476839118</div>";
+
   return h;
 }
 let homeParams = false;
