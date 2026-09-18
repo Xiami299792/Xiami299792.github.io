@@ -940,6 +940,13 @@ function buildSmart() {
   const tail = pickWeighted(rest, n - head.length);
   return shuffle(head.concat(tail));
 }
+/* 临阵磨枪：只抽「从没答过」的题。
+   口径与首页「已答 x/240」一致（P().seen），背过但没答过的不算刷过 —— 见 markSeen 的注释。 */
+const freshList = () => scopeList().filter(q => !P(q.id).seen);
+function buildFresh() {
+  const pool = shuffle(freshList());
+  return pool.slice(0, cfg.size === 0 ? pool.length : Math.min(cfg.size, pool.length));
+}
 function orderList() {                      // 顺序刷：从上次位置继续
   const pool = scopeList();
   if (!pool.length) return [];
@@ -1034,7 +1041,7 @@ function swallowClick() {
 
 /* ---------------- 日常练习：3D 圆柱轮播 ---------------- */
 let carRot = 0, carDrag = false;          // carRot 是连续角度（不取模），所以可以一直往一个方向转
-const CAR_N = 5, CAR_DEG = 360 / CAR_N, CAR_R = 120;
+const CAR_N = 6, CAR_DEG = 360 / CAR_N, CAR_R = 140;
 const carIdxNow = () => ((Math.round(carRot / CAR_DEG) % CAR_N) + CAR_N) % CAR_N;
 
 /* 顺序刷题的进度提示：让用户看到「接着哪刷」 */
@@ -1046,8 +1053,10 @@ function seqHint() {
 }
 function carModes() {
   const wn = wrongList().length;
+  const fn = freshList().length;
   return [
     { id: "smart",  nm: "智能刷题", ds: "按错误次数抽题", ic: ICON.target },
+    { id: "fresh",  nm: "临阵磨枪", ds: fn ? "还剩 " + fn + " 题没刷过" : "没刷过的已清零", ic: ICON.sword, n: fn || 0 },
     { id: "wrong",  nm: "错题重刷", ds: wn ? "错题本 " + wn + " 题" : "暂无错题", ic: ICON.repeat, n: wn || 0 },
     { id: "recite", nm: "背题模式", ds: "直接看答案", ic: ICON.layer },
     { id: "seq",    nm: "顺序刷题", ds: seqHint(), ic: ICON.book },
@@ -1146,8 +1155,10 @@ function bindCarousel() {
     if (i === carIdxNow()) {                       // 点正中的卡片才进入
       const m = carModes()[i];
       if (m.id === "wrong" && !wrongList().length) return toast("错题本是空的");
+      if (m.id === "fresh" && !freshList().length) return toast("这个范围内没有没刷过的题了");
       swallowClick();                              // 先吞掉这次 click，再换页
       if (m.id === "smart") start("smart", buildSmart(), "智能刷题");
+      else if (m.id === "fresh") start("fresh", buildFresh(), "临阵磨枪");
       else if (m.id === "wrong") start("wrong", wrongList(), "错题重刷");
       else if (m.id === "recite") startRecite(scopeList(), "背题模式");
       else if (m.id === "seq") start("seq", orderList(), "顺序刷题");
@@ -1748,6 +1759,7 @@ function bindSummary() {
       if (S.mode === "seq") start("seq", orderList(), "顺序刷题");
       else if (S.mode === "random") start("random", randomList(), "随机刷题");
       else if (S.mode === "wrong") start("wrong", wrongList(), "错题重刷");
+      else if (S.mode === "fresh") start("fresh", buildFresh(), "临阵磨枪");
       else start("smart", buildSmart(), "智能刷题");
     }
   });
