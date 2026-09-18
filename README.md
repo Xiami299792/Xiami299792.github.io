@@ -234,15 +234,28 @@ part: 基础篇         # 可选，系列目录页按它分组
 
 | 用途 | 字体 | 说明 |
 | --- | --- | --- |
-| 正文 / 标题 / 中文 | 系统字体栈 | `PingFang SC` / `Microsoft YaHei` / `Noto Sans CJK SC` |
+| 随笔正文 / 标题 | **汇文明朝体**（按页裁剪） | 由 `scripts/build-fonts.mjs` 生成子集，见下 |
+| 技术正文 / 标题 | 系统字体栈 | `PingFang SC` / `Microsoft YaHei` / `Noto Sans CJK SC` |
 | 日期、编号、引用 | **Source Serif 4** | 自托管，带旧式数字（`oldstyle-nums`） |
 | 代码 | **JetBrains Mono** | 自托管 |
 
-两款西文字体由 `@fontsource/*` 打进产物（约 85KB），**不走 Google Fonts CDN**——
+西文字体由 `@fontsource/*` 打进产物（约 85KB），**不走 Google Fonts CDN**——
 `fonts.googleapis.com` 在国内基本访问不通，外链会导致字体加载卡住并拖慢首屏。
 
-中文没有用 Web 字体：一套中文字体动辄 5~15MB，即使按 `unicode-range` 切片，
-长文也会拉下好几 MB。中文字形交给系统字体是这里的正确取舍。
+**汇文明朝体为什么是「按页裁剪」**：GBK 全集那份 woff2 有 3.4MB（每字约 800 字节，
+是 Noto/思源宋体那类的四倍），手机上常常没下载完就被划走，正文于是回退到系统字体——
+安卓没有中文衬线，回退成黑体，表现就是「随笔里看不到明朝体」。
+所以改成每篇文章只带自己用到的字（连导航、页脚、上一篇标题这些外壳用字一起算进去）：
+
+```bash
+pnpm fonts           # 只重建过期/缺失的（新写完随笔记得跑一次）
+pnpm fonts --force   # 全部重建
+```
+
+产物是 `public/fonts/huiwen-*.woff2`（随笔页 500~670KB、栏目页 380KB），**要提交进仓库**——
+提交之后 CI 构建不需要 Python。脚本需要本机有 `fontTools`（`pip install fonttools brotli`），
+源字体优先用工作区里的 `huiwen-mincho-gbk.ttf`（44MB，字最全），
+找不到就退回仓库内 `src/styles/fonts/huiwen-mincho-subset.woff2`（GB2312-1，会少几个生僻字）。
 
 想换字体就装对应的 `@fontsource` 包，然后在 `src/layouts/BaseLayout.astro` 顶部改 import，
 再改 `global.css` 里的 `--font-serif` / `--font-mono`。

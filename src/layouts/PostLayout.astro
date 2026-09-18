@@ -3,7 +3,7 @@ import 'katex/dist/katex.min.css';
 import BaseLayout from './BaseLayout.astro';
 import Giscus from '../components/Giscus.astro';
 import { CATEGORIES } from '../consts';
-import { formatDate, postPath, type Post } from '../utils/posts';
+import { formatDate, postPath, postSlug, type Post } from '../utils/posts';
 import { withBase } from '../utils/url';
 
 interface SeriesInfo {
@@ -47,6 +47,13 @@ const cat = CATEGORIES[post.data.category];
 const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 const inSeries = Boolean(seriesKey && seriesInfo);
 const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
+
+// 随笔页的明朝体：按页裁剪的子集（scripts/build-fonts.mjs 生成，文件名 = slug 里的 / 换成 -）。
+// 只有随笔分类用这个字体，技术栏目用中性无衬线主题。
+const fontFile =
+  post.data.category === 'essay'
+    ? withBase(`/fonts/huiwen-${postSlug(post).replace(/\//g, '-')}.woff2`)
+    : undefined;
 ---
 
 <BaseLayout
@@ -55,6 +62,7 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
   type="article"
   image={post.data.cover}
   cat={post.data.category}
+  font={fontFile}
 >
   <article data-pagefind-body>
     <header class="post-header">

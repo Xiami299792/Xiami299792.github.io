@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
 import { CATEGORIES, TECH_SECTIONS, type CategoryKey } from '../../consts';
 import { getPostsByCategory, groupByTechSection } from '../../utils/posts';
+import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
   return (Object.keys(CATEGORIES) as CategoryKey[]).map((key) => ({
@@ -20,7 +21,13 @@ const groups =
   key === 'tech' ? groupByTechSection(posts) : [{ key: null, posts }];
 ---
 
-<BaseLayout wide cat={key} title={cat.label} description={cat.description}>
+<BaseLayout
+  wide
+  cat={key}
+  title={cat.label}
+  description={cat.description}
+  font={key === 'essay' ? withBase('/fonts/huiwen-essay-list.woff2') : undefined}
+>
   <h1 class="page-title">{cat.label}</h1>
   <p class="page-lead">共 {posts.length} 篇</p>
 

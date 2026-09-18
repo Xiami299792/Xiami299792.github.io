@@ -8,15 +8,12 @@
      · Long Table        —— 单一锈红墨，只用不透明度做层次
      · Broadside         —— 1px 结构线 / 2px 只给短强调线
    中文用汇文明朝体（明朝体＝传统铅字），西文用 Source Serif 4。
-   ========================================================================== */
 
-@font-face {
-  font-family: 'Huiwen Mincho';
-  src: url('./fonts/huiwen-mincho-subset.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+   字体不在这里 @font-face 声明。整份汇文明朝体 GBK 是 3.4MB，手机上常常没下载完
+   就被划走，正文于是回退到系统字体（安卓是黑体）—— 表现就是「随笔里看不到明朝体」。
+   现在改成「按页精确裁剪」：scripts/build-fonts.mjs 为每篇文章生成只含该页用字的子集
+   （随笔页 460~640KB、栏目页 320KB），由 BaseLayout 的 font 属性 preload 进来。
+   ========================================================================== */
 
 [data-cat='essay'] {
   /* 新闻纸：比站点主色更灰、更旧 */

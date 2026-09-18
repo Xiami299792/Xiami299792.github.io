@@ -43,6 +43,13 @@ interface Props {
    * 不设则用 global.css 的中性主题。
    */
   cat?: 'essay' | 'tech';
+  /**
+   * 按页裁剪的汇文明朝体子集（随笔页用，见 scripts/build-fonts.mjs）。
+   * 整份 GBK 字体是 3.4MB，手机上常常没下载完就被划走，正文因此回退到系统字体
+   * （安卓是黑体）—— 看起来就是「随笔里没有明朝体」。这里换成每页专用的小子集。
+   * 不设则不加载任何中文字体，交给系统字体栈。
+   */
+  font?: string;
 }
 
 const {
@@ -52,6 +59,7 @@ const {
   image,
   wide = false,
   cat,
+  font,
 } = Astro.props;
 
 // 首页的 <title> 只用站点名 —— 站名本身已经是一句话，
@@ -85,6 +93,19 @@ const ogImage = image ? new URL(image, Astro.site ?? 'https://example.com').href
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+
+    {/* 明朝体：preload 让字体与 CSS 并行下载，swap 保证文字先可读、字体到位再换字形 */}
+    {
+      font && (
+        <>
+          <link rel="preload" href={font} as="font" type="font/woff2" crossorigin="anonymous" />
+          <style
+            is:inline
+            set:html={`@font-face{font-family:'Huiwen Mincho';src:url('${font}') format('woff2');font-weight:400;font-style:normal;font-display:swap}`}
+          />
+        </>
+      )
+    }
 
     {/* 在渲染前定好主题，避免深色模式下的白屏闪烁 */}
     <script is:inline>
