@@ -6,7 +6,7 @@ section: hard
 series: skill-picks
 order: 8
 part: 通用栏目
-draft: true
+draft: false
 ---
 
 技能生态已经大到一种程度，你根本不知道有什么可用。

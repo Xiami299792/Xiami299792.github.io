@@ -6,7 +6,7 @@ section: hard
 series: skill-picks
 order: 4
 part: 演示栏目
-draft: true
+draft: false
 ---
 
 这一篇不是单个技能，是一份合集。公众号「数字生命卡兹克」把自己每天在用的几个技能开源了出来。

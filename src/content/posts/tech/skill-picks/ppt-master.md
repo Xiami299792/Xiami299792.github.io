@@ -6,7 +6,7 @@ section: hard
 series: skill-picks
 order: 3
 part: 演示栏目
-draft: true
+draft: false
 ---
 
 让 AI 做 PPT 早就不新鲜了。但多数工具给你的是一堆图片，想改一个字都得重新生成。

@@ -6,7 +6,7 @@ section: hard
 series: skill-picks
 order: 5
 part: 演示栏目
-draft: true
+draft: false
 ---
 
 AI 写的中文有一股味。

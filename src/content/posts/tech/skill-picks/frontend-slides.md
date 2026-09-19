@@ -6,7 +6,7 @@ section: hard
 series: skill-picks
 order: 2
 part: 演示栏目
-draft: true
+draft: false
 ---
 
 做演示最烦的从来不是内容，是排版。你脑子里明明有个样子，工具里就是做不出来。

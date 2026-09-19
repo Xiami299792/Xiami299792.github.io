@@ -6,7 +6,7 @@ section: hard
 series: skill-picks
 order: 7
 part: 通用栏目
-draft: true
+draft: false
 ---
 
 跟 AI 协作最容易出的事，是你以为你说清楚了。

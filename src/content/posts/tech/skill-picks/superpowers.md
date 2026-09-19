@@ -6,7 +6,7 @@ section: hard
 series: skill-picks
 order: 6
 part: 代码栏目
-draft: true
+draft: false
 ---
 
 Agent 写代码最大的问题，往往不是不会写，是太急着写。
