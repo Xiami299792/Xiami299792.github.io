@@ -41,17 +41,6 @@
   --p-hair: #b9b9c2;
 }
 
-/* 暗色：People's Platform 本身是纸白系统，这里做最小反转 ——
-   纸面转深、ink 转 cream（边框与文字同时反转），蓝/橙/红保持不变。 */
-:root[data-theme='dark'] {
-  --p-paper: #0f0f16;
-  --p-ink: #f4e9d6;
-  --p-blue-text: #8f8fff;
-  --p-muted: #c9c9d2;
-  --p-muted-2: #a5a5b0;
-  --p-hair: #4a4a56;
-}
-
 :root:not([data-cat]) body {
   background: var(--p-paper);
   color: var(--p-ink);
@@ -99,14 +88,6 @@
   color: var(--p-ink);
   background: var(--p-orange);
   font-weight: 500;
-}
-
-:root:not([data-cat]) .theme-toggle {
-  color: rgba(244, 233, 214, 0.72);
-}
-
-:root:not([data-cat]) .theme-toggle:hover {
-  color: var(--p-cream);
 }
 
 /* ---------- 报头 ---------- */

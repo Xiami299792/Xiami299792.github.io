@@ -1,6 +1,13 @@
 ---
 import { GISCUS } from '../consts';
 
+interface Props {
+  /** 评论框配色，跟随所在页面的配色，不再跟系统日夜走 */
+  theme?: string;
+}
+
+const { theme = 'light' } = Astro.props;
+
 // 四项都齐了才渲染。缺任意一项就整块不出现 ——
 // 访客不该看到「评论尚未启用」这种半成品提示。
 const ready =
@@ -31,7 +38,7 @@ const ready =
           data-reactions-enabled="1"
           data-emit-metadata="0"
           data-input-position="top"
-          data-theme="preferred_color_scheme"
+          data-theme={theme}
           data-lang={GISCUS.lang}
           data-loading="lazy"
           crossorigin="anonymous"

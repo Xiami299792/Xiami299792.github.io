@@ -21,41 +21,6 @@ const current = Astro.url.pathname;
         ))
       }
 
-      <button
-        id="theme-toggle"
-        class="theme-toggle"
-        type="button"
-        aria-label="切换深色 / 浅色主题"
-        title="切换深色 / 浅色主题"
-      >
-        {/* 亮色下显示月亮（点了变暗），深色下显示太阳 */}
-        <svg
-          class="icon-moon"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M20.6 14.4A8.7 8.7 0 1 1 9.6 3.4a6.9 6.9 0 0 0 11 11z"></path>
-        </svg>
-        <svg
-          class="icon-sun"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="4.1"></circle>
-          <path
-            d="M12 2.4v2.3M12 19.3v2.3M2.4 12h2.3M19.3 12h2.3M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"
-          ></path>
-        </svg>
-      </button>
     </nav>
   </div>
 </header>

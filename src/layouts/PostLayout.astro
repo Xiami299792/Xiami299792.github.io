@@ -173,6 +173,7 @@ const fontFile =
       )
     }
 
-    <Giscus />
+    {/* 评论框跟随所在页面的配色：技术文章是深底，随笔是纸面 */}
+    <Giscus theme={post.data.category === 'tech' ? 'dark' : 'light'} />
   </article>
 </BaseLayout>
