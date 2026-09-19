@@ -1,10 +1,10 @@
-﻿---
+---
 title: grill-me：把自己问到无话可说
 date: 2026-09-19
 category: tech
 section: hard
 series: skill-picks
-order: 8
+order: 7
 part: 通用栏目
 draft: true
 ---

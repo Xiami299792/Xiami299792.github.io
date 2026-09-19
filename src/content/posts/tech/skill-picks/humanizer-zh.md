@@ -1,4 +1,4 @@
-﻿---
+---
 title: Humanizer-zh：去掉中文里的 AI 味
 date: 2026-09-19
 category: tech

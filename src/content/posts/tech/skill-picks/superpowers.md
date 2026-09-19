@@ -1,4 +1,4 @@
-﻿---
+---
 title: Superpowers：给编码 Agent 装一套工程方法论
 date: 2026-09-19
 category: tech

@@ -1,4 +1,4 @@
-﻿---
+---
 title: Khazix Skills：数字生命卡兹克的自用技能合集
 date: 2026-09-19
 category: tech

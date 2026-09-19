@@ -1,4 +1,4 @@
-﻿---
+---
 title: frontend-slides：让 Agent 用前端手艺做幻灯片
 date: 2026-09-19
 category: tech

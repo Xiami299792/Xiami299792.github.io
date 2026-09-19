@@ -1,10 +1,10 @@
-﻿---
+---
 title: find-skills：让 Agent 帮你找技能
 date: 2026-09-19
 category: tech
 section: hard
 series: skill-picks
-order: 9
+order: 8
 part: 通用栏目
 draft: true
 ---
