@@ -47,7 +47,7 @@ const modules = [
             {featuredInfo.title}
           </a>
           <p class="spotlight__sub">
-            {featuredInfo.subtitle} · 共 {featured.posts.length} 篇
+            {[featuredInfo.subtitle, `共 ${featured.posts.length} 篇`].filter(Boolean).join(' · ')}
           </p>
           <ol class="spotlight__list">
             {featured.posts.map((post, i) => (

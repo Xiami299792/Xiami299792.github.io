@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 3
 part: 演示栏目
-tags: [AI, Skill, 演示, PowerPoint]
-summary: "把一个 PDF／DOCX／网页或一句话题目，变成原生可编辑的 PowerPoint。"
 draft: true
 ---
 

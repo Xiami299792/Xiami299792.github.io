@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 5
 part: 进阶篇
-tags: [DSH, Skill, 自动化]
 summary: "Skill 把无数的重复总结成一个规律，把无数的思想汇总成一条经验"
 draft: false
 ---

@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 8
 part: 通用栏目
-tags: [AI, Skill, 需求, 设计]
-summary: "不留情面地采访你，把方案的每个分支都钉死，直到达成共识才动手。"
 draft: true
 ---
 

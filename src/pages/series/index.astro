@@ -26,7 +26,7 @@ for (const key of Object.keys(SERIES) as SeriesKey[]) {
           <h2 class="series-card__title">
             <a href={withBase(`/series/${key}/`)}>{SERIES[key].title}</a>
           </h2>
-          <p class="series-card__desc">{SERIES[key].description}</p>
+          {SERIES[key].description && <p class="series-card__desc">{SERIES[key].description}</p>}
           <p class="series-card__meta">{posts.length} 篇</p>
           <ol class="series-card__list">
             {posts.slice(0, 4).map((post) => (

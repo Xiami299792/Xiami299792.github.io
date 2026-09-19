@@ -74,7 +74,6 @@ git push -u origin main
 title: 用 Astro 搭一个纯静态博客
 date: 2026-03-01
 category: tech          # tech | essay，决定首页分栏和配色
-tags: [Astro, 静态站点]  # 会生成 /tags/xxx/ 页面
 summary: 一句话摘要，用于列表页、SEO 描述和 RSS。
 updated: 2026-03-05     # 可选，显示「已更新」
 cover: /images/2026/03/foo.png   # 可选，放 public/ 下的路径
@@ -205,7 +204,6 @@ pnpm new:skill "Midjourney" --part 出图                          # Skill 推�
 │  │  ├─ posts/[...id].astro      文章详情
 │  │  ├─ series/                  系列总览与系列目录页
 │  │  ├─ category/[category].astro
-│  │  ├─ tags/                    标签索引与标签页
 │  │  ├─ archive.astro            按年份归档
 │  │  ├─ search.astro             Pagefind 搜索
 │  │  ├─ about.astro  404.astro
@@ -232,7 +230,7 @@ pnpm new:skill "Midjourney" --part 出图                          # Skill 推�
   --paper: #faf9f7;      /* 页面底色（纸） */
   --ink: #1a1a1a;        /* 正文（墨） */
   --ink-muted: #56534d;  /* 次要文字 */
-  --ink-faint: #8b8781;  /* 日期、标签等弱信息 */
+  --ink-faint: #8b8781;  /* 日期等弱信息 */
   --rule: #e7e3db;       /* 1px 分隔线 */
   --accent: #b3272e;     /* 强调色：链接、当前导航、系列标记 */
   --dot-tech: #b3272e;   /* 技术的圆点 */

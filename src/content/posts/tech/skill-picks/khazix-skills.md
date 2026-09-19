@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 4
 part: 演示栏目
-tags: [AI, Skill, 合集]
-summary: "6 个自用技能：目标定义、磁盘清理、AI 资讯、文档对齐、横纵分析、口吻写作。"
 draft: true
 ---
 

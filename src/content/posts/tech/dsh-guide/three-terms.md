@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 2
 part: 基础篇
-tags: [DSH, AI 工具, 概念]
 summary: "DSH、API、Agent 和若干个常用词"
 draft: false
 ---

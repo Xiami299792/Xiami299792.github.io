@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 9
 part: 附录
-tags: [DSH, 速查表, 附录]
 summary: "你可能需要的部分"
 draft: false
 ---

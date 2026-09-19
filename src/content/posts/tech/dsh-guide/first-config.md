@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 4
 part: 进阶篇
-tags: [DSH, 配置, API]
 summary: "顾名思义，你开始设置你的 Agent"
 draft: false
 ---

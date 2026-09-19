@@ -146,18 +146,6 @@
   display: none;
 }
 
-[data-cat='essay'] .post-tags {
-  margin-top: 12px;
-}
-
-[data-cat='essay'] .tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
 /* 系列横幅：一行细线 + mono 标签 */
 [data-cat='essay'] .series-banner {
   border-left: none;

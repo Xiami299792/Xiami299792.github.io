@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 7
 part: 进阶篇
-tags: [DSH, 实战, 刷题程序]
 summary: "实用至上"
 draft: false
 ---

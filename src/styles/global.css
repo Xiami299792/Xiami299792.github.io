@@ -370,7 +370,7 @@ main {
   color: var(--ink-faint);
 }
 
-/* ---------- 标签 ---------- */
+/* ---------- 通用小链接（404 页等在用；文章标签已整站移除） ---------- */
 
 .tag {
   display: inline-block;
@@ -381,12 +381,6 @@ main {
 
 .tag:hover {
   color: var(--accent);
-}
-
-.tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 18px;
 }
 
 /* ---------- 页面标题 ---------- */
@@ -467,13 +461,6 @@ main {
   font-weight: 600;
   line-height: 1.32;
   letter-spacing: -0.022em;
-}
-
-.post-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 14px;
 }
 
 /* ---------- 正文 ---------- */

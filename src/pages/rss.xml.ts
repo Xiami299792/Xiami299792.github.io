@@ -18,7 +18,7 @@ export async function GET(context: APIContext) {
       pubDate: post.data.date,
       description: post.data.summary ?? '',
       link: withBase(postPath(post)),
-      categories: [post.data.category, ...post.data.tags],
+      categories: [post.data.category],
     })),
   });
 }

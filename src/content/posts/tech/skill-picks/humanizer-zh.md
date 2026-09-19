@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 5
 part: 演示栏目
-tags: [AI, Skill, 写作]
-summary: "按维基百科「AI 写作特征」清单，把机器味的中文改回人话。"
 draft: true
 ---
 

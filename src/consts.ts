@@ -81,11 +81,12 @@ export const SERIES = {
   },
   'skill-picks': {
     title: 'Skill 推荐',
-    subtitle: '按用途分栏，用到哪一类再翻哪一栏',
-    description:
-      '把用过、踩过坑的 AI 技能与工具按用途收在这里。每一栏对应一类具体的事，每篇写清它擅长什么、以及什么时候别用它。',
+    // 下面三句（副标题、系列简介、说明）留空给作者自己写。
+    // 空着不会渲染空框：系列页只在有内容时才显示简介块，副标题也会自动省略分隔符。
+    subtitle: '',
+    description: '',
     author: '夏弥',
-    note: '按用途分栏目，随用随补。',
+    note: '',
   },
 } as const;
 

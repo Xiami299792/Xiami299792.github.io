@@ -3,7 +3,6 @@ title: 防伪水印的千年变迁：从《溪山行旅图》到 SynthID
 date: 2026-09-17
 category: tech
 section: soft
-tags: [水印, 防伪, AI, 图像处理]
 summary: "如何从技术上分辨人与非人？"
 draft: false
 ---

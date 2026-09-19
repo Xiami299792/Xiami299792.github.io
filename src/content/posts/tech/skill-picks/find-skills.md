@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 9
 part: 通用栏目
-tags: [AI, Skill, 检索]
-summary: "问一句「有没有能 X 的技能」，它去市场、GitHub 和清单里找，排掉你已装的，给前 5 个。"
 draft: true
 ---
 

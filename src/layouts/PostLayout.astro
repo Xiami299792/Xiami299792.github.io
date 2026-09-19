@@ -86,17 +86,6 @@ const fontFile =
 
       {/* 导语 / 报纸的 deck：两个分类主题都把它做成标题区的第二层 */}
       {post.data.summary && <p class="post-deck">{post.data.summary}</p>}
-
-      {
-        post.data.tags.length > 0 && (
-          <div class="post-tags">
-            {/* 标签页已移除，这里只作展示，不再是链接 */}
-            {post.data.tags.map((tag) => (
-              <span class="tag">#{tag}</span>
-            ))}
-          </div>
-        )
-      }
     </header>
 
     {

@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 1
 part: 基础篇
-tags: [DSH, AI 工具, 新手指南]
 summary: "关于我，关于这本书"
 draft: false
 ---

@@ -39,14 +39,16 @@ function groupOf(post: (typeof posts)[number]) {
 
 <BaseLayout wide title={info.title} description={info.description}>
   <h1 class="page-title">{info.title}</h1>
-  <p class="page-lead">
-    {info.subtitle} · 共 {posts.length} 篇
-  </p>
+  <p class="page-lead">{[info.subtitle, `共 ${posts.length} 篇`].filter(Boolean).join(' · ')}</p>
 
-  <div class="series-intro">
-    <p>{info.description}</p>
-    <p class="series-intro__meta">{info.note}</p>
-  </div>
+  {
+    (info.description || info.note) && (
+      <div class="series-intro">
+        {info.description && <p>{info.description}</p>}
+        {info.note && <p class="series-intro__meta">{info.note}</p>}
+      </div>
+    )
+  }
 
   {
     buckets.map((part) => {

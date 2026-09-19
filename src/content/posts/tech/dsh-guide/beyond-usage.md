@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 8
 part: 进阶篇
-tags: [DSH, 排错, 成本]
 summary: "我的钱都去哪了？为什么我的 Agent 这么笨啊？"
 draft: false
 ---

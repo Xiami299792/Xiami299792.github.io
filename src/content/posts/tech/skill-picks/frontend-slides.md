@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 2
 part: 演示栏目
-tags: [AI, Skill, 演示, 前端]
-summary: "零依赖、单文件的 HTML 演示：动画丰富，双击即播，还能把 PPT 转过来。"
 draft: true
 ---
 

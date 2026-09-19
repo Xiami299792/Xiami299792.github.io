@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 1
 part: 开始之前
-tags: [AI, 工具, 索引]
-summary: "收录标准与阅读方式：按用途分栏，每篇只回答四个问题。"
 draft: true
 ---
 

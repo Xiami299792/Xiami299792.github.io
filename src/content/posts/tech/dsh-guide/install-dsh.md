@@ -6,7 +6,6 @@ section: hard
 series: dsh-guide
 order: 3
 part: 基础篇
-tags: [DSH, 安装, Windows]
 summary: "安装 DSH Desktop，或者再安装一个 OpenClaw"
 draft: false
 ---

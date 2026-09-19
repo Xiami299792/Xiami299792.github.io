@@ -6,8 +6,6 @@ section: hard
 series: skill-picks
 order: 6
 part: 代码栏目
-tags: [AI, Skill, 工程, 工作流]
-summary: "从问清需求到收尾合并，15+ 个可组合技能强制 Agent 按工程流程走。"
 draft: true
 ---
 

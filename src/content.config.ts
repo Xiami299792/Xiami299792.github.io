@@ -26,8 +26,6 @@ const posts = defineCollection({
      * 见 consts.ts 的 TECH_SECTIONS。
      */
     section: z.enum(['soft', 'hard']).optional(),
-    /** 标签，用于 /tags 聚合 */
-    tags: z.array(z.string()).default([]),
     /**
      * 一句话摘要（可选）。列表页、SEO 描述、RSS 都用它。
      * 不写就不显示导语 —— 宁可空着，也不要为了填满而凑一句。
