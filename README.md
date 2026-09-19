@@ -122,6 +122,23 @@ part: 基础篇         # 可选，系列目录页按它分组
 `/series/dsh-guide/` 是完整目录，`/series/` 汇总全部系列，导航栏也有入口。
 不属于任何系列的文章照旧显示全站的「更新的一篇 / 更早的一篇」。
 
+**小栏目（`part`）**：`part` 相同的文章会在系列目录页归到同一个标题下，分组顺序按
+`order` 出现的先后。没写 `part` 的文章排在最前面、不加分组标题 —— 适合放「写在前面」这种总览。
+
+**新建一篇**（会自动建到 `src/content/posts/tech/<系列名>/` 并补上 `series` / `order`）：
+
+```bash
+pnpm new tech "文章标题" --series skill-picks --part 出图         # 通用写法
+pnpm new:skill "Midjourney" --part 出图                          # Skill 推荐系列的快捷方式
+```
+
+`order` 会自动接在该系列现有最大序号之后，不用自己数。新文章默认 `draft: true`：
+本地 `pnpm dev` 可见，`pnpm build` 上线时自动跳过；系列里一篇文章都没发布时，
+`/series/<slug>/` 不会生成。
+
+> 注意：内容集合会**忽略文件名或目录名以下划线开头**的文件（`_template.md` 这类不会被收录），
+> 想放模板请放在 `scripts/` 下。
+
 ### 插入图片
 
 放进 `public/images/2026/03/`，正文里写绝对路径：

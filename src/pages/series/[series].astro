@@ -24,6 +24,10 @@ export async function getStaticPaths() {
 const { key, posts, parts } = Astro.props;
 const info = SERIES[key as SeriesKey];
 const grouped = parts.length > 0;
+// 有分部的系列按分部分组；没归入任何分部的文章（比如「写在前面」）也要出现在目录里，
+// 否则只要有文章带 part，没带 part 的那几篇就会从目录页上静默消失
+const hasUngrouped = posts.some((p) => !p.data.part);
+const buckets = grouped ? [...(hasUngrouped ? [''] : []), ...parts] : [''];
 
 // 整个系列都是同一个分类时，每行都标一遍是纯噪音
 const mixedCategories = new Set(posts.map((p) => p.data.category)).size > 1;
@@ -45,7 +49,7 @@ function groupOf(post: (typeof posts)[number]) {
   </div>
 
   {
-    (grouped ? parts : ['']).map((part) => {
+    buckets.map((part) => {
       const items = grouped ? posts.filter((p) => groupOf(p) === part) : posts;
       return (
         <section>

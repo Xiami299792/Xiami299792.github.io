@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "new": "node scripts/new-post.mjs",
+    "new:skill": "node scripts/new-post.mjs tech --series skill-picks --section hard",
     "fonts": "node scripts/build-fonts.mjs"
   },
   "dependencies": {

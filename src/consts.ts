@@ -79,6 +79,14 @@ export const SERIES = {
     author: '夏弥',
     note: '应睿信科协邀请写作，核对于 2026 年 9 月。',
   },
+  'skill-picks': {
+    title: 'Skill 推荐',
+    subtitle: '按用途分栏，用到哪一类再翻哪一栏',
+    description:
+      '把用过、踩过坑的 AI 技能与工具按用途收在这里。每一栏对应一类具体的事，每篇写清它擅长什么、以及什么时候别用它。',
+    author: '夏弥',
+    note: '按用途分栏目，随用随补。',
+  },
 } as const;
 
 export type SeriesKey = keyof typeof SERIES;
