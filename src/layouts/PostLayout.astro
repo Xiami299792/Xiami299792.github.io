@@ -1,7 +1,7 @@
 ---
 import 'katex/dist/katex.min.css';
 import BaseLayout from './BaseLayout.astro';
-import Comment from '../components/Comment.astro';
+import Giscus from '../components/Giscus.astro';
 import { CATEGORIES } from '../consts';
 import { formatDate, postPath, postSlug, type Post } from '../utils/posts';
 import { withBase } from '../utils/url';
@@ -173,7 +173,7 @@ const fontFile =
       )
     }
 
-    {/* 评论：Waline，免登录只填昵称。未配 serverURL 时整块不渲染 */}
-    <Comment />
+    {/* 评论：Giscus，数据存在本仓库的 Discussions 里。未配置时整块不渲染 */}
+    <Giscus />
   </article>
 </BaseLayout>

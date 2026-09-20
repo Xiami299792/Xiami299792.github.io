@@ -8,6 +8,10 @@ interface Props {
 
 const { theme = 'light' } = Astro.props;
 
+// 全站只有一套纸面配色（日夜切换那个提交已经拆掉了），
+// 所以评论框固定走 light，不要交给 preferred_color_scheme —— 那会让
+// 系统偏好深色的读者看到一个深色评论框，跟纸面正文割裂。
+
 // 四项都齐了才渲染。缺任意一项就整块不出现 ——
 // 访客不该看到「评论尚未启用」这种半成品提示。
 const ready =

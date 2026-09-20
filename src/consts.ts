@@ -103,48 +103,50 @@ export const NAV = [
 ] as const;
 
 /**
+ * 评论：Giscus（基于 GitHub Discussions，零后端零成本）
+ *
+ * 为什么是它：这个站点是 GitHub Pages 纯静态托管，没有任何后端，
+ * 评论必须有地方收和存。Giscus 把这件事交给仓库自带的 Discussions，
+ * 于是不需要数据库、不需要服务器、不会挂、也不花钱。
+ *
+ * 代价：评论者需要 GitHub 账号并授权 giscus app。
+ * 若要「不登录、只填昵称」的评论，得另起一个后端（如 Supabase），
+ * 前端换掉 components/Giscus.astro 即可，consts 里这块不用动。
+ *
+ * 三项前置条件（缺一项 giscus.app 就会报「无法在该仓库上使用」）：
+ *   1. 仓库是公开的
+ *   2. 仓库 Settings → General → Features 勾上 Discussions
+ *   3. 安装 giscus app：https://github.com/apps/giscus
+ * 分类选 Announcements，因为公告类下只有维护者和 giscus 能建帖，
+ * 访客照样能评论和点反应，只是不能在你仓库里乱开帖。
+ */
+export const GISCUS = {
+  enabled: true,
+  repo: 'Xiami299792/Xiami299792.github.io',
+  repoId: 'R_kgDOUeex_g',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDOUeex_s4DGAEu',
+  mapping: 'pathname',
+  lang: 'zh-CN',
+} as const;
+
+/**
  * 评论：Waline（免登录，只填昵称）
  *
- * 服务端不在这个仓库里。GitHub Pages 是纯静态托管，不跑代码，
- * 评论必须另有地方收和存，所以 Waline 单独部署在 Vercel 上，
- * 数据库用 Vercel 的 Neon 集成。三步：
- *   1. 用 https://vercel.com/new/clone?repository-url=https://github.com/walinejs/waline/tree/main/example 一键部署
- *   2. Vercel 顶部 Storage → Create Database → Neon，建库后在 Neon 的 SQL Editor 里跑
- *      https://github.com/walinejs/waline/blob/main/assets/waline.pgsql
- *   3. 回 Vercel 重新部署一次让数据库生效，把部署出来的地址填到 serverURL
- * 部署完访问 <serverURL>/ui/register 注册，第一个注册的人自动成为管理员。
+ * 未启用。留在这儿是因为它是「不登录也能评论」的现成方案，
+ * 组件也写好了（components/Comment.astro），前端不用重写。
  *
- * 免登录是这里的重点，见 Comment.astro 的 login 配置。
- * 未配置 serverURL 时评论区整块不渲染（访客看不到半成品）。
+ * 服务端不在这个仓库里。GitHub Pages 不跑代码，Waline 必须另有地方部署。
+ * 已知走不通的路：Vercel 对部分地区返回 403；腾讯云开发的一键部署模板
+ * 依赖 2022 年就停更的 @waline/cloudbase，本地装依赖会卡在 better-sqlite3
+ * 的原生编译。若将来要启用，优先考虑 Supabase 自建一个轻量后端。
+ *
+ * 免登录同样是两处开关：组件里的 login: 'disable'，加上服务端的 LOGIN=disable。
+ * 只配一处不生效。
  */
 export const WALINE = {
   serverURL: '',
   lang: 'zh-CN',
   /** 同一浏览器只记一个昵称，见 Comment.astro 的昵称锁定说明 */
   lockNickname: true,
-} as const;
-
-/**
- * 评论：Giscus（基于 GitHub Discussions，零后端零成本）
- *
- * 已弃用，保留代码和配置只为将来想换回去时省事。
- * 弃用原因：它强制评论者用 GitHub 账号登录，与「不注册就能评论」相冲突。
- *
- * 现状：repoId 已填（取自 GitHub API 的仓库 node_id）。
- * 还差两步，都需要仓库管理权限，只能由站长本人做：
- *   1. 仓库 Settings → General → Features 勾选 Discussions
- *   2. 安装 Giscus App：https://github.com/apps/giscus
- *   3. 打开 https://giscus.app/zh-CN 填入仓库名，复制生成的 categoryId 填到下面
- *   4. 把 enabled 改成 true
- *
- * 未配置时评论区整块不渲染（访客看不到半成品）。
- */
-export const GISCUS = {
-  enabled: false,
-  repo: 'Xiami299792/Xiami299792.github.io',
-  repoId: 'R_kgDOUeex_g',
-  category: 'Announcements',
-  categoryId: '',
-  mapping: 'pathname',
-  lang: 'zh-CN',
 } as const;

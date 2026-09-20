@@ -8,8 +8,8 @@
  *
  * 免登录靠客户端和服务端两处一起生效：
  *   login: 'disable' 只关掉客户端登录入口；
- *   serverURL 那个服务端还要把 LOGIN 环境变量设成 disable，
- *   否则接口仍然接受注册和登录。（部署后记得在 Vercel 里补这一项）
+ *   serverURL 那个服务端还要把环境变量 LOGIN 设成 disable，
+ *   否则接口仍然接受注册和登录。（部署后在 Vercel 里补这一项，改完要重新部署才生效）
  */
 import { WALINE } from '../consts';
 
