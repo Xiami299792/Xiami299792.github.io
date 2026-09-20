@@ -1,7 +1,7 @@
 ---
 import 'katex/dist/katex.min.css';
 import BaseLayout from './BaseLayout.astro';
-import Giscus from '../components/Giscus.astro';
+import Comment from '../components/Comment.astro';
 import { CATEGORIES } from '../consts';
 import { formatDate, postPath, postSlug, type Post } from '../utils/posts';
 import { withBase } from '../utils/url';
@@ -173,7 +173,7 @@ const fontFile =
       )
     }
 
-    {/* 评论框跟随所在页面的配色：技术文章是深底，随笔是纸面 */}
-    <Giscus theme={post.data.category === 'tech' ? 'dark' : 'light'} />
+    {/* 评论：Waline，免登录只填昵称。未配 serverURL 时整块不渲染 */}
+    <Comment />
   </article>
 </BaseLayout>

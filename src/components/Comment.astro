@@ -1,0 +1,225 @@
+---
+/**
+ * 评论：Waline。
+ *
+ * 为什么不用 Giscus：它强制评论者用 GitHub 账号登录，而这个站点的
+ * 评论策略是「不注册、不登录、只填一个昵称」。两者直接冲突。
+ * 代价是 Waline 需要一个服务端，配置方法见 consts.ts 的 WALINE 注释。
+ *
+ * 免登录靠客户端和服务端两处一起生效：
+ *   login: 'disable' 只关掉客户端登录入口；
+ *   serverURL 那个服务端还要把 LOGIN 环境变量设成 disable，
+ *   否则接口仍然接受注册和登录。（部署后记得在 Vercel 里补这一项）
+ */
+import { WALINE } from '../consts';
+
+// 没配服务端地址就整块不渲染，访客不该看到「评论尚未启用」这种半成品。
+const ready = WALINE.serverURL !== '';
+
+const serverURL = WALINE.serverURL;
+---
+
+{
+  ready && (
+    <section class="comments" aria-label="评论">
+      <h2 class="section-title comments-label">
+        <span class="dot" />
+        评论
+      </h2>
+
+      {/* 评论是第三方组件，加载失败不该拖累整页渲染，所以这里先放一个降级文案 */}
+      <noscript>
+        <p class="comments-fallback">评论需要开启 JavaScript 才能加载。</p>
+      </noscript>
+
+      <div id="waline" class="waline-host" />
+
+      <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+
+      <script is:inline define:vars={{ serverURL, lockNickname: WALINE.lockNickname }}>
+        (() => {
+          const host = document.getElementById('waline');
+          if (!host) return;
+
+          const root = document.documentElement;
+
+          // 把 Waline 的组件变量接到本站的纸墨变量上，不额外定义颜色。
+          const tokens = {
+            '--waline-theme-color': 'var(--accent)',
+            '--waline-active-color': 'var(--accent-hover)',
+            '--waline-color': 'var(--ink)',
+            '--waline-bg-color': 'var(--paper)',
+            '--waline-bg-color-light': 'var(--code-bg)',
+            '--waline-bg-color-hover': 'var(--code-bg)',
+            '--waline-border-color': 'var(--rule)',
+            '--waline-disable-bg-color': 'var(--code-bg)',
+            '--waline-disable-color': 'var(--ink-faint)',
+            '--waline-info-color': 'var(--ink-faint)',
+            '--waline-info-bg-color': 'var(--code-bg)',
+            '--waline-light-grey': 'var(--ink-faint)',
+            '--waline-box-shadow': 'none',
+            '--waline-font-size': '15px',
+          };
+          for (const [key, value] of Object.entries(tokens)) {
+            root.style.setProperty(key, value);
+          }
+
+          // 全站只有一套纸面配色，日夜切换那个提交已经拆掉了，
+          // 所以评论框固定走亮色，不要留一个永远不生效的暗色选择器。
+          const dark = false;
+
+          let cleanupNickname = () => {};
+
+          /**
+           * 昵称锁定（软约束）。
+           *
+           * 同一浏览器只在第一次填昵称，之后自动带出并设为只读。
+           *
+           * 它拦不住什么，得说清楚：localStorage 可以清，无痕窗口是全新的，
+           * 想换个名字随时能换。Waline 官方文档给的正解是强制注册登录
+           * （「这样访问者将不能伪造其他人发表评论」），而这个站点选的是不要注册。
+           * 所以这里只解决「同一个人每次叫不同名字」和「每次重打一遍」，
+           * 不做也做不了身份验证。
+           */
+          function lockNicknameOnce() {
+            if (!lockNickname) return () => {};
+
+            const KEY = 'lw:nick';
+            let saved = '';
+            try {
+              saved = localStorage.getItem(KEY) || '';
+            } catch {
+              return () => {};
+            }
+
+            // 存一次就不改了，避免用户改昵称之后旧的又覆盖回来。
+            const remember = (value) => {
+              if (saved || !value) return;
+              saved = value;
+              try {
+                localStorage.setItem(KEY, value);
+              } catch {
+                /* 隐私模式下写不进去，忽略即可，不影响评论 */
+              }
+              apply();
+              host.dataset.nickLocked = 'true';
+            };
+
+            function apply() {
+              const input = host.querySelector('.wl-header input.wl-nick');
+              if (!input) return;
+              if (input.dataset.locked === 'true') return;
+
+              if (!saved) {
+                input.addEventListener('change', () => remember(input.value.trim()), { once: true });
+                return;
+              }
+
+              input.dataset.locked = 'true';
+              if (input.value !== saved) input.value = saved;
+              input.readOnly = true;
+              input.title = '昵称已记住，换名字请清掉本站数据';
+              host.dataset.nickLocked = 'true';
+            }
+
+            apply();
+
+            const observer = new MutationObserver(apply);
+            observer.observe(host, { childList: true, subtree: true });
+
+            return () => observer.disconnect();
+          }
+
+          import('https://unpkg.com/@waline/client@v3/dist/waline.js')
+            .then(({ init }) => {
+              init({
+                el: '#waline',
+                serverURL,
+                lang: 'zh-CN',
+                dark,
+                // 免登录：只保留评论框，不出现登录 / 注册入口
+                login: 'disable',
+                // 昵称、邮箱、网址都显示出来，但只有昵称是必填
+                meta: ['nick', 'mail', 'link'],
+                requiredMeta: ['nick'],
+                // 图片默认走 base64 内联，体积不可控，先关掉
+                imageUploader: false,
+                // 每页 5 条，长文评论区的滚动交给页面，不做内部滚动区
+                pageSize: 5,
+                search: false,
+              });
+
+              cleanupNickname = lockNicknameOnce();
+            })
+            .catch(() => {
+              host.innerHTML =
+                '<p class="comments-fallback">评论暂时加载不出来，刷新一下试试。</p>';
+            });
+
+          document.addEventListener('astro:before-swap', () => cleanupNickname(), { once: true });
+        })();
+      </script>
+    </section>
+  )
+}
+
+<style>
+  /*
+   * .comments（上分隔线）和 .comments-label 定义在 global.css 里，
+   * 和原先把 Giscus 挂上去时共用同一套，这里不重复写。
+   */
+
+  .comments-fallback {
+    color: var(--ink-faint);
+    font-size: 0.92rem;
+  }
+
+  /*
+   * Waline 自带的圆角（8px 起）和粗细都比本站的 3px + 1px 细线重，
+   * 这里压回去。只改形状和线条，颜色交给上面注入的变量。
+   */
+  .waline-host :global(.wl-panel) {
+    border-radius: var(--radius);
+  }
+
+  .waline-host :global(.wl-editor),
+  .waline-host :global(.wl-input) {
+    border-radius: var(--radius);
+  }
+
+  .waline-host :global(.wl-btn) {
+    border-radius: var(--radius);
+    box-shadow: none;
+  }
+
+  .waline-host :global(.wl-card) {
+    border: none;
+    border-top: 1px solid var(--rule);
+    border-radius: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .waline-host :global(.wl-card:first-child) {
+    border-top: none;
+  }
+
+  .waline-host :global(.wl-comment) {
+    border-radius: var(--radius);
+  }
+
+  .waline-host :global(.wl-header) {
+    gap: 0.6rem;
+  }
+
+  /* 昵称锁定之后给一点视觉暗示，别让人以为输入框坏了 */
+  .waline-host[data-nick-locked='true'] :global(input.wl-nick) {
+    color: var(--ink-muted);
+    background: var(--code-bg);
+    cursor: default;
+  }
+
+  .waline-host :global(.wl-footer) {
+    color: var(--ink-faint);
+  }
+</style>

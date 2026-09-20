@@ -103,7 +103,32 @@ export const NAV = [
 ] as const;
 
 /**
+ * 评论：Waline（免登录，只填昵称）
+ *
+ * 服务端不在这个仓库里。GitHub Pages 是纯静态托管，不跑代码，
+ * 评论必须另有地方收和存，所以 Waline 单独部署在 Vercel 上，
+ * 数据库用 Vercel 的 Neon 集成。三步：
+ *   1. 用 https://vercel.com/new/clone?repository-url=https://github.com/walinejs/waline/tree/main/example 一键部署
+ *   2. Vercel 顶部 Storage → Create Database → Neon，建库后在 Neon 的 SQL Editor 里跑
+ *      https://github.com/walinejs/waline/blob/main/assets/waline.pgsql
+ *   3. 回 Vercel 重新部署一次让数据库生效，把部署出来的地址填到 serverURL
+ * 部署完访问 <serverURL>/ui/register 注册，第一个注册的人自动成为管理员。
+ *
+ * 免登录是这里的重点，见 Comment.astro 的 login 配置。
+ * 未配置 serverURL 时评论区整块不渲染（访客看不到半成品）。
+ */
+export const WALINE = {
+  serverURL: '',
+  lang: 'zh-CN',
+  /** 同一浏览器只记一个昵称，见 Comment.astro 的昵称锁定说明 */
+  lockNickname: true,
+} as const;
+
+/**
  * 评论：Giscus（基于 GitHub Discussions，零后端零成本）
+ *
+ * 已弃用，保留代码和配置只为将来想换回去时省事。
+ * 弃用原因：它强制评论者用 GitHub 账号登录，与「不注册就能评论」相冲突。
  *
  * 现状：repoId 已填（取自 GitHub API 的仓库 node_id）。
  * 还差两步，都需要仓库管理权限，只能由站长本人做：
