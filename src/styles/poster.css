@@ -436,13 +436,14 @@
 /* ---------- 模块里的系列块 ---------- */
 
 /* 系列不单开一栏：它是栏目内部的一个块，点进去才是章节列表。
-   与普通文章行区分：米色底、方块项目符（文章行是菱形）、字号更大。 */
+   不用自己的底色 —— 米色底和模块纸色接近但不相等，看起来像色差；
+   区别交给方块项目符（文章行是菱形）、「系列 · N 篇」小标和更大的标题。 */
 .module .series-block {
   display: block;
   position: relative;
   padding: 18px 26px 18px 42px;
   border-bottom: 3px solid var(--p-ink);
-  background: var(--p-cream);
+  background: transparent;
   transition: background 0.14s;
 }
 
