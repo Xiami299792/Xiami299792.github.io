@@ -17,7 +17,7 @@ const posts = defineCollection({
     /** 发布日期，写 2026-03-01 或 2026-03-01 10:00 都可以 */
     date: z.coerce.date(),
     /** 分类，决定首页分栏和配色 */
-    category: z.enum(['tech', 'essay']),
+    category: z.enum(['tech', 'essay', 'study']),
     /**
      * 板块（只对 category: tech 有意义）。
      * tech 下分两块，列表页与首页都按它分组，不混在一起：

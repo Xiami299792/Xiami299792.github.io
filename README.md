@@ -1,6 +1,6 @@
 # 拾光集 · Astro 个人博客
 
-一个用 **Astro + Markdown + GitHub Pages** 搭的纯静态个人博客，双栏目：**技术**（下分软科普 / 硬指南两个板块）与 **随笔**。
+一个用 **Astro + Markdown + GitHub Pages** 搭的纯静态个人博客，三栏目：**技术**（下分软科普 / 硬指南两个板块）、**随笔** 与 **伴学**。
 
 无数据库、无服务器、无运维。文章是仓库里的 Markdown 文件，`git push` 即上线。
 
@@ -200,7 +200,7 @@ pnpm new:skill "Midjourney" --part 出图                          # Skill 推�
 │  │  ├─ BaseLayout.astro         HTML 骨架、SEO、主题切换
 │  │  └─ PostLayout.astro         文章页：系列横幅 / 目录 / 正文 / 上下篇 / 评论
 │  ├─ pages/
-│  │  ├─ index.astro              首页（系列连载 + 技术 / 随笔 分栏）
+│  │  ├─ index.astro              首页（系列连载 + 技术 / 随笔 / 伴学 分栏）
 │  │  ├─ posts/[...id].astro      文章详情
 │  │  ├─ series/                  系列总览与系列目录页
 │  │  ├─ category/[category].astro

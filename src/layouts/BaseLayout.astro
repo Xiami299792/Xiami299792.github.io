@@ -17,6 +17,7 @@ import '@fontsource/alfa-slab-one/latin-400.css';
 import '@fontsource/archivo-narrow/latin-400.css';
 import '@fontsource/archivo-narrow/latin-500.css';
 import '@fontsource/archivo-narrow/latin-600.css';
+import '@fontsource/archivo-narrow/latin-700.css';
 import '@fontsource/dm-mono/latin-400.css';
 import '@fontsource/dm-mono/latin-500.css';
 
@@ -26,6 +27,7 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 import '../styles/cat-essay.css';
 import '../styles/cat-tech.css';
+import '../styles/cat-study.css';
 // 海报风：站点外壳 + 栏目页。内部全部限定在 :root:not([data-cat])，
 // 有分类主题的文章页不会被它覆盖。
 import '../styles/poster.css';
@@ -39,10 +41,11 @@ interface Props {
   wide?: boolean;
   /**
    * 分类主题。设了就在 <html> 上打 data-cat，
-   * 由 cat-essay.css / cat-tech.css 整套换皮（随笔=铅字报刊，技术=Broadside）。
+   * 由 cat-essay.css / cat-tech.css / cat-study.css 整套换皮
+   * （随笔=铅字报刊，技术=Broadside，伴学=Swiss Modern 网格纸）。
    * 不设则用 global.css 的中性主题。
    */
-  cat?: 'essay' | 'tech';
+  cat?: 'essay' | 'tech' | 'study';
   /**
    * 按页裁剪的汇文明朝体子集（随笔页用，见 scripts/build-fonts.mjs）。
    * 整份 GBK 字体是 3.4MB，手机上常常没下载完就被划走，正文因此回退到系统字体

@@ -1,0 +1,379 @@
+/* ==========================================================================
+   伴学 · Swiss Modern
+   --------------------------------------------------------------------------
+   按 frontend-slides / STYLE_PRESETS.md 的 Swiss Modern 实现：
+     · 纯白纸 + 纯黑字 + 朱红 #FF3300 单一强调色
+     · 22px 正方格网格纸底纹（与 Cobalt Grid 同尺寸），铺满整页
+     · 可见网格、非对称排版、几何形；圆角与投影一律为 0
+     · 西文三档：Archivo Narrow（标题）/ Barlow（正文）/ DM Mono（标签）
+       中文回退系统字体栈（Archivo Narrow、DM Mono、Barlow 都没有汉字）
+   与另外两个栏目的分工：技术=深色报头，随笔=铅字报刊，伴学=工程网格纸。
+   ========================================================================== */
+
+[data-cat='study'] {
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --ink-muted: #555555;
+  --ink-faint: #8a8a8a;
+  --rule: rgba(0, 0, 0, 0.12);
+  --rule-strong: rgba(0, 0, 0, 0.24);
+  --code-bg: #f4f4f4;
+
+  --accent: #ff3300;
+  --accent-hover: #cc2900;
+  --accent-underline: rgba(255, 51, 0, 0.35);
+
+  --dot-study: #ff3300;
+
+  --font-sans: 'Barlow', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC',
+    sans-serif;
+  --font-serif: 'Archivo Narrow', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'DM Mono', 'PingFang SC', 'Microsoft YaHei', ui-monospace,
+    Consolas, monospace;
+
+  --radius: 0;
+  --measure: 40rem;
+
+  color-scheme: light;
+}
+
+/* ---------- 网格纸：22px 正方格铺满整页 ---------- */
+
+[data-cat='study'] body {
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size:
+    22px 22px,
+    22px 22px;
+  color: var(--ink);
+}
+
+/* ---------- 页头：2px 黑线收口，标题窄体大写 ---------- */
+
+[data-cat='study'] .site-header {
+  background: transparent;
+  border-bottom: 2px solid var(--ink);
+}
+
+[data-cat='study'] .brand {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+[data-cat='study'] .nav-link {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .nav-link:hover {
+  color: var(--ink);
+}
+
+[data-cat='study'] .nav-link.active {
+  color: var(--accent);
+  background: none;
+}
+
+/* ---------- 文章头 ---------- */
+
+[data-cat='study'] .post-header {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 22px;
+  margin-bottom: 30px;
+}
+
+[data-cat='study'] .post-header h1 {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+}
+
+[data-cat='study'] .post-meta {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .post-meta .cat {
+  background: var(--accent);
+  color: #ffffff;
+  border-radius: 0;
+  padding: 2px 8px;
+}
+
+/* 分类圆点在伴学里没有意义，标签本身就是色块 */
+[data-cat='study'] .post-meta .cat::before {
+  display: none;
+}
+
+/* 简介：只放小标题关键词，做成等宽小字 */
+[data-cat='study'] .post-deck {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin-top: 14px;
+}
+
+/* ---------- 系列横幅 ---------- */
+
+[data-cat='study'] .series-banner {
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: #ffffff;
+  padding: 12px 14px;
+}
+
+[data-cat='study'] .series-banner__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .series-banner__title {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+[data-cat='study'] .series-banner__count {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .series-banner__link {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ---------- 目录 ---------- */
+
+[data-cat='study'] .toc {
+  border-left: 6px solid var(--accent);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-cat='study'] .toc-title {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .toc a {
+  color: var(--ink);
+}
+
+[data-cat='study'] .toc a:hover {
+  color: var(--accent);
+}
+
+/* ---------- 正文 ---------- */
+
+[data-cat='study'] .prose {
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  line-height: 1.95;
+}
+
+[data-cat='study'] .prose h2 {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  border-top: 2px solid var(--ink);
+  padding-top: 14px;
+  margin-top: 46px;
+}
+
+[data-cat='study'] .prose h3 {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+[data-cat='study'] .prose h4 {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .prose a {
+  color: var(--accent);
+  text-decoration-color: var(--accent-underline);
+}
+
+[data-cat='study'] .prose strong {
+  font-weight: 700;
+}
+
+/* 定义、定理、证明这类块：朱红粗竖条 */
+[data-cat='study'] .prose blockquote {
+  margin: 22px 0;
+  padding: 12px 18px;
+  border-left: 6px solid var(--accent);
+  background: rgba(255, 51, 0, 0.04);
+  font-style: normal;
+}
+
+[data-cat='study'] .prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+[data-cat='study'] .prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+
+[data-cat='study'] .prose th {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: left;
+  background: transparent;
+  border-bottom: 2px solid var(--ink);
+}
+
+[data-cat='study'] .prose td {
+  border-bottom: 1px solid var(--rule);
+}
+
+[data-cat='study'] .prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 0;
+  background: #000000;
+  color: #ffffff;
+}
+
+[data-cat='study'] .prose pre {
+  border-radius: 0;
+  border: 1px solid var(--ink);
+}
+
+[data-cat='study'] .prose hr {
+  border: 0;
+  border-top: 2px solid var(--ink);
+}
+
+/* 行间公式左右留白，别贴着网格线 */
+[data-cat='study'] .katex-display {
+  margin: 1.4em 0;
+}
+
+/* ---------- 上下篇 ---------- */
+
+[data-cat='study'] .post-nav a {
+  border-top: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  padding: 14px 0;
+}
+
+[data-cat='study'] .post-nav .dir {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .post-nav a:hover .title {
+  color: var(--accent);
+}
+
+/* ---------- 栏目页 ---------- */
+
+[data-cat='study'] .page-title {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+[data-cat='study'] .page-lead {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .cat::before {
+  background: var(--accent);
+}
+
+[data-cat='study'] .subhead h2,
+[data-cat='study'] .subhead h3 {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+[data-cat='study'] .post-card {
+  border-bottom: 1px solid var(--rule);
+}
+
+[data-cat='study'] .post-card h3 {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-weight: 600;
+}
+
+[data-cat='study'] .post-card:hover h3 {
+  color: var(--accent);
+}
+
+/* ---------- 页脚 ---------- */
+
+[data-cat='study'] .site-footer {
+  background: transparent;
+  border-top: 2px solid var(--ink);
+}
+
+[data-cat='study'] .site-footer,
+[data-cat='study'] .footer-links a {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .footer-links a:hover {
+  color: var(--accent);
+}

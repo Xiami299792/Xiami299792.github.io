@@ -9,19 +9,21 @@ import { withBase } from '../utils/url';
 
 const HOME_LIMIT = 5;
 
-const [tech, essay, seriesOverview] = await Promise.all([
+const [tech, essay, study, seriesOverview] = await Promise.all([
   getPostsByCategory('tech'),
   getPostsByCategory('essay'),
+  getPostsByCategory('study'),
   getSeriesOverview(),
 ]);
 
 const featured = seriesOverview[0];
 const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : undefined;
 
-// 两个大板块 = 首页里的两个模块
+// 三个大板块 = 首页里的三个模块（01 技术 / 02 随笔 / 03 伴学）
 const modules = [
   { cat: CATEGORIES.tech, groups: groupByTechSection(tech) },
   { cat: CATEGORIES.essay, groups: [{ key: null, posts: essay }] },
+  { cat: CATEGORIES.study, groups: [{ key: null, posts: study }] },
 ]
   .map((m) => ({
     ...m,

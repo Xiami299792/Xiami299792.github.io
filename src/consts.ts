@@ -28,7 +28,7 @@ export const SITE = {
   base: '/',
 } as const;
 
-/** 两条内容线：技术 / 随笔 */
+/** 三条内容线：技术 / 随笔 / 伴学 */
 export const CATEGORIES = {
   tech: {
     key: 'tech',
@@ -39,6 +39,11 @@ export const CATEGORIES = {
     key: 'essay',
     label: '随笔',
     description: '日常、阅读，以及一些没什么用但想说的想法。',
+  },
+  study: {
+    key: 'study',
+    label: '伴学',
+    description: '课堂笔记与整理，一门课一门课地记下去。',
   },
 } as const;
 
@@ -84,6 +89,13 @@ export const SERIES = {
     // 下面三句（副标题、系列简介、说明）留空给作者自己写。
     // 空着不会渲染空框：系列页只在有内容时才显示简介块，副标题也会自动省略分隔符。
     subtitle: '',
+    description: '',
+    author: '夏弥',
+    note: '',
+  },
+  'math-analysis': {
+    title: '工科数学分析',
+    subtitle: '课堂笔记整理',
     description: '',
     author: '夏弥',
     note: '',
