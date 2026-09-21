@@ -44,7 +44,11 @@ const {
 } = Astro.props;
 
 const cat = CATEGORIES[post.data.category];
-const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+// 前言、序这类开场白是正文之前的话，不进目录。除此之外 h2/h3 都收。
+const TOC_SKIP = /^(前言|序|写在前面)/;
+const toc = headings.filter(
+  (h) => (h.depth === 2 || h.depth === 3) && !TOC_SKIP.test(h.text),
+);
 const inSeries = Boolean(seriesKey && seriesInfo);
 const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
 
