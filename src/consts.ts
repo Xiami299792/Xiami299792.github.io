@@ -108,7 +108,6 @@ export type SeriesKey = keyof typeof SERIES;
 export const NAV = [
   { href: '/', label: '首页' },
   { href: '/projects/', label: '项目' },
-  { href: '/series/', label: '系列' },
   { href: '/archive/', label: '归档' },
   { href: '/search/', label: '搜索' },
   { href: '/about/', label: '关于' },

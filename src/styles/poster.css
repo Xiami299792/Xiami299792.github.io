@@ -433,6 +433,89 @@
   color: var(--p-cream);
 }
 
+/* ---------- 模块里的系列块 ---------- */
+
+/* 系列不单开一栏：它是栏目内部的一个块，点进去才是章节列表。
+   与普通文章行区分：米色底、方块项目符（文章行是菱形）、字号更大。 */
+.module .series-block {
+  display: block;
+  position: relative;
+  padding: 18px 26px 18px 42px;
+  border-bottom: 3px solid var(--p-ink);
+  background: var(--p-cream);
+  transition: background 0.14s;
+}
+
+.module .series-block:hover {
+  background: var(--p-blue);
+}
+
+.module .series-block::before {
+  content: '';
+  position: absolute;
+  left: 26px;
+  top: 25px;
+  width: 9px;
+  height: 9px;
+  background: var(--p-blue);
+  border-radius: 0;
+}
+
+.module .series-block:hover::before {
+  background: var(--p-cream);
+}
+
+.module .series-block__kicker {
+  display: block;
+  font-family: var(--p-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-blue-text);
+}
+
+.module .series-block__title {
+  display: block;
+  margin: 6px 0 3px;
+  font-family: var(--p-slab);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1.24;
+  letter-spacing: 0;
+  color: var(--p-ink);
+}
+
+/* 中文标题交给系统粗体（Alfa Slab 没有中文字形）*/
+.module .series-block__title:lang(zh) {
+  font-weight: 700;
+}
+
+.module .series-block__sub {
+  display: block;
+  font-family: var(--p-body);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--p-muted);
+}
+
+.module .series-block__more {
+  display: block;
+  margin-top: 9px;
+  font-family: var(--p-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--p-blue-text);
+}
+
+.module .series-block:hover .series-block__kicker,
+.module .series-block:hover .series-block__title,
+.module .series-block:hover .series-block__sub,
+.module .series-block:hover .series-block__more {
+  color: var(--p-cream);
+}
+
 /* ---------- 页脚 ---------- */
 
 :root:not([data-cat]) .site-footer {

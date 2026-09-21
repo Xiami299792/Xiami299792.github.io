@@ -42,6 +42,31 @@ export function groupByTechSection(
 }
 
 /**
+ * 把一组文章拆成「系列」与「不属于系列的文章」两部分。首页按栏目铺开时用：
+ * 成系列的收成一块（点进去才是章节列表），剩下的照常按文章行排。
+ * 系列按在传入顺序里首次出现的先后排列（也就是最新的系列在前），系列内按 order 升序。
+ */
+export function splitSeries(posts: Post[]): {
+  series: { key: string; posts: Post[] }[];
+  loose: Post[];
+} {
+  const keys: string[] = [];
+  for (const post of posts) {
+    const key = post.data.series;
+    if (key && !keys.includes(key)) keys.push(key);
+  }
+  return {
+    series: keys.map((key) => ({
+      key,
+      posts: posts
+        .filter((post) => post.data.series === key)
+        .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0)),
+    })),
+    loose: posts.filter((post) => !post.data.series),
+  };
+}
+
+/**
  * 文章的 URL slug。
  * 兼容模式下 entry.id 会带上 .md 后缀，这里统一剥掉，
  * 这样无论用哪种 loader，链接都是 /posts/tech/xxx/。

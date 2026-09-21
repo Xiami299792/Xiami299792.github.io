@@ -118,7 +118,8 @@ part: 基础篇         # 可选，系列目录页按它分组
 ```
 
 效果：文章页顶部出现系列横幅、底部是「上一篇 / 下一篇（3/9）」，
-`/series/dsh-guide/` 是完整目录，`/series/` 汇总全部系列，导航栏也有入口。
+`/series/dsh-guide/` 是完整章节目录。系列不单独占一栏：首页按栏目（硬指南 / 伴学…）
+把系列摆进所属板块，点进系列才展开章节。
 不属于任何系列的文章照旧显示全站的「更新的一篇 / 更早的一篇」。
 
 **小栏目（`part`）**：`part` 相同的文章会在系列目录页归到同一个标题下，分组顺序按
@@ -202,7 +203,7 @@ pnpm new:skill "Midjourney" --part 出图                          # Skill 推�
 │  ├─ pages/
 │  │  ├─ index.astro              首页（系列连载 + 技术 / 随笔 / 伴学 分栏）
 │  │  ├─ posts/[...id].astro      文章详情
-│  │  ├─ series/                  系列总览与系列目录页
+│  │  ├─ series/                  系列章节页（点进首页的系列块进来）
 │  │  ├─ category/[category].astro
 │  │  ├─ archive.astro            按年份归档
 │  │  ├─ search.astro             Pagefind 搜索

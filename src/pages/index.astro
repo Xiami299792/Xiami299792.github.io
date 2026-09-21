@@ -1,25 +1,26 @@
 ---
 // 首页专用：People's Platform (Block & Bold) 海报风
 // 字体与 poster.css 已在 BaseLayout 里引入，这里不再重复
+// 系列不单独占一栏：它长在所属栏目里（硬指南 / 伴学…），点进系列块才是章节列表
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { CATEGORIES, SERIES, SITE, TECH_SECTIONS } from '../consts';
-import { getPostsByCategory, getSeriesOverview, groupByTechSection, postPath } from '../utils/posts';
+import { getPostsByCategory, groupByTechSection, splitSeries } from '../utils/posts';
 import { withBase } from '../utils/url';
 
 const HOME_LIMIT = 5;
 
-const [tech, essay, study, seriesOverview] = await Promise.all([
+const [tech, essay, study] = await Promise.all([
   getPostsByCategory('tech'),
   getPostsByCategory('essay'),
   getPostsByCategory('study'),
-  getSeriesOverview(),
 ]);
 
-const featured = seriesOverview[0];
-const featuredInfo = featured ? SERIES[featured.key as keyof typeof SERIES] : undefined;
+const seriesUrl = (key: string) => withBase(`/series/${key}/`);
+const seriesInfo = (key: string) => SERIES[key as keyof typeof SERIES];
 
 // 三个大板块 = 首页里的三个模块（01 技术 / 02 随笔 / 03 伴学）
+// 每个板块内部再分两组：成系列的自成一块，其余文章照常铺开
 const modules = [
   { cat: CATEGORIES.tech, groups: groupByTechSection(tech) },
   { cat: CATEGORIES.essay, groups: [{ key: null, posts: essay }] },
@@ -28,7 +29,9 @@ const modules = [
   .map((m) => ({
     ...m,
     total: m.groups.reduce((n, g) => n + g.posts.length, 0),
-    shown: m.groups.reduce((n, g) => n + Math.min(g.posts.length, HOME_LIMIT), 0),
+    // 只有「散篇文章」超过限制才需要「查看全部」；系列块自己带篇数与入口
+    more: m.groups.some((g) => splitSeries(g.posts).loose.length > HOME_LIMIT),
+    groups: m.groups.map((g) => ({ ...g, ...splitSeries(g.posts) })),
   }))
   .filter((m) => m.total > 0);
 ---
@@ -41,33 +44,9 @@ const modules = [
       <p class="lede">{SITE.description}</p>
     </header>
 
-    {
-      featured && featuredInfo && (
-        <section class="spotlight">
-          <p class="spotlight__kicker">系列连载 · Series</p>
-          <a class="spotlight__title" href={withBase(`/series/${featured.key}/`)}>
-            {featuredInfo.title}
-          </a>
-          <p class="spotlight__sub">
-            {[featuredInfo.subtitle, `共 ${featured.posts.length} 篇`].filter(Boolean).join(' · ')}
-          </p>
-          <ol class="spotlight__list">
-            {featured.posts.map((post, i) => (
-              <li>
-                <a href={withBase(postPath(post))}>
-                  <span class="spotlight__num">{String(i + 1).padStart(2, '0')}</span>
-                  <span>{post.data.title}</span>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )
-    }
-
     <div class="modules">
       {
-        modules.map(({ cat, groups, total, shown }, i) => (
+        modules.map(({ cat, groups, total, more }, i) => (
           <section class="module">
             <div class="module__head">
               <span class="module__num">{String(i + 1).padStart(2, '0')}</span>
@@ -83,15 +62,36 @@ const modules = [
                     <em>{group.posts.length} 篇</em>
                   </div>
                 )}
-                <div class="post-list">
-                  {group.posts.slice(0, HOME_LIMIT).map((post) => (
-                    <PostCard post={post} />
-                  ))}
-                </div>
+
+                {group.series.map((s) => {
+                  const info = seriesInfo(s.key);
+                  return (
+                    <a class="series-block" href={seriesUrl(s.key)}>
+                      <span class="series-block__kicker">
+                        系列 · {s.posts.length} 篇
+                      </span>
+                      <span class="series-block__title">
+                        {info?.title ?? s.key}
+                      </span>
+                      {info?.subtitle && (
+                        <span class="series-block__sub">{info.subtitle}</span>
+                      )}
+                      <span class="series-block__more">进入系列看章节 →</span>
+                    </a>
+                  );
+                })}
+
+                {group.loose.length > 0 && (
+                  <div class="post-list">
+                    {group.loose.slice(0, HOME_LIMIT).map((post) => (
+                      <PostCard post={post} />
+                    ))}
+                  </div>
+                )}
               </>
             ))}
 
-            {total > shown && (
+            {more && (
               <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
                 查看全部 {total} 篇 →
               </a>
