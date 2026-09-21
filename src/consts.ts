@@ -100,6 +100,13 @@ export const SERIES = {
     author: '夏弥',
     note: '',
   },
+  'c-programming': {
+    title: 'C 语言程序设计',
+    subtitle: '课堂笔记整理',
+    description: '',
+    author: '夏弥',
+    note: '',
+  },
 } as const;
 
 export type SeriesKey = keyof typeof SERIES;
