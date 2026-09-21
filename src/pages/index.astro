@@ -29,8 +29,6 @@ const modules = [
   .map((m) => ({
     ...m,
     total: m.groups.reduce((n, g) => n + g.posts.length, 0),
-    // 只有「散篇文章」超过限制才需要「查看全部」；系列块自己带篇数与入口
-    more: m.groups.some((g) => splitSeries(g.posts).loose.length > HOME_LIMIT),
     groups: m.groups.map((g) => ({ ...g, ...splitSeries(g.posts) })),
   }))
   .filter((m) => m.total > 0);
@@ -46,7 +44,7 @@ const modules = [
 
     <div class="modules">
       {
-        modules.map(({ cat, groups, total, more }, i) => (
+        modules.map(({ cat, groups, total }, i) => (
           <section class="module">
             <div class="module__head">
               <span class="module__num">{String(i + 1).padStart(2, '0')}</span>
@@ -91,11 +89,10 @@ const modules = [
               </>
             ))}
 
-            {more && (
-              <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
-                查看全部 {total} 篇 →
-              </a>
-            )}
+            {/* 每个模块都留一个栏目入口：系列块只通向系列，栏目页仍要够得着 */}
+            <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
+              查看全部 {total} 篇 →
+            </a>
           </section>
         ))
       }
