@@ -31,13 +31,16 @@ const buckets = grouped ? [...(hasUngrouped ? [''] : []), ...parts] : [''];
 
 // 整个系列都是同一个分类时，每行都标一遍是纯噪音
 const mixedCategories = new Set(posts.map((p) => p.data.category)).size > 1;
+// 单一分类的系列页直接套该栏目的专有皮肤（技术=Broadside，随笔=铅字报刊，伴学=网格纸）；
+// 跨分类的系列不套皮肤，回落站点的中性主题
+const catKey = mixedCategories ? undefined : posts[0].data.category;
 
 function groupOf(post: (typeof posts)[number]) {
   return post.data.part ?? '';
 }
 ---
 
-<BaseLayout wide title={info.title} description={info.description}>
+<BaseLayout wide title={info.title} description={info.description} cat={catKey}>
   <h1 class="page-title">{info.title}</h1>
   <p class="page-lead">{[info.subtitle, `共 ${posts.length} 篇`].filter(Boolean).join(' · ')}</p>
 

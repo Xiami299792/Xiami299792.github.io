@@ -358,6 +358,39 @@
   color: var(--accent);
 }
 
+/* ---------- 系列页（从首页系列块点进来） ---------- */
+
+[data-cat='study'] .series-intro {
+  border-left: 6px solid var(--accent);
+  padding-left: 16px;
+  color: var(--ink-muted);
+}
+
+[data-cat='study'] .series-list__item {
+  border-bottom: 1px solid var(--rule);
+}
+
+[data-cat='study'] .series-list__num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+[data-cat='study'] .series-list__title {
+  font-family: 'Archivo Narrow', 'PingFang SC', sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+/* 章节目录里的那句「简介」也是关键词，用等宽小字 */
+[data-cat='study'] .series-list__summary {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
 /* ---------- 页脚 ---------- */
 
 [data-cat='study'] .site-footer {
