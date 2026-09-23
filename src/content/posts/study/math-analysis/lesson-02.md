@@ -19,7 +19,7 @@ $$\begin{cases}x=x(t),\\ y=y(t)\end{cases}$$
 
 称为曲线的参数方程，其中 $t$ 称为参变量或参数。
 
-**例 9**（炮弹运动的轨道，即弹道曲线）　设 $v_1,v_2$ 分别表示炮弹的水平初速度和铅直初速度，$g$ 为重力加速度，$t$ 为时间，$x,y$ 分别为 $t$ 时刻炮弹在铅直平面上的横坐标和纵坐标，则在不计空气阻力的情况下，可以得到弹道曲线的参数方程
+**例 1**（炮弹运动的轨道，即弹道曲线）　设 $v_1,v_2$ 分别表示炮弹的水平初速度和铅直初速度，$g$ 为重力加速度，$t$ 为时间，$x,y$ 分别为 $t$ 时刻炮弹在铅直平面上的横坐标和纵坐标，则在不计空气阻力的情况下，可以得到弹道曲线的参数方程
 
 $$\begin{cases}x=v_1t,\\ y=v_2t-\dfrac12gt^2.\end{cases}$$
 
@@ -29,7 +29,7 @@ $$y=\frac{v_2}{v_1}x-\frac{g}{2v_1^2}x^2.$$
 
 弹道曲线的图形是抛物线。
 
-**例 10**　椭圆 $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=1$ 的参数方程为
+**例 2**　椭圆 $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=1$ 的参数方程为
 
 $$\begin{cases}x=a\cos t,\\ y=b\sin t.\end{cases}$$
 
@@ -37,13 +37,13 @@ $$\begin{cases}x=a\cos t,\\ y=b\sin t.\end{cases}$$
 
 $$\begin{cases}x=R\cos t,\\ y=R\sin t.\end{cases}$$
 
-**例 11**　曲线 $\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=1\ (x>0)$ 的参数方程为
+**例 3**　曲线 $\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=1\ (x>0)$ 的参数方程为
 
 $$\begin{cases}x=a\,\mathrm{ch}\,t,\\ y=b\,\mathrm{sh}\,t.\end{cases}$$
 
 如果记图中阴影部分的面积为 $S$，则有 $t=\dfrac{2S}{ab}$。这一点在学完了定积分之后会知晓。（这里用到的 $\mathrm{ch}\,t$、$\mathrm{sh}\,t$ 是双曲函数。）
 
-**例 12**（摆线方程）　一半径为 $a$ 的圆，初始时其圆心位于点 $(0,a)$ 处，$P$ 是圆上一定点，初始时位于原点处，当圆沿 $x$ 轴正向做无滑动的滚动时，求 $P$ 的轨迹。
+**例 4**（摆线方程）　一半径为 $a$ 的圆，初始时其圆心位于点 $(0,a)$ 处，$P$ 是圆上一定点，初始时位于原点处，当圆沿 $x$ 轴正向做无滑动的滚动时，求 $P$ 的轨迹。
 
 解　设点 $P$ 位于 $(x,y)$，圆的半径所转过的角度为 $t$，则
 
@@ -55,7 +55,7 @@ $$\begin{cases}x=a(t-\sin t),\\ y=a(1-\cos t).\end{cases}$$
 
 此运动轨迹叫作摆线（也叫作旋轮线），它是以 $2\pi$ 为周期的。
 
-**例 13**（星形线方程）　一个小圆在大圆内沿大圆做无滑动的滚动，设大圆圆心在原点，半径为 $4r$，小圆半径为 $r$，$P$ 是小圆上一定点，初始时，点 $P$ 在 $P_0(4r,0)$，求点 $P$ 的运动轨迹。
+**例 5**（星形线方程）　一个小圆在大圆内沿大圆做无滑动的滚动，设大圆圆心在原点，半径为 $4r$，小圆半径为 $r$，$P$ 是小圆上一定点，初始时，点 $P$ 在 $P_0(4r,0)$，求点 $P$ 的运动轨迹。
 
 解　设定点由 $P_0$ 移动到 $P(x,y)$ 时，小圆与大圆的切点为 $N$，$ON$ 与 $x$ 轴正向的夹角为 $t$，设 $\angle PCN=\alpha$，$\angle PCD=\beta$，由 $\overset{\frown}{NP}=\overset{\frown}{NP_0}$，得 $r\alpha=4rt$，$\alpha=4t$，故
 
@@ -97,7 +97,7 @@ $$x^{\frac23}+y^{\frac23}=a^{\frac23}.$$
 
 其中第二个方向由 $x^2+y^2=\rho^2$ 得 $\rho=\sqrt{x^2+y^2}$，又 $\dfrac yx=\dfrac{\rho\sin\theta}{\rho\cos\theta}=\tan\theta$。利用上述关系，可以将曲线的直角坐标方程与极坐标方程互相转化。
 
-**例 14**　将下列圆的直角坐标方程化成极坐标方程。
+**例 6**　将下列圆的直角坐标方程化成极坐标方程。
 
 （1）$x^2+y^2=a^2$；　　（2）$(x-a)^2+y^2=a^2$。
 
@@ -139,7 +139,7 @@ $$\lim_{n\to\infty}y_n=A\quad\text{或}\quad y_n\to A\ (n\to\infty).$$
 
 这种描述不能算是极限的定义，严格的定义后面才给出。先来考察几个有极限的数列和没有极限的数列。
 
-**例 1**　（1）$\{y_n\}=\left\{\dfrac1n\right\}=1,\dfrac12,\dfrac13,\dfrac14,\dots$，由于当 $n$ 无限增大时，$y_n$ 任意地接近于常数 $0$，因此
+**例 7**　（1）$\{y_n\}=\left\{\dfrac1n\right\}=1,\dfrac12,\dfrac13,\dfrac14,\dots$，由于当 $n$ 无限增大时，$y_n$ 任意地接近于常数 $0$，因此
 
 $$\lim_{n\to\infty}y_n=\lim_{n\to\infty}\frac1n=0.$$
 
@@ -155,11 +155,11 @@ $$\lim_{n\to\infty}y_n=\lim_{n\to\infty}\left[2+\frac{(-1)^n}{n}\right]=2.$$
 
 （5）$y_n=\begin{cases}-1+\dfrac1n,&n\ \text{为奇数},\\ -1,&n\ \text{为偶数}\end{cases}=0,-1,-\dfrac23,-1,-\dfrac45,-1,-\dfrac67,-1,\dots$，由于当 $n$ 无限增大时，$y_n$ 任意地接近于常数 $-1$，因此 $\lim\limits_{n\to\infty}y_n=-1$。
 
-**例 2**　数列 $\{y_n\}=\{n\}=1,2,3,\dots$ 是没有极限的，因为当 $n$ 无限增大时，$y_n$ 并不任意地接近某个常数。
+**例 8**　数列 $\{y_n\}=\{n\}=1,2,3,\dots$ 是没有极限的，因为当 $n$ 无限增大时，$y_n$ 并不任意地接近某个常数。
 
 前面关于数列 $\{y_n\}$ 与 $A$ 任意地接近的描述是很含糊的。主要是"当 $n$ 无限增大"以及"$\{y_n\}$ 与 $A$ 任意地接近"这些说法不是很明确，据此我们也无法去证明、去计算或进行理论推导。下面对有极限的数列做进一步的考察，以获得更深入的认识。
 
-再次考察例 1 中的数列（3）$\{y_n\}=\left\{2+\dfrac{(-1)^n}{n}\right\}=1,\dfrac52,\dfrac53,\dfrac94,\dfrac95,\dfrac{13}{6},\dots$。在极限 $y=2$ 的上方与下方各做一条与 $y=2$ 等距离（将这个距离记为 $\varepsilon$）的直线 $y=2+\varepsilon$ 与 $y=2-\varepsilon$，不论 $\varepsilon$ 有多么小，我们总能在 $x$ 轴上找到一点 $N$（$N$ 是正数，但不一定是整数），使得在这个点右方，$\{y_n\}$ 的图形完全位于直线 $y=2+\varepsilon$ 与 $y=2-\varepsilon$ 所形成的水平带形域内，如果用数学式表示就是：
+再次考察例 7 中的数列（3）$\{y_n\}=\left\{2+\dfrac{(-1)^n}{n}\right\}=1,\dfrac52,\dfrac53,\dfrac94,\dfrac95,\dfrac{13}{6},\dots$。在极限 $y=2$ 的上方与下方各做一条与 $y=2$ 等距离（将这个距离记为 $\varepsilon$）的直线 $y=2+\varepsilon$ 与 $y=2-\varepsilon$，不论 $\varepsilon$ 有多么小，我们总能在 $x$ 轴上找到一点 $N$（$N$ 是正数，但不一定是整数），使得在这个点右方，$\{y_n\}$ 的图形完全位于直线 $y=2+\varepsilon$ 与 $y=2-\varepsilon$ 所形成的水平带形域内，如果用数学式表示就是：
 
 对 $\forall\varepsilon>0$，都 $\exists N>0$，使得当 $n>N$ 时，恒有 $|y_n-2|<\varepsilon$。
 
@@ -195,7 +195,7 @@ $\varepsilon$ 是希腊字母，读作 epsilon，其相当于英文字母的 $e$
 
 利用极限的 $\varepsilon$-$N$ 定义可以证明数列的极限。
 
-**例 3**　证明：$\lim\limits_{n\to\infty}\dfrac{2+(-1)^n}{n+1}=0$。
+**例 9**　证明：$\lim\limits_{n\to\infty}\dfrac{2+(-1)^n}{n+1}=0$。
 
 **证**　对 $\forall\varepsilon>0$，只要 $N=\dfrac3\varepsilon$，则当 $n>N$ 时，总有
 
@@ -203,7 +203,7 @@ $$|y_n-0|=\left|\frac{2+(-1)^n}{n+1}\right|\le\frac{3}{n+1}<\frac3n<\varepsilon,
 
 因此 $\lim\limits_{n\to\infty}\dfrac{2+(-1)^n}{n+1}=0$。
 
-**例 4**　设 $y_n=\dfrac1{6n^2}-\dfrac1{2n}+\dfrac13$，证明：$\lim\limits_{n\to\infty}y_n=\dfrac13$。
+**例 10**　设 $y_n=\dfrac1{6n^2}-\dfrac1{2n}+\dfrac13$，证明：$\lim\limits_{n\to\infty}y_n=\dfrac13$。
 
 **证**　对 $\forall\varepsilon>0$，只要 $N=\dfrac1{2\varepsilon}$，则当 $n>N$ 时，总有
 
@@ -211,7 +211,7 @@ $$\left|y_n-\frac13\right|=\left|\frac1{6n^2}-\frac1{2n}\right|=\frac{3n-1}{6n^2
 
 故 $\lim\limits_{n\to\infty}y_n=\dfrac13$。
 
-**例 5**　证明：$\lim\limits_{n\to\infty}\dfrac1{2^n}=0$。
+**例 11**　证明：$\lim\limits_{n\to\infty}\dfrac1{2^n}=0$。
 
 **证**　对 $\forall\varepsilon>0$（不妨设 $\varepsilon<1$），只要取 $N=\dfrac{\ln\frac1\varepsilon}{\ln2}$，则当 $n>N$ 时，总有
 
@@ -235,7 +235,7 @@ $$M=\max\{|y_{n_1}|,|y_{n_2}|,\dots,|y_{n_k}|,|A-1|,|A+1|\},$$
 
 要注意的是，**有界只是收敛的必要条件，不是充分条件**：有界的数列不一定收敛。
 
-**例 6**　证明数列 $y_n=(-1)^{n+1}$ 是发散的。
+**例 12**　证明数列 $y_n=(-1)^{n+1}$ 是发散的。
 
 **证**　反设 $\lim\limits_{n\to\infty}y_n=A$。取 $\varepsilon=\dfrac12$，则 $\exists N>0$，当 $n>N$ 时有 $|y_n-A|<\dfrac12$，即 $y_n$ 都落在区间 $\left(A-\dfrac12,A+\dfrac12\right)$ 内，而这个区间的长度是 $1$。但 $y_n$ 只取 $1$ 与 $-1$ 两个值，它们相距 $2$，不可能同时位于长度为 $1$ 的区间内，矛盾，故 $\{y_n\}$ 发散。
 
@@ -273,7 +273,7 @@ $$\{y_{2n}\}=y_2,y_4,y_6,\dots,y_{2n},\dots.$$
 
 由定理 3 可知，如果 $\{y_n\}$ 有一个子列是发散的，则 $\{y_n\}$ 也发散；如果 $\{y_n\}$ 有两个子列收敛于不同的极限，则 $\{y_n\}$ 一定是发散的。
 
-**例 7**　下面数列是否有极限？
+**例 13**　下面数列是否有极限？
 
 （1）$y_n=\begin{cases}2n,&n\ \text{是奇数},\\ \dfrac1n,&n\ \text{是偶数};\end{cases}$　　（2）$y_n=1+(-1)^n$。
 
