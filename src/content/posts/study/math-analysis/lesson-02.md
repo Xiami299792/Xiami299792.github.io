@@ -73,19 +73,29 @@ $$\begin{cases}x=a\cos^3t,\\ y=a\sin^3t,\end{cases}$$
 
 $$x^{\frac23}+y^{\frac23}=a^{\frac23}.$$
 
+这几种常用曲线的参数方程与直角坐标方程对照如下。
+
+| 曲线 | 参数方程 | 直角坐标方程 |
+| --- | --- | --- |
+| 弹道曲线 | $x=v_1t,\ y=v_2t-\dfrac12gt^2$ | $y=\dfrac{v_2}{v_1}x-\dfrac{g}{2v_1^2}x^2$ |
+| 圆 | $x=R\cos t,\ y=R\sin t$ | $x^2+y^2=R^2$ |
+| 椭圆 | $x=a\cos t,\ y=b\sin t$ | $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=1$ |
+| 双曲线（右支） | $x=a\,\mathrm{ch}\,t,\ y=b\,\mathrm{sh}\,t$ | $\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=1\ (x>0)$ |
+| 摆线 | $x=a(t-\sin t),\ y=a(1-\cos t)$ | — |
+| 星形线 | $x=a\cos^3t,\ y=a\sin^3t$ | $x^{\frac23}+y^{\frac23}=a^{\frac23}$ |
+
 ### 2．曲线的极坐标方程
 
 在平面上取一个定点 $O$，称为极点，由 $O$ 点向右引一具有规定长度单位的水平射线 $Ox$，称为极轴。设 $M$ 是平面上任一点，将 $OM$ 的长度记作 $\rho$，极轴与 $OM$ 的夹角记作 $\theta$，则 $(\rho,\theta)$ 叫作点 $M$ 的极坐标。每一对 $(\rho,\theta)$ 确定一个点的位置。显然 $\rho\ge0$，而 $\theta$ 的取值范围通常规定为 $0\le\theta<2\pi$。
 
-点 $M$ 的直角坐标 $(x,y)$ 与极坐标 $(\rho,\theta)$ 之间有如下关系：
+点 $M$ 的直角坐标 $(x,y)$ 与极坐标 $(\rho,\theta)$ 之间的互化关系如下表，两个方向不要弄反：
 
-$$\begin{cases}x=\rho\cos\theta,\\ y=\rho\sin\theta.\end{cases}$$
+| 方向 | 公式 |
+| --- | --- |
+| 由极坐标求直角坐标 | $x=\rho\cos\theta,\qquad y=\rho\sin\theta$ |
+| 由直角坐标求极坐标 | $\rho=\sqrt{x^2+y^2},\qquad \tan\theta=\dfrac yx$ |
 
-反之，由 $x^2+y^2=\rho^2$，得 $\rho=\sqrt{x^2+y^2}$；又 $\dfrac{y}{x}=\dfrac{\rho\sin\theta}{\rho\cos\theta}=\tan\theta$，故有
-
-$$\begin{cases}\rho=\sqrt{x^2+y^2},\\[4pt] \tan\theta=\dfrac{y}{x}.\end{cases}$$
-
-利用上述关系，可以将曲线的直角坐标方程与极坐标方程互相转化。
+其中第二个方向由 $x^2+y^2=\rho^2$ 得 $\rho=\sqrt{x^2+y^2}$，又 $\dfrac yx=\dfrac{\rho\sin\theta}{\rho\cos\theta}=\tan\theta$。利用上述关系，可以将曲线的直角坐标方程与极坐标方程互相转化。
 
 **例 14**　将下列圆的直角坐标方程化成极坐标方程。
 
@@ -163,6 +173,14 @@ $$\lim_{n\to\infty}y_n=A\quad\text{或}\quad y_n\to A\ (n\to\infty).$$
 
 如果数列 $\{y_n\}$ 没有极限，则称数列 $\{y_n\}$ 不收敛，或称它是发散的。
 
+定义里的三个符号各司其职，读的时候不要混：
+
+| 符号 | 含义 | 在定义里的角色 |
+| --- | --- | --- |
+| $\varepsilon$ | 任给的正数，代表允许的误差 | 由外部给定，要多么小就多么小 |
+| $N$ | 与 $\varepsilon$ 有关的正数 | 分界点：$\varepsilon$ 定了，$N$ 才定得下来 |
+| $n$ | 数列的下标 | 讨论的是 $n>N$ 的那些项，即"充分靠后"的项 |
+
 $\varepsilon$ 是希腊字母，读作 epsilon，其相当于英文字母的 $e$，它是 error（误差）的头一个字母。误差任意小的数量提法也就是"小于任意给正数 $\varepsilon$"。极限的定义也就是把误差可以小到任意小这个唯一的要点明确地提出来。
 
 极限的英文是 limit。$\lim\limits_{n\to\infty}y_n=A$ 读作"当 $n$ 无限增大时，$y_n$ 的极限等于（是、收敛于）$A$"。
@@ -215,9 +233,13 @@ $$M=\max\{|y_{n_1}|,|y_{n_2}|,\dots,|y_{n_k}|,|A-1|,|A+1|\},$$
 
 则 $M>0$，且对一切正整数 $n$ 都有 $|y_n|\le M$，故 $\{y_n\}$ 有界。
 
-要注意的是，**有界只是收敛的必要条件，不是充分条件**：有界的数列不一定收敛。例如 $y_n=(-1)^{n+1}$ 有界，但它发散。
+要注意的是，**有界只是收敛的必要条件，不是充分条件**：有界的数列不一定收敛。
+
+**例 6**　证明数列 $y_n=(-1)^{n+1}$ 是发散的。
 
 **证**　反设 $\lim\limits_{n\to\infty}y_n=A$。取 $\varepsilon=\dfrac12$，则 $\exists N>0$，当 $n>N$ 时有 $|y_n-A|<\dfrac12$，即 $y_n$ 都落在区间 $\left(A-\dfrac12,A+\dfrac12\right)$ 内，而这个区间的长度是 $1$。但 $y_n$ 只取 $1$ 与 $-1$ 两个值，它们相距 $2$，不可能同时位于长度为 $1$ 的区间内，矛盾，故 $\{y_n\}$ 发散。
+
+这个例子同时说明了"有界不一定收敛"。
 
 把定理 1 写成逆否命题，又立刻得到下面的推论。
 
@@ -251,7 +273,7 @@ $$\{y_{2n}\}=y_2,y_4,y_6,\dots,y_{2n},\dots.$$
 
 由定理 3 可知，如果 $\{y_n\}$ 有一个子列是发散的，则 $\{y_n\}$ 也发散；如果 $\{y_n\}$ 有两个子列收敛于不同的极限，则 $\{y_n\}$ 一定是发散的。
 
-**例 6**　下面数列是否有极限？
+**例 7**　下面数列是否有极限？
 
 （1）$y_n=\begin{cases}2n,&n\ \text{是奇数},\\ \dfrac1n,&n\ \text{是偶数};\end{cases}$　　（2）$y_n=1+(-1)^n$。
 
@@ -264,3 +286,11 @@ $$\{y_{2n}\}=y_2,y_4,y_6,\dots,y_{2n},\dots.$$
 例如，如果 $\lim\limits_{n\to\infty}y_{2n}=A$，$\lim\limits_{n\to\infty}y_{2n-1}=A$，则有 $\lim\limits_{n\to\infty}y_n=A$。
 
 又如，如果 $\lim\limits_{n\to\infty}y_{3n-1}=A$，$\lim\limits_{n\to\infty}y_{3n-2}=A$，$\lim\limits_{n\to\infty}y_{3n}=A$，则有 $\lim\limits_{n\to\infty}y_n=A$。
+
+这一节的三条性质收在一起就是：
+
+| 性质 | 定理 | 结论 |
+| --- | --- | --- |
+| 有界性 | 定理 1 | 收敛的数列必有界；无界的数列必定发散 |
+| 唯一性 | 定理 2 | 收敛的数列只有一个极限 |
+| 子列的收敛性 | 定理 3 | 收敛数列的任一子列都收敛，且极限相同 |

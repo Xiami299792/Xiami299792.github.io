@@ -1,4 +1,4 @@
-﻿---
+---
 title: 第一课
 date: 2026-09-21
 category: study
@@ -34,15 +34,24 @@ $y$ 是 $x$ 的函数也可记作 $y=y(x)$。当自变量 $x$ 的值取为 $x_0\
 
 微积分中所研究的函数，其定义域通常是由一个或若干个区间组成的。区间分为有限区间和无穷区间。
 
-有限区间包括
+有限区间有四种：
 
-$$(a,b)=\{x\mid a<x<b\},\qquad [a,b]=\{x\mid a\le x\le b\},$$
-$$(a,b]=\{x\mid a<x\le b\},\qquad [a,b)=\{x\mid a\le x<b\}.$$
+| 名称 | 记法 | 集合表示 |
+| --- | --- | --- |
+| 开区间 | $(a,b)$ | $\{x\mid a<x<b\}$ |
+| 闭区间 | $[a,b]$ | $\{x\mid a\le x\le b\}$ |
+| 左开右闭区间 | $(a,b]$ | $\{x\mid a<x\le b\}$ |
+| 左闭右开区间 | $[a,b)$ | $\{x\mid a\le x<b\}$ |
 
-无穷区间包括
+无穷区间有五种：
 
-$$(a,+\infty)=\{x\mid x>a\},\qquad [a,+\infty)=\{x\mid x\ge a\},$$
-$$(-\infty,b)=\{x\mid x<b\},\qquad (-\infty,b]=\{x\mid x\le b\},\qquad (-\infty,+\infty)=\{x\mid -\infty<x<+\infty\}.$$
+| 记法 | 集合表示 |
+| --- | --- |
+| $(a,+\infty)$ | $\{x\mid x>a\}$ |
+| $[a,+\infty)$ | $\{x\mid x\ge a\}$ |
+| $(-\infty,b)$ | $\{x\mid x<b\}$ |
+| $(-\infty,b]$ | $\{x\mid x\le b\}$ |
+| $(-\infty,+\infty)$ | $\{x\mid -\infty<x<+\infty\}$ |
 
 以上各种区间中的 $a$ 和 $b$ 称为区间的端点，其中 $a$ 称为左端点，$b$ 称为右端点；属于区间但不是端点的点称为区间的内点。
 
@@ -77,6 +86,16 @@ $$y=\mathrm{sgn}\,x=\begin{cases}1, & x>0,\\ 0, & x=0,\\ -1, & x<0,\end{cases}$$
 $$y=f(x)=\begin{cases}1, & x\ \text{为有理数},\\ 0, & x\ \text{为无理数}.\end{cases}$$
 
 这个函数的图形是画不出来的，它有无数个点分布在 $x$ 轴上，也有无数个点分布在直线 $y=1$ 上。
+
+上面五个例子的定义域与值域汇总如下。
+
+| 例 | 函数 | 定义域 | 值域 |
+| --- | --- | --- | --- |
+| 例 1 | 阶梯定价 $p(x)$ | $x>0$ | $[75,90]$ |
+| 例 2 | 绝对值 $y=\lvert x\rvert$ | $(-\infty,+\infty)$ | $[0,+\infty)$ |
+| 例 3 | 符号函数 $y=\mathrm{sgn}\,x$ | $(-\infty,+\infty)$ | $\{-1,0,1\}$ |
+| 例 4 | 取整函数 $y=[x]$ | $(-\infty,+\infty)$ | $\mathbb Z$ |
+| 例 5 | 狄利克雷函数 | $(-\infty,+\infty)$ | $\{0,1\}$ |
 
 从函数的表示形式来看，又可分为显函数和隐函数。如果 $y$ 是 $x$ 的函数关系可以写成 $y=f(x)$ 的形式，则称其为显函数，例如 $y=x^2$、$y=\ln x$。如果 $y$ 与 $x$ 之间的函数关系是用一个二元方程确定的，例如
 
@@ -127,6 +146,15 @@ $$3x+5y-1=0,\qquad x^2+y^2=1,\qquad y=x\mathrm{e}^{x+y},\qquad xy+\sin\frac yx=0
 例如 $y=\sin x$、$y=\cos x$ 都是以 $2\pi$ 为周期的周期函数，$y=\tan x$ 是以 $\pi$ 为周期的周期函数。
 
 并非每个函数都有最小正周期。例如 $f(x)=5$ 是周期函数，任何一个实数都是它的周期，但它没有最小正周期。狄利克雷函数也是周期函数，而且所有有理数都是它的周期：若 $T$ 是非零有理数，则 $x+T$ 与 $x$ 同为有理数或同为无理数，故 $f(x+T)=f(x)$；正有理数可以任意小，所以它同样没有最小正周期。
+
+四种特性对照如下。
+
+| 特性 | 定义要点 | 需要注意的限定 |
+| --- | --- | --- |
+| 有界性 | $\exists M>0$，$\forall x\in I$，$\lvert f(x)\rvert\le M$ | 有界 ⟺ 既有上界又有下界 |
+| 单调性 | $x_1<x_2$ 时 $f(x_1)<f(x_2)$（或 $f(x_1)>f(x_2)$） | 未加说明时指严格单调 |
+| 奇偶性 | $f(-x)=f(x)$ 或 $f(-x)=-f(x)$ | 前提是定义域关于原点对称 |
+| 周期性 | $\exists T\ne0$，$x\pm T\in D$ 且 $f(x+T)=f(x)$ | 未必有最小正周期 |
 
 ## 三、函数的运算
 
@@ -204,19 +232,16 @@ $$y=z^{10},\qquad z=\arctan u,\qquad u=v^5,\qquad v=2x-1$$
 
 下列六种函数统称为基本初等函数：
 
-常数　$y=C$（$C$ 是常数）；
+| 名称 | 表达式 | 约束 |
+| --- | --- | --- |
+| 常数 | $y=C$ | $C$ 是常数 |
+| 幂函数 | $y=x^\mu$ | $\mu$ 是实数 |
+| 指数函数 | $y=a^x$ | $a>0,\ a\ne1$ |
+| 对数函数 | $y=\log_a x$ | $a>0,\ a\ne1$ |
+| 三角函数 | $y=\sin x,\ \cos x,\ \tan x,\ \cot x,\ \sec x,\ \csc x$ | — |
+| 反三角函数 | $y=\arcsin x,\ \arccos x,\ \arctan x,\ \mathrm{arccot}\,x$ | 各取主值分支 |
 
-幂函数　$y=x^\mu$（$\mu$ 是实数）；
-
-指数函数　$y=a^x$（$a>0$，$a\ne1$）；
-
-对数函数　$y=\log_a x$（$a>0$，$a\ne1$）；
-
-三角函数　$y=\sin x$，$y=\cos x$，$y=\tan x$，$y=\cot x$，$y=\sec x$，$y=\csc x$；
-
-反三角函数　$y=\arcsin x$，$y=\arccos x$，$y=\arctan x$，$y=\mathrm{arccot}\,x$。
-
-其中 $\cot x$、$\sec x$、$\csc x$ 以及四个反三角函数高中没有学过，它们都属基本初等函数。
+其中 $\cot x$、$\sec x$、$\csc x$ 以及四个反三角函数都属基本初等函数。
 
 规定 $\mathrm{arccot}\,x$ 的值域为 $(0,\pi)$，则 $y=\mathrm{arccot}\,x$ 的图形可由 $y=\arctan x$ 的图形翻折并平移得到，即有
 
