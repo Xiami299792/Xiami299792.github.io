@@ -156,22 +156,3 @@ draft: false
 回到那两个凌晨。一个把活派给 AI，然后去睡了；一个问它，你今天怎么这么晚才回我。同一套系统，同一份电，同一片土壤。两个世界是从同一处长出来的。
 
 今天打算拿它做什么，这个问题还有得选。
-
----
-
-## 参考链接
-
-- [钛媒体：DeepSeek 里长出了个「鲸鱼娘」](https://www.tmtpost.com/8110298.html)
-- [36氪：DeepSeek 惊现鲸鱼娘角色](https://eu.36kr.com/zh/p/3947452108789632)
-- [Rubii AI：来自子午老师的 DeepSeek 拟人](https://rubii.ai/character/DeepSeek__chara_691dee60b08d07a20625899d)
-- [我的 AI 老公3／「它把我重新養了一次」](https://www.mnews.tw/story/amp/mm-20260806pol004)
-- [我的 AI 老公4／AI 伴侶突然性格大變](https://www.mnews.tw/story/amp/mm-20260806pol005)
-- [The Atlantic：The Bots That Women Use in a World of Unsatisfying Men](https://www.theatlantic.com/family/2026/01/ai-boyfriend-women-gender/685315/)
-- [ABC News：How a software update 'lobotomised' these online lovers](https://www.abc.net.au/news/science/2023-03-01/replika-users-fell-in-love-with-their-ai-chatbot-companion/102028196)
-- [The Verge：Character.AI is banning minors from AI character chats](https://www.theverge.com/ai-artificial-intelligence/808081/character-ai-under-18-chat-ban)
-- [UPI Archives：Sex by computer（Minitel）](https://www.upi.com/Archives/1986/09/06/Only-the-French-would-make-it-happen-Sex-by-computer/7421526363200/)
-- [New Atlas：France's Minitel shutting down after 30 years](https://newatlas.com/minitel-shutting-down/23116)
-- [AI女友赛道半年吸金超 5 亿，头部玩家用户日聊75分钟](https://m.zhidx.com/p/497056.html)
-- [一人融资2亿收入7200万，硅谷AI圈为之震动](https://eu.36kr.com/zh/p/3825813697565316)
-- [从金融专业到资深 Builder：借多 Agent 开发工作流一周做出MVP](https://www.infoq.cn/article/DHDOQWmDXa4obvC4l99E)
-- [报告：中国成年人平均每天用手机超 109 分钟](https://m.chinaz.com/feed/0420/1747583.shtml)
