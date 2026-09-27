@@ -351,7 +351,12 @@
   transition: background 0.14s;
 }
 
-.module .post-card:last-child {
+/* 板块末尾的「查看全部」自带一根上边框：紧挨着它的那一行就不再画下边框
+   （两根 3px 只隔 8px，读起来是画重了）。反过来，后面接的是下一个子板块时
+   这根线必须留着 —— 否则那个子板块上面就空了（硬指南原来就是这样）。
+   原来写成 .post-card:last-child，把两种情况一起处理了，所以少了线。 */
+.module .post-list:has(+ .section-more) .post-card:last-child,
+.module .series-block:has(+ .section-more) {
   border-bottom: none;
 }
 
