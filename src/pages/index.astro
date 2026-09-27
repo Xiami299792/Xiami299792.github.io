@@ -81,7 +81,7 @@ const modules = [
                     return (
                       <a class="series-block" href={seriesUrl(s.key)}>
                         <span class="series-block__kicker">
-                          系列 · {s.posts.length} 篇
+                          系列 · {s.posts.length} {info?.unit ?? '篇'}
                         </span>
                         <span class="series-block__title">
                           {info?.title ?? s.key}

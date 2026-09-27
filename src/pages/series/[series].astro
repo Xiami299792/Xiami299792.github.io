@@ -42,7 +42,9 @@ function groupOf(post: (typeof posts)[number]) {
 
 <BaseLayout wide title={info.title} description={info.description} cat={catKey}>
   <h1 class="page-title">{info.title}</h1>
-  <p class="page-lead">{[info.subtitle, `共 ${posts.length} 篇`].filter(Boolean).join(' · ')}</p>
+  <p class="page-lead">
+    {[info.subtitle, `共 ${posts.length} ${info.unit ?? '篇'}`].filter(Boolean).join(' · ')}
+  </p>
 
   {
     (info.description || info.note) && (

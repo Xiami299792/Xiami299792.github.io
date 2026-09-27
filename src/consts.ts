@@ -78,7 +78,11 @@ export type TechSectionKey = keyof typeof TECH_SECTIONS;
 export const SERIES = {
   'dsh-guide': {
     title: 'DSH 使用指南（大一新生版）',
+    /** 条目小字里用的短名：全名太长，手机上会把日期挤到第二行 */
+    shortTitle: 'DSH 使用指南',
     subtitle: '从装上到用明白',
+    /** 计件单位：技术系列按「篇」，伴学的课堂笔记按「课」 */
+    unit: '篇',
     description:
       '一本写给大一新生的 DeepSeek Harness 入门手册：怎么装、怎么配、怎么把话说清楚，最后做出一个真有人在用的东西。',
     author: '夏弥',
@@ -86,6 +90,8 @@ export const SERIES = {
   },
   'skill-picks': {
     title: 'Skill 推荐',
+    shortTitle: 'Skill 推荐',
+    unit: '篇',
     // 下面三句（副标题、系列简介、说明）留空给作者自己写。
     // 空着不会渲染空框：系列页只在有内容时才显示简介块，副标题也会自动省略分隔符。
     subtitle: '',
@@ -95,14 +101,18 @@ export const SERIES = {
   },
   'math-analysis': {
     title: '工科数学分析',
+    shortTitle: '工科数学分析',
     subtitle: '课堂笔记整理',
+    unit: '课',
     description: '',
     author: '夏弥',
     note: '',
   },
   'c-programming': {
     title: 'C 语言程序设计',
+    shortTitle: 'C 语言程序设计',
     subtitle: '课堂笔记整理',
+    unit: '课',
     description: '',
     author: '夏弥',
     note: '',

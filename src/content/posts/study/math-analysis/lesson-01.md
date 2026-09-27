@@ -65,17 +65,23 @@ $y$ 是 $x$ 的函数也可记作 $y=y(x)$。当自变量 $x$ 的值取为 $x_0\
 
 **例 1**　某种商品每件出厂价 90 元，成本 60 元。厂家为鼓励销售商大量采购，决定凡是订购量超过 100 件以上的，每多订购 1 件售价就降低 1 分，但最低价为每件 75 元。设 $x$ 表示订购量，$p$ 表示实际售价，则
 
-$$p=\begin{cases}90, & x\le100,\\ 90-0.01(x-100), & 100<x<1600,\\ 75, & x\ge1600.\end{cases}$$
+$$
+p=\begin{cases}90, & x\le100,\\ 90-0.01(x-100), & 100<x<1600,\\ 75, & x\ge1600.\end{cases}
+$$
 
 **例 2**　绝对值函数
 
-$$y=|x|=\begin{cases}x, & x\ge0,\\ -x, & x<0,\end{cases}$$
+$$
+y=|x|=\begin{cases}x, & x\ge0,\\ -x, & x<0,\end{cases}
+$$
 
 其定义域为 $(-\infty,+\infty)$，值域为 $[0,+\infty)$。
 
 **例 3**　符号函数
 
-$$y=\mathrm{sgn}\,x=\begin{cases}1, & x>0,\\ 0, & x=0,\\ -1, & x<0,\end{cases}$$
+$$
+y=\mathrm{sgn}\,x=\begin{cases}1, & x>0,\\ 0, & x=0,\\ -1, & x<0,\end{cases}
+$$
 
 它的定义域为 $(-\infty,+\infty)$，值域为 $\{-1,0,1\}$。
 
@@ -83,7 +89,9 @@ $$y=\mathrm{sgn}\,x=\begin{cases}1, & x>0,\\ 0, & x=0,\\ -1, & x<0,\end{cases}$$
 
 **例 5**　狄利克雷函数
 
-$$y=f(x)=\begin{cases}1, & x\ \text{为有理数},\\ 0, & x\ \text{为无理数}.\end{cases}$$
+$$
+y=f(x)=\begin{cases}1, & x\ \text{为有理数},\\ 0, & x\ \text{为无理数}.\end{cases}
+$$
 
 这个函数的图形是画不出来的，它有无数个点分布在 $x$ 轴上，也有无数个点分布在直线 $y=1$ 上。
 
@@ -99,7 +107,9 @@ $$y=f(x)=\begin{cases}1, & x\ \text{为有理数},\\ 0, & x\ \text{为无理数}
 
 从函数的表示形式来看，又可分为显函数和隐函数。如果 $y$ 是 $x$ 的函数关系可以写成 $y=f(x)$ 的形式，则称其为显函数，例如 $y=x^2$、$y=\ln x$。如果 $y$ 与 $x$ 之间的函数关系是用一个二元方程确定的，例如
 
-$$3x+5y-1=0,\qquad x^2+y^2=1,\qquad y=x\mathrm{e}^{x+y},\qquad xy+\sin\frac yx=0$$
+$$
+3x+5y-1=0,\qquad x^2+y^2=1,\qquad y=x\mathrm{e}^{x+y},\qquad xy+\sin\frac yx=0
+$$
 
 都确定了 $y$ 是 $x$ 的函数，这样的函数称为隐函数。
 
@@ -160,8 +170,12 @@ $$3x+5y-1=0,\qquad x^2+y^2=1,\qquad y=x\mathrm{e}^{x+y},\qquad xy+\sin\frac yx=0
 
 同数一样，函数也可以做加、减、乘、除、幂运算。设函数 $f(x)$ 与 $g(x)$ 的定义域分别为 $D_1,D_2$，$D=D_1\cap D_2$ 是非空数集，则可以在 $D$ 上定义这两个函数的下列运算：
 
-$$(f+g)(x)=f(x)+g(x),\qquad (f-g)(x)=f(x)-g(x),$$
-$$(f\cdot g)(x)=f(x)\cdot g(x),\qquad \left(\frac fg\right)(x)=\frac{f(x)}{g(x)}\ (g(x)\ne0),\qquad f^m(x)=[f(x)]^m\ (m\ne-1).$$
+$$
+(f+g)(x)=f(x)+g(x),\qquad (f-g)(x)=f(x)-g(x),
+$$
+$$
+(f\cdot g)(x)=f(x)\cdot g(x),\qquad \left(\frac fg\right)(x)=\frac{f(x)}{g(x)}\ (g(x)\ne0),\qquad f^m(x)=[f(x)]^m\ (m\ne-1).
+$$
 
 ## 四、反函数与复合函数
 
@@ -175,7 +189,9 @@ $$(f\cdot g)(x)=f(x)\cdot g(x),\qquad \left(\frac fg\right)(x)=\frac{f(x)}{g(x)}
 
 反函数是相互的：若 $y=f^{-1}(x)$ 是 $y=f(x)$ 的反函数，则 $y=f(x)$ 也是 $y=f^{-1}(x)$ 的反函数，即它们互为反函数。根据定义有
 
-$$f^{-1}(f(x))=x,\qquad f(f^{-1}(x))=x.$$
+$$
+f^{-1}(f(x))=x,\qquad f(f^{-1}(x))=x.
+$$
 
 在同一坐标系中，$y=f(x)$ 与 $x=f^{-1}(y)$ 的图形显然是同一条曲线。若点 $(x,y)$ 在曲线 $y=f(x)$ 上，则点 $(y,x)$ 一定在曲线 $y=f^{-1}(x)$ 上，因此曲线 $y=f(x)$ 与 $y=f^{-1}(x)$ 关于直线 $y=x$ 对称。例如 $y=2x$ 的反函数是 $y=\dfrac x2$，它们的图形对称于直线 $y=x$。
 
@@ -193,13 +209,17 @@ $$f^{-1}(f(x))=x,\qquad f(f^{-1}(x))=x.$$
 
 两个函数有时会复合在一起产生一个新的函数。例如质量为 $m$ 的物体以初速度 $v_0$ 向上抛出，动能与速度的关系为 $T=\dfrac12mv^2$，速度与时间的关系为 $v=v_0-gt$，由此得 $T$ 与 $t$ 的函数关系
 
-$$T=\frac12m(v_0-gt)^2,$$
+$$
+T=\frac12m(v_0-gt)^2,
+$$
 
 此函数称为 $T=\dfrac12mv^2$ 与 $v=v_0-gt$ 的复合函数。
 
 **定义 3**　设函数 $y=f(u)$ 的定义域为 $D_1$，$u=g(x)$ 的定义域为 $D$，值域为 $g(D)$。如果 $g(D)\subset D_1$，则由 $y=f(g(x))$ 确定的函数称为 $y=f(u)$ 与 $u=g(x)$ 的复合函数，常用 $f\circ g$ 表示，即
 
-$$(f\circ g)(x)=f(g(x)),$$
+$$
+(f\circ g)(x)=f(g(x)),
+$$
 
 $(f\circ g)(x)$ 的定义域是 $D$，变量 $u$ 称为中间变量。同样可以定义由三个甚至更多个函数构成的复合函数。
 
@@ -209,8 +229,12 @@ $(f\circ g)(x)$ 的定义域是 $D$，变量 $u$ 称为中间变量。同样可�
 
 解
 
-$$(f\circ g)(x)=f(g(x))=f(\sqrt x)=\frac{\sqrt x-3}{2},$$
-$$(g\circ f)(x)=g(f(x))=g\left(\frac{x-3}{2}\right)=\sqrt{\frac{x-3}{2}}.$$
+$$
+(f\circ g)(x)=f(g(x))=f(\sqrt x)=\frac{\sqrt x-3}{2},
+$$
+$$
+(g\circ f)(x)=g(f(x))=g\left(\frac{x-3}{2}\right)=\sqrt{\frac{x-3}{2}}.
+$$
 
 由此可见，通常 $f\circ g\ne g\circ f$。
 
@@ -218,13 +242,17 @@ $$(g\circ f)(x)=g(f(x))=g\left(\frac{x-3}{2}\right)=\sqrt{\frac{x-3}{2}}.$$
 
 解　由 $f(x)<0$，即 $1+x<0$，得 $x<-1$，此时 $f(x)=1+x$。有两种情形可得到 $f(x)\ge0$：一种是当 $x<0$ 但 $x\ge-1$ 时，$f(x)=1+x\ge0$；另一种是当 $x\ge0$ 时，$f(x)=1+x^2>0$。因此
 
-$$(f\circ f)(x)=\begin{cases}1+(1+x), & x<-1,\\ 1+(1+x)^2, & -1\le x<0,\\ 1+(1+x^2)^2, & x\ge0\end{cases}=\begin{cases}2+x, & x<-1,\\ 2+2x+x^2, & -1\le x<0,\\ 2+2x^2+x^4, & x\ge0.\end{cases}$$
+$$
+(f\circ f)(x)=\begin{cases}1+(1+x), & x<-1,\\ 1+(1+x)^2, & -1\le x<0,\\ 1+(1+x^2)^2, & x\ge0\end{cases}=\begin{cases}2+x, & x<-1,\\ 2+2x+x^2, & -1\le x<0,\\ 2+2x^2+x^4, & x\ge0.\end{cases}
+$$
 
 **例 8**　分析函数 $y=[\arctan(2x-1)^5]^{10}$ 是由哪些简单函数复合而成的。
 
 解　所给函数可以看作由
 
-$$y=z^{10},\qquad z=\arctan u,\qquad u=v^5,\qquad v=2x-1$$
+$$
+y=z^{10},\qquad z=\arctan u,\qquad u=v^5,\qquad v=2x-1
+$$
 
 复合而成。
 
@@ -245,11 +273,15 @@ $$y=z^{10},\qquad z=\arctan u,\qquad u=v^5,\qquad v=2x-1$$
 
 规定 $\mathrm{arccot}\,x$ 的值域为 $(0,\pi)$，则 $y=\mathrm{arccot}\,x$ 的图形可由 $y=\arctan x$ 的图形翻折并平移得到，即有
 
-$$\mathrm{arccot}\,x=\frac{\pi}{2}-\arctan x=\arctan(-x)+\frac{\pi}{2}.$$
+$$
+\mathrm{arccot}\,x=\frac{\pi}{2}-\arctan x=\arctan(-x)+\frac{\pi}{2}.
+$$
 
 **证**　记 $y=\arctan(-x)+\dfrac{\pi}{2}$。因 $\arctan(-x)\in\left(-\dfrac{\pi}{2},\dfrac{\pi}{2}\right)$，故 $y\in(0,\pi)$。又
 
-$$\cot y=\cot\left(\arctan(-x)+\frac{\pi}{2}\right)=-\tan\bigl(\arctan(-x)\bigr)=-(-x)=x.$$
+$$
+\cot y=\cot\left(\arctan(-x)+\frac{\pi}{2}\right)=-\tan\bigl(\arctan(-x)\bigr)=-(-x)=x.
+$$
 
 而 $\mathrm{arccot}\,x$ 是 $(0,\pi)$ 内唯一使 $\cot y=x$ 成立的数，故 $y=\mathrm{arccot}\,x$，即 $\mathrm{arccot}\,x=\arctan(-x)+\dfrac{\pi}{2}$。
 
@@ -257,6 +289,8 @@ $$\cot y=\cot\left(\arctan(-x)+\frac{\pi}{2}\right)=-\tan\bigl(\arctan(-x)\bigr)
 
 由基本初等函数经过有限次四则运算和有限次复合所产生并且可用一个式子表示的函数称为初等函数。例如
 
-$$y=\frac{1+\mathrm{e}^x\sin x}{\sqrt{1-x^2}},\qquad y=\ln(x+\sqrt{1+x^2}),\qquad y=\arctan\frac{3x+2}{2}+5,\qquad y=|x|=\sqrt{x^2},\qquad y=x^x=\mathrm{e}^{x\ln x}$$
+$$
+y=\frac{1+\mathrm{e}^x\sin x}{\sqrt{1-x^2}},\qquad y=\ln(x+\sqrt{1+x^2}),\qquad y=\arctan\frac{3x+2}{2}+5,\qquad y=|x|=\sqrt{x^2},\qquad y=x^x=\mathrm{e}^{x\ln x}
+$$
 
 都是初等函数，其中绝对值函数实际上就是 $\sqrt{x^2}$。分段函数常常不是初等函数。

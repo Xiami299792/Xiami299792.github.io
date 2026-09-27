@@ -19,7 +19,18 @@ const cat = CATEGORIES[post.data.category];
 const rt = readingTime(post.body);
 
 const seriesKey = post.data.series as keyof typeof SERIES | undefined;
-const seriesTitle = seriesKey ? SERIES[seriesKey]?.title : undefined;
+const series = seriesKey ? SERIES[seriesKey] : undefined;
+
+/* 只写「系列 · 第 N 篇」时，两条不同系列的「第一课」在分类页和归档里长得一模一样，
+   而系列名只挂在 title 上——手机没有悬停，所以这里把系列名写出来。
+   标题里已经有序号的（「第 6 章 …」「第一课」）就不再重复一遍：
+   DSH 那个系列的 order 把「前言」也算进去，标出来会和标题里的章号对不上（第 6 章 / 第 7 篇）。 */
+const titleHasNumber = /第\s*[0-9一二三四五六七八九十]+\s*[章节篇课]/.test(post.data.title);
+const seriesLabel = series
+  ? titleHasNumber
+    ? series.shortTitle
+    : `${series.shortTitle} · 第 ${post.data.order ?? '?'} ${series.unit}`
+  : undefined;
 ---
 
 <a class="post-card" href={withBase(postPath(post))}>
@@ -29,11 +40,7 @@ const seriesTitle = seriesKey ? SERIES[seriesKey]?.title : undefined;
     showMeta && (
       <div class="post-meta">
         {showCategory && <span class={`cat cat--${cat.key}`}>{cat.label}</span>}
-        {seriesTitle && (
-          <span class="series-tag" title={`系列：${seriesTitle}`}>
-            系列 · 第 {post.data.order ?? '?'} 篇
-          </span>
-        )}
+        {seriesLabel && <span class="series-tag">{seriesLabel}</span>}
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
         {rt && (
           <>
