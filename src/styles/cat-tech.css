@@ -326,6 +326,15 @@
   padding: 14px 0;
 }
 
+/* 目录本体排两列。之前漏了这条，11 条目录在桌面端也是一长条竖下来 */
+[data-cat='tech'] .toc ul {
+  columns: 2;
+}
+
+[data-cat='tech'] .toc li {
+  break-inside: avoid;
+}
+
 [data-cat='tech'] .toc-title {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -500,4 +509,119 @@
 
 [data-cat='tech'] .subhead em {
   letter-spacing: 0.08em;
+}
+
+/* ---------- 手机端 ----------
+   以前这一套皮肤一条媒体查询都没有，手机上是硬吃桌面尺寸：
+   标题过大、正文行宽被 24px 内边距压窄、目录默认展开占掉第一屏、
+   表格和代码块横向溢出。下面按 620px 一档收拾干净。 */
+
+@media (max-width: 620px) {
+  /* 长英文词和「」标题在窄屏上会顶破容器，允许在需要时断行 */
+  [data-cat='tech'] .post-header h1,
+  [data-cat='tech'] .post-card h3,
+  [data-cat='tech'] .page-title {
+    overflow-wrap: anywhere;
+  }
+
+  [data-cat='tech'] .prose {
+    /* 17px 在窄栏里偏挤，同时中文行高收到 1.86 更松快 */
+    font-size: 16.5px;
+    line-height: 1.86;
+    overflow-wrap: anywhere;
+  }
+
+  [data-cat='tech'] .post-header {
+    margin-bottom: 26px;
+    padding-bottom: 18px;
+  }
+
+  [data-cat='tech'] .post-header h1 {
+    font-size: clamp(25px, 8.2vw, 32px);
+    line-height: 1.3;
+  }
+
+  [data-cat='tech'] .post-deck {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  [data-cat='tech'] .prose h2 {
+    font-size: 21px;
+    margin-top: 2em;
+  }
+
+  [data-cat='tech'] .prose h3 {
+    font-size: 17.5px;
+  }
+
+  /* 顶栏是 sticky，锚点跳转要把标题让出来 */
+  [data-cat='tech'] .prose h2,
+  [data-cat='tech'] .prose h3,
+  [data-cat='tech'] .prose h4 {
+    scroll-margin-top: 16px;
+  }
+
+  /* 目录：自动展开会让 11 条目录占掉整个第一屏，这里收成一行标题，点开才展开；
+     展开后每条补足到手指能点中的高度 */
+  [data-cat='tech'] .toc {
+    margin-bottom: 26px;
+    padding: 11px 0;
+  }
+
+  [data-cat='tech'] .toc-title {
+    padding: 5px 0;
+  }
+
+  [data-cat='tech'] .toc[open] > .toc-title {
+    margin-bottom: 4px;
+  }
+
+  [data-cat='tech'] .toc ul {
+    display: block;
+    columns: 1;
+  }
+
+  [data-cat='tech'] .toc li {
+    padding-left: 0;
+  }
+
+  [data-cat='tech'] .toc a {
+    display: block;
+    padding: 8px 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* 表格与代码块改为自身横滚，不让整页跟着左右晃 */
+  [data-cat='tech'] .prose table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  [data-cat='tech'] .prose pre {
+    font-size: 12.5px;
+    padding: 13px 14px;
+  }
+
+  /* 顶栏：.container 在 620px 已收到 18px，品牌字略降一档 */
+  [data-cat='tech'] .brand {
+    font-size: 15.5px;
+  }
+
+  [data-cat='tech'] .nav-link {
+    font-size: 12px;
+    padding: 3px 0;
+  }
+
+  /* 上/下篇标题在窄屏折行会挤，行距放宽一点 */
+  [data-cat='tech'] .post-nav .title {
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+
+  [data-cat='tech'] .post-card h3 {
+    font-size: 19px;
+  }
 }

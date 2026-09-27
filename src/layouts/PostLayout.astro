@@ -126,6 +126,34 @@ const fontFile =
       )
     }
 
+    {/* 手机上把默认展开的目录收起来：屏幕高度有限，11 条目录会把正文挤到第二屏之后。
+        桌面端保持原来的默认展开。 */}
+    <script is:inline>
+      (function () {
+        var toc = document.querySelector('details.toc');
+        if (!toc) return;
+        var mq = window.matchMedia('(max-width: 620px)');
+        var autoOpened = toc.hasAttribute('open');
+        var touched = false;
+
+        function apply() {
+          // 用户自己点过之后就不再干预，避免旋屏时把他的选择覆盖掉
+          if (touched || !autoOpened) return;
+          if (mq.matches) toc.removeAttribute('open');
+          else toc.setAttribute('open', '');
+        }
+
+        toc.addEventListener('toggle', function () {
+          if (!mq.matches) return;
+          touched = true;
+        });
+
+        apply();
+        if (mq.addEventListener) mq.addEventListener('change', apply);
+        else if (mq.addListener) mq.addListener(apply);
+      })();
+    </script>
+
     <div class="prose">
       <slot />
     </div>
