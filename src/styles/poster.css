@@ -1336,3 +1336,79 @@ html { scroll-behavior: smooth; }
 @media (max-width: 620px) {
   .module .post-card:not(:has(.post-meta)) h3 { font-size: 20px; }
 }
+
+/* ==========================================================================
+   手机端紧凑化（2026-09-27 二次）
+   实测（390px）发现四处浪费：顶栏 107px（站名与导航分两行）、报头 165px
+   （内边距 38px、标题 33.5px）、报头到板块之间空 72px、板块头 73px + 子板块头
+   60px。结果是头条块落到 538px 处，第一屏几乎看不到内容。
+   目标：顶栏一行 ~52px、报头 ~120px、报头到板块 20px 以内、板块头与子板块头
+   各 ~42px，让头条块进入第一屏。
+   同时保住上一轮的硬指标：点击区 ≥40px、小字 ≥11px、横向溢出 0。
+   ========================================================================== */
+@media (max-width: 620px) {
+  /* 顶栏压回一行：站名在左、导航在右 */
+  :root:not([data-cat]) .header-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    height: auto;
+    padding: 5px 0;
+  }
+  :root:not([data-cat]) .brand { font-size: 15.5px; }
+  :root:not([data-cat]) .site-nav { gap: 2px; }
+  :root:not([data-cat]) .nav-link {
+    min-height: 40px;
+    padding: 0 6px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  /* 报头收矮：内边距 38→16，标题 33.5→26，导语上距 14→8 */
+  .masthead {
+    padding-top: 16px;
+    padding-bottom: 10px;
+  }
+  .masthead h1 { font-size: 26px; line-height: 1.12; }
+  .masthead .lede { margin-top: 8px; font-size: 15.5px; line-height: 1.55; }
+
+  /* 报头到第一个板块：.modules 的 34px + .module 的 16px 原来是 50px 的空档，
+     手机上去掉 .modules 那一层，只留 12px */
+  .modules { margin-top: 4px; gap: 0; }
+  .module { margin-top: 12px; }
+
+  /* 板块头：73 → 42 左右 */
+  .module__head {
+    padding-top: 10px;
+    padding-bottom: 8px;
+    border-bottom-width: 4px;
+  }
+  .module__num { font-size: 20px; }
+  .module__title { font-size: 19px; }
+
+  /* 子板块头：60 → 40 左右 */
+  .module .subhead {
+    padding: 12px 0 7px;
+    border-bottom-width: 2px;
+  }
+
+  /* 头条块：内边距 26/28 → 18/20，上距 14 → 10 */
+  .spotlight {
+    margin-top: 10px;
+    padding: 18px 16px 20px;
+    border-width: 4px;
+  }
+  .spotlight::before { inset: 7px; border-width: 3px; }
+  .spotlight__title { font-size: 21px; line-height: 1.2; }
+  .spotlight__kicker { margin-bottom: 8px; }
+  .spotlight__sub { font-size: 14px; }
+
+  /* 系列块与条目：内边距统一收一档 */
+  .module .series-block { margin-top: 10px; padding: 14px; }
+  .module .post-card { padding: 13px 18px 13px 34px; }
+  .module .section-more { margin-top: 8px; }
+
+  /* 板块之间：38 → 26，避免长页每段都空一大块 */
+  .module + .module { margin-top: 26px; }
+}
