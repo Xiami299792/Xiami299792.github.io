@@ -1191,3 +1191,148 @@
     font-size: 18px;
   }
 }
+
+/* ==========================================================================
+   首页优化层（2026-09-27）
+   --------------------------------------------------------------------------
+   在不动原有大风格的前提下做四件事：
+     1) 节奏：把散落的内边距收进一套刻度，数字统一等宽对齐
+     2) 反馈：可点元素都有悬停/按下/键盘焦点反馈
+     3) 入场：内容按视口分批浮现；默认可见，只有 JS 可用时才启用隐藏态，
+        并带 2.5 秒兜底 —— 无脚本、打印、截图都不会丢内容
+     4) 手机：按实测数据修（导航点击区 25→40px、头条按钮 31→44px、
+        元信息 10→11px、子板块名 15→16px）
+   中文改用按页裁剪的汇文明朝体子集（由 index.astro 传入 font 触发生成
+   @font-face 与 preload）；该字体只在首页加载，其它页面自然回退。
+   ========================================================================== */
+
+:root {
+  --s1: 6px; --s2: 10px; --s3: 14px; --s4: 20px; --s5: 28px; --s6: 38px; --s7: 52px;
+  --ease: cubic-bezier(0.22, 0.8, 0.28, 1);
+  /* 中文声部：拉丁仍走各自的字体，汉字交给汇文明朝体子集 */
+  --p-slab: 'Alfa Slab One', 'Huiwen Mincho', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  --p-body: 'Archivo Narrow', 'Huiwen Mincho', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --p-mono: 'DM Mono', ui-monospace, Consolas, monospace;
+}
+
+/* ---------- 1. 节奏 ---------- */
+.masthead { padding-top: var(--s7); padding-bottom: var(--s4); }
+.module { margin-top: var(--s6); }
+.module .subhead { padding: var(--s4) 0 var(--s2); }
+.module .post-card { padding: var(--s3) 26px var(--s3) 42px; }
+.module .series-block { margin-top: var(--s3); }
+.module .section-more { margin-top: var(--s1); }
+.spotlight { margin-top: var(--s3); }
+
+/* 数字等宽：日期、篇数、时长在竖排时不再左右跳动 */
+.module .post-meta,
+.module .module__count,
+.module .series-block__kicker,
+.module .section-more,
+.spotlight__kicker { font-variant-numeric: tabular-nums; }
+
+/* 中文标题的字距：粗体标题收紧一档，读起来更整 */
+.module .post-card h3 { letter-spacing: 0.01em; }
+.masthead h1:lang(zh) { letter-spacing: 0.01em; }
+
+/* ---------- 2. 反馈（悬停 / 按下 / 键盘焦点） ---------- */
+.module .post-card,
+.module .series-block,
+.module .section-more,
+.module .post-card h3 {
+  transition: background 0.16s var(--ease), color 0.16s var(--ease),
+    border-color 0.16s var(--ease), transform 0.22s var(--ease);
+}
+
+/* 菱形项目符悬停时轻微放大 —— 保持原有的 45° 旋转 */
+.module .post-card::before { transition: transform 0.22s var(--ease); }
+.module .post-card:hover::before { transform: rotate(45deg) scale(1.22); }
+
+/* 系列块：橙底块抬起、空心块填充为墨色 */
+.module .series-block:hover { transform: translateY(-2px); }
+.module .series-block:active { transform: translateY(0); }
+
+/* 键盘访问 */
+.poster a:focus-visible { outline: 3px solid var(--p-blue); outline-offset: 3px; }
+
+/* ---------- 3. 入场（默认可见，JS 可用才隐藏） ---------- */
+.reveal { transition: opacity 0.42s var(--ease), transform 0.42s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+html.js .reveal { opacity: 0; transform: translateY(10px); }
+html.js .reveal.in { opacity: 1; transform: none; }
+/* 首屏内容不等动画：报头与第一个模块直接显示 */
+html.js .masthead.reveal,
+html.js .poster > .modules > .module:first-child.reveal { opacity: 1; transform: none; }
+
+html { scroll-behavior: smooth; }
+.module { scroll-margin-top: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal, html.js .reveal { opacity: 1 !important; transform: none !important; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* ---------- 4. 手机端（按实测数据） ---------- */
+@media (max-width: 620px) {
+  :root:not([data-cat]) .nav-link {
+    display: inline-flex; align-items: center;
+    min-height: 40px; padding: 0 8px; font-size: 11.5px;
+  }
+
+  .spotlight__link, .spotlight a[class*='link'] {
+    min-height: 44px; display: inline-flex; align-items: center; padding: 13px 16px;
+  }
+
+  .module .section-more {
+    min-height: 46px; display: flex; align-items: center; justify-content: center;
+    padding: 13px 18px;
+  }
+
+  /* 小字提一档 */
+  .module .post-meta { font-size: 11px; letter-spacing: 0.05em; }
+  .module__count { font-size: 11.5px; }
+  .module .subhead h3 { font-size: 16px; }
+  .module .subhead em { font-size: 11px; }
+
+  /* 窄栏排版：15.5/1.72 比 16/1.55 好读 */
+  .module .post-card p { font-size: 15.5px; line-height: 1.72; }
+  .module .post-card h3 { font-size: 18px; line-height: 1.44; }
+
+  /* 报头与板块间距收紧，第一屏多露内容 */
+  .masthead { padding-top: var(--s6); padding-bottom: var(--s3); }
+  .masthead .lede { margin-top: var(--s3); }
+  .module { margin-top: var(--s6); }
+
+  /* 条目左内边距按屏收窄，菱形符跟着左移 */
+  .module .post-card { padding: var(--s3) 18px var(--s3) 34px; }
+  .module .post-card::before { left: 18px; top: 22px; }
+}
+
+/* 触屏没有 hover，用按下反馈替代 */
+@media (hover: none) {
+  .module .post-card:active { background: var(--p-cream); }
+  .module .post-card:active h3 { color: var(--p-blue-text); }
+  .module .series-block:active { transform: scale(0.99); }
+  .module .section-more:active { background: var(--p-blue); color: var(--p-cream); }
+}
+
+/* spotlight 用 <a> 承载，必须显式 block —— 否则 a 是行内元素，
+   背景与 6px 边框只会铺成左边一条细条 */
+.spotlight { display: block; }
+.spotlight__title { display: block; }
+.spotlight__kicker, .spotlight__sub { display: block; }
+
+/* spotlight 的移动端字号（原样式只有桌面档） */
+@media (max-width: 680px) {
+  .spotlight__title { font-size: 22px; line-height: 1.16; }
+  .spotlight__kicker { margin-bottom: 10px; }
+  .spotlight__sub { margin-bottom: 0; font-size: 14px; line-height: 1.66; color: rgba(244,233,214,.78); font-family: var(--p-body); letter-spacing: .01em; }
+}
+
+/* 随笔（不显示元信息时）行高放宽：整行只剩标题，行距要撑住 */
+.module .post-card:not(:has(.post-meta)) { padding-top: var(--s4); padding-bottom: var(--s4); }
+.module .post-card:not(:has(.post-meta)) h3 { margin-bottom: 0; font-size: 21px; }
+@media (max-width: 620px) {
+  .module .post-card:not(:has(.post-meta)) h3 { font-size: 20px; }
+}

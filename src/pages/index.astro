@@ -2,10 +2,17 @@
 // 首页专用：People's Platform (Block & Bold) 海报风
 // 字体与 poster.css 已在 BaseLayout 里引入，这里不再重复
 // 系列不单独占一栏：它长在所属栏目里（硬指南 / 伴学…），点进系列块才是章节列表
+//
+// 首页的三条呈现规则：
+//   1. 成系列的一律收成一个系列入口，不把每一课铺出来
+//   2. 软科普的最新一篇做成 spotlight（蓝底 inset 框），其余走普通条目
+//   3. 随笔的标题本身就是日期，列表只显示标题，不再重复挂一行日期
+// 中文走按页裁剪的汇文明朝体子集（public/fonts/huiwen-home.woff2），
+// 由 BaseLayout 的 font prop 触发 @font-face 与 preload；其它页面不加载。
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import { CATEGORIES, SERIES, SITE, TECH_SECTIONS } from '../consts';
-import { getPostsByCategory, groupByTechSection, splitSeries } from '../utils/posts';
+import { getPostsByCategory, groupByTechSection, postPath, readingTime, splitSeries } from '../utils/posts';
 import { withBase } from '../utils/url';
 
 const HOME_LIMIT = 5;
@@ -34,7 +41,11 @@ const modules = [
   .filter((m) => m.total > 0);
 ---
 
-<BaseLayout wide description={SITE.description}>
+<BaseLayout
+  wide
+  description={SITE.description}
+  font={withBase('/fonts/huiwen-home.woff2')}
+>
   <div class="poster">
     <header class="masthead">
       <p class="kicker">Science &amp; Culture · Since 2026</p>
@@ -52,42 +63,59 @@ const modules = [
               <span class="module__count">{total} 篇</span>
             </div>
 
-            {groups.map((group) => (
-              <>
-                {group.key && (
-                  <div class="subhead">
-                    <h3>{TECH_SECTIONS[group.key].label}</h3>
-                    <em>{group.posts.length} 篇</em>
-                  </div>
-                )}
+            {groups.map((group) => {
+              // 软科普组的第一篇做头条
+              const feature = group.key === 'soft' ? group.loose[0] : undefined;
+              const rest = feature ? group.loose.slice(1) : group.loose;
+              return (
+                <>
+                  {group.key && (
+                    <div class="subhead">
+                      <h3>{TECH_SECTIONS[group.key].label}</h3>
+                      <em>{group.posts.length} 篇</em>
+                    </div>
+                  )}
 
-                {group.series.map((s) => {
-                  const info = seriesInfo(s.key);
-                  return (
-                    <a class="series-block" href={seriesUrl(s.key)}>
-                      <span class="series-block__kicker">
-                        系列 · {s.posts.length} 篇
-                      </span>
-                      <span class="series-block__title">
-                        {info?.title ?? s.key}
-                      </span>
-                      {info?.subtitle && (
-                        <span class="series-block__sub">{info.subtitle}</span>
+                  {group.series.map((s) => {
+                    const info = seriesInfo(s.key);
+                    return (
+                      <a class="series-block" href={seriesUrl(s.key)}>
+                        <span class="series-block__kicker">
+                          系列 · {s.posts.length} 篇
+                        </span>
+                        <span class="series-block__title">
+                          {info?.title ?? s.key}
+                        </span>
+                        {info?.subtitle && (
+                          <span class="series-block__sub">{info.subtitle}</span>
+                        )}
+                        <span class="series-block__more">进入系列看章节 →</span>
+                      </a>
+                    );
+                  })}
+
+                  {feature && (
+                    <a class="spotlight" href={withBase(postPath(feature))}>
+                      <p class="spotlight__kicker">
+                        最新 · {readingTime(feature.body)}
+                      </p>
+                      <span class="spotlight__title">{feature.data.title}</span>
+                      {feature.data.summary && (
+                        <p class="spotlight__sub">{feature.data.summary}</p>
                       )}
-                      <span class="series-block__more">进入系列看章节 →</span>
                     </a>
-                  );
-                })}
+                  )}
 
-                {group.loose.length > 0 && (
-                  <div class="post-list">
-                    {group.loose.slice(0, HOME_LIMIT).map((post) => (
-                      <PostCard post={post} />
-                    ))}
-                  </div>
-                )}
-              </>
-            ))}
+                  {rest.length > 0 && (
+                    <div class="post-list">
+                      {rest.slice(0, HOME_LIMIT).map((post) => (
+                        <PostCard post={post} showMeta={cat.key !== 'essay'} />
+                      ))}
+                    </div>
+                  )}
+                </>
+              );
+            })}
 
             {/* 每个模块都留一个栏目入口：系列块只通向系列，栏目页仍要够得着 */}
             <a class="section-more" href={withBase(`/category/${cat.key}/`)}>
@@ -98,4 +126,52 @@ const modules = [
       }
     </div>
   </div>
+
+  {/* 内容按视口分批浮现。默认可见：只有 JS 真跑起来（<html> 带 .js）才启用隐藏态，
+      并带 2.5 秒兜底 —— 无脚本、打印、截图都不会留下不可见的内容。 */}
+  <script is:inline>
+    (function () {
+      var root = document.documentElement;
+      root.classList.add('js');
+      var items = document.querySelectorAll(
+        '.masthead, .module, .spotlight, .series-block, .post-card',
+      );
+      // 兜底：无论观察器是否触发，2.5 秒后全部显示
+      setTimeout(function () {
+        items.forEach(function (el) {
+          el.classList.add('in');
+        });
+      }, 2500);
+
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (el) {
+          el.classList.add('reveal', 'in');
+        });
+        return;
+      }
+
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+      );
+
+      items.forEach(function (el, i) {
+        // 首屏内的元素不等动画，避免"进场时才闪一下"
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.9) {
+          el.classList.add('reveal', 'in');
+          return;
+        }
+        el.style.setProperty('--d', String(i % 5));
+        el.classList.add('reveal');
+        io.observe(el);
+      });
+    })();
+  </script>
 </BaseLayout>
