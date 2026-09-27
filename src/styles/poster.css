@@ -144,10 +144,13 @@
   text-wrap: pretty;
 }
 
-/* ---------- 高亮块：蓝底 + cream inset 框（authoritative 时刻）---------- */
+/* ---------- 高亮块：蓝底 + 墨框 + 橙色角块（authoritative 时刻）----------
+   照 sz-phone 定稿的做法：不再套那圈 cream inset 框，改用右下角一块 45° 橙色方块
+   压在框里（overflow:hidden 裁掉一半，读起来是一个尖角），并由「读这一篇 →」做动作。 */
 
 .spotlight {
   position: relative;
+  overflow: hidden;
   margin-top: 34px;
   padding: 34px 38px 38px;
   background: var(--p-blue);
@@ -155,12 +158,16 @@
   color: var(--p-cream);
 }
 
-/* inset 框：蓝底上再套一圈 6px cream 边框 */
-.spotlight::before {
+.spotlight::after {
   content: '';
   position: absolute;
-  inset: 12px;
-  border: 6px solid var(--p-cream);
+  right: -34px;
+  bottom: -34px;
+  width: 106px;
+  height: 106px;
+  background: var(--p-orange);
+  transform: rotate(45deg);
+  opacity: 0.92;
   pointer-events: none;
 }
 
@@ -180,6 +187,7 @@
 
 .spotlight__title {
   display: block;
+  max-width: 16em;
   font-family: var(--p-slab);
   font-size: 30px;
   line-height: 1.05;
@@ -194,10 +202,23 @@
 
 .spotlight__sub {
   margin: 0 0 20px;
+  max-width: 20em;
   font-family: var(--p-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   color: rgba(244, 233, 214, 0.7);
+}
+
+/* 「读这一篇 →」：橙底墨字，块内唯一的实心按钮 */
+.spotlight__cta {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 7px 12px;
+  background: var(--p-orange);
+  color: var(--p-ink);
+  font-family: var(--p-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
 }
 
 .spotlight__list {
@@ -545,11 +566,6 @@
 
   .spotlight {
     padding: 26px 22px 28px;
-  }
-
-  .spotlight::before {
-    inset: 8px;
-    border-width: 4px;
   }
 
   .spotlight__list {
@@ -958,9 +974,12 @@
    ========================================================================== */
 
 @media (max-width: 620px) {
+  /* 只改纵向内边距。写成 padding: 11px 0 会把 .container 的左右 18px 一起清掉，
+     站名和导航就贴到屏幕角上去了——这里必须写 padding-top/bottom。 */
   :root:not([data-cat]) .header-inner {
     height: auto;
-    padding: 11px 0 12px;
+    padding-top: 11px;
+    padding-bottom: 12px;
     gap: 9px;
   }
 
@@ -1213,6 +1232,9 @@
   --p-slab: 'Alfa Slab One', 'Huiwen Mincho', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
   --p-body: 'Archivo Narrow', 'Huiwen Mincho', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --p-mono: 'DM Mono', ui-monospace, Consolas, monospace;
+  /* 小屏报头专用：明朝的横画在 30px 上下只有一两像素，投影一压就糊，
+     改用系统粗体（参考稿 sz-phone 就是这一档）。 */
+  --p-sans-cjk: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Source Han Sans SC', sans-serif;
 }
 
 /* ---------- 1. 节奏 ---------- */
@@ -1347,16 +1369,25 @@ html { scroll-behavior: smooth; }
    同时保住上一轮的硬指标：点击区 ≥40px、小字 ≥11px、横向溢出 0。
    ========================================================================== */
 @media (max-width: 620px) {
-  /* 顶栏压回一行：站名在左、导航在右 */
+  /* 顶栏压回一行：站名在左、导航在右。
+     只写纵向内边距 —— 写 padding: 5px 0 会连 .container 的左右 18px 一起清掉，
+     站名就贴到屏幕左上角、导航贴到右边缘（手机上最扎眼的一处）。 */
   :root:not([data-cat]) .header-inner {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
     height: auto;
-    padding: 5px 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
-  :root:not([data-cat]) .brand { font-size: 15.5px; }
+  :root:not([data-cat]) .brand {
+    /* 顶栏 50px 高，站名自己只有 26px —— 撑到 40px，点击区和导航项齐平 */
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    font-size: 15.5px;
+  }
   :root:not([data-cat]) .site-nav { gap: 2px; }
   :root:not([data-cat]) .nav-link {
     min-height: 40px;
@@ -1365,12 +1396,30 @@ html { scroll-behavior: smooth; }
     letter-spacing: 0.04em;
   }
 
-  /* 报头收矮：内边距 38→16，标题 33.5→26，导语上距 14→8 */
+  /* 报头（改自 sz-phone 定稿那一版）：
+     内边距 38→16；标题不再走明朝体 —— 明朝的横画在 26px 上只有一两个像素，
+     再压一层 5/10 的 red 投影就糊成一片红。小屏改用系统粗体（与参考稿一致），
+     投影收到 3/5，字号 26→30（30×9=270 < 324，仍是一行）。
+     桌面保持 84px 明朝 + 5/10 投影不动 —— 那一档是好看的。 */
   .masthead {
     padding-top: 16px;
     padding-bottom: 10px;
   }
-  .masthead h1 { font-size: 26px; line-height: 1.12; }
+  .masthead .kicker {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--p-muted);
+    margin-bottom: 14px;
+  }
+  .masthead h1 {
+    font-size: 30px;
+    line-height: 1.06;
+    text-shadow: 3px 3px 0 var(--p-red), 5px 5px 0 var(--p-red-deep);
+  }
+  .masthead h1:lang(zh) {
+    font-family: 'Alfa Slab One', var(--p-sans-cjk);
+    font-weight: 700;
+  }
   .masthead .lede { margin-top: 8px; font-size: 15.5px; line-height: 1.55; }
 
   /* 报头到第一个板块：.modules 的 34px + .module 的 16px 原来是 50px 的空档，
@@ -1393,19 +1442,29 @@ html { scroll-behavior: smooth; }
     border-bottom-width: 2px;
   }
 
-  /* 头条块：内边距 26/28 → 18/20，上距 14 → 10 */
+  /* 头条块：蓝底 + 墨框 + 橙色「读这一篇」+ 右下角橙色方块（照 sz-phone 定稿）。
+     ::before 那圈 cream inset 框在小屏上被压到 7px，和蓝底挤成两层噪音，去掉。 */
   .spotlight {
     margin-top: 10px;
     padding: 18px 16px 20px;
     border-width: 4px;
   }
-  .spotlight::before { inset: 7px; border-width: 3px; }
-  .spotlight__title { font-size: 21px; line-height: 1.2; }
+  .spotlight__title { font-size: 24px; line-height: 1.16; max-width: 12em; }
   .spotlight__kicker { margin-bottom: 8px; }
-  .spotlight__sub { font-size: 14px; }
+  .spotlight__sub { font-size: 14px; max-width: 15em; }
+  .spotlight__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 12px;
+    padding: 0 16px;
+  }
 
-  /* 系列块与条目：内边距统一收一档 */
-  .module .series-block { margin-top: 10px; padding: 14px; }
+  /* 系列块与条目：内边距统一收一档。
+     左内边距必须留出方块符的位置（原来 padding:14px 把左边 42px 一起吃了，
+     方块还停在 left:26px，正好压在「系列」两个字上）；方块符与条目菱形符对齐。 */
+  .module .series-block { margin-top: 10px; padding: 14px 18px 14px 34px; }
+  .module .series-block::before { left: 18px; top: 21px; }
   .module .post-card { padding: 13px 18px 13px 34px; }
   .module .section-more { margin-top: 8px; }
 
