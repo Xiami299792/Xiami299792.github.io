@@ -43,7 +43,7 @@ $$\lim_{x\to\infty} f(x)=A \quad \text{或} \quad f(x)\to A\;(x\to\infty).$$
 
 从几何上看，$\displaystyle\lim_{x\to\infty}f(x)=A$ 意味着对 $\forall\varepsilon>0$，$\exists N>0$，使得 $f(x)$ 在 $-N$ 左边以及 $N$ 右边的图形都位于直线 $y=A-\varepsilon$ 与 $y=A+\varepsilon$ 之间。
 
-三种情形的差别只在"$x$ 在哪一边趋于无穷"，对照如下。
+三种情形的差别只在 $x$ 从哪一边趋于无穷：
 
 | 情形 | 函数在何处有定义 | 定义中的条件 | 记法 |
 | --- | --- | --- | --- |
@@ -59,7 +59,7 @@ $$|f(x)-0|=\left|\frac{\sin x}{x}-0\right|=\frac{|\sin x|}{|x|}\leq\frac{1}{|x|}
 
 故 $\displaystyle\lim_{x\to\infty}\frac{\sin x}{x}=0$。
 
-这个例子还带出一个名词：如果 $\displaystyle\lim_{x\to\infty}f(x)=c$，则直线 $y=c$ 是函数 $y=f(x)$ 的图形的**水平渐近线**。
+如果 $\displaystyle\lim_{x\to\infty}f(x)=c$，则直线 $y=c$ 是函数 $y=f(x)$ 的图形的**水平渐近线**。
 
 三种自变量趋于无穷大时的极限有如下关系。
 
@@ -89,16 +89,16 @@ $$\lim_{x\to x_0} f(x)=A \quad \text{或} \quad f(x)\to A\;(x\to x_0).$$
 
 定义中的"当 $0<|x-x_0|<\delta$ 时"可以说成"当 $x$ 充分接近 $x_0$ 时"。
 
-几何上，$\displaystyle\lim_{x\to x_0}f(x)=A$ 意味着对 $\forall\varepsilon>0$，都 $\exists\delta>0$，使得当 $x$ 在 $x_0$ 的去心 $\delta$ 邻域内时，函数 $f(x)$ 的图形都位于直线 $y=A-\varepsilon$ 与 $y=A+\varepsilon$ 之间。换个说法：当 $x$ 在 $x_0$ 的去心 $\delta$ 邻域时，函数 $y=f(x)$ 的图形完全落在以直线 $y=A$ 为中心线、宽为 $2\varepsilon$ 的带形区域内。
+几何上，$\displaystyle\lim_{x\to x_0}f(x)=A$ 意味着对 $\forall\varepsilon>0$，都 $\exists\delta>0$，使得当 $x$ 在 $x_0$ 的去心 $\delta$ 邻域内时，函数 $f(x)$ 的图形都位于直线 $y=A-\varepsilon$ 与 $y=A+\varepsilon$ 之间。换言之，函数 $y=f(x)$ 的图形完全落在以直线 $y=A$ 为中心线、宽为 $2\varepsilon$ 的带形区域内。
 
-定义里的几个符号各管一段，不要混：
+定义中几个符号的作用：
 
 | 符号 | 含义 | 在定义里的角色 |
 | --- | --- | --- |
 | $\varepsilon$ | 任给的正数，代表允许的误差 | 由外部给定，要多么小就多么小 |
-| $\delta$ | 与 $\varepsilon$ 有关的正数 | 去心邻域的半径：$\varepsilon$ 定了，$\delta$ 才定得下来 |
-| $x_0$ | 考察点 | $f$ 在它的某去心邻域内有定义，但 $x_0$ 本身可以不参与 |
-| $x$ | 自变量 | 讨论的是满足 $0<\lvert x-x_0\rvert<\delta$ 的那些点 |
+| $\delta$ | 与 $\varepsilon$ 有关的正数 | 去心邻域的半径，由 $\varepsilon$ 定出 |
+| $x_0$ | 考察点 | $f$ 在它的某去心邻域内有定义，$x_0$ 本身不参与 |
+| $x$ | 自变量 | 讨论满足 $0<\lvert x-x_0\rvert<\delta$ 的点 |
 
 **例 2**　证明 $\displaystyle\lim_{x\to x_0}C=C$（$C$ 为常数）。
 
@@ -116,7 +116,7 @@ $$\left\lvert\frac{x^2-1}{x-1}-2\right\rvert<\varepsilon,$$
 
 故 $\displaystyle\lim_{x\to1}\frac{x^2-1}{x-1}=2$。
 
-这个例子里函数在点 $x=1$ 处根本没有定义，极限照样存在 —— 这正是定义 4 里那个 $0<\lvert x-x_0\rvert$ 的作用。
+函数在点 $x=1$ 处没有定义，极限仍然存在，可见极限与 $f(x_0)$ 无关。
 
 **例 5**　证明 $\displaystyle\lim_{x\to2}\frac{2x^2-3x-2}{x-2}=5$。
 
@@ -124,7 +124,7 @@ $$\left\lvert\frac{x^2-1}{x-1}-2\right\rvert<\varepsilon,$$
 
 $$|f(x)-5|=\left|\frac{2x^2-3x-2}{x-2}-5\right|=\left|\frac{(2x+1)(x-2)}{x-2}-5\right|=|(2x+1)-5|=2|x-2|<\varepsilon,$$
 
-（最后一步用到 $2\lvert x-2\rvert<2\delta=\varepsilon$。）故 $\displaystyle\lim_{x\to2}\frac{2x^2-3x-2}{x-2}=5$。
+（末一步用到 $2\lvert x-2\rvert<2\delta=\varepsilon$。）故 $\displaystyle\lim_{x\to2}\frac{2x^2-3x-2}{x-2}=5$。
 
 **例 6**　证明 $\displaystyle\lim_{x\to x_0}\sqrt x=\sqrt{x_0}$。
 
@@ -134,12 +134,12 @@ $$\lvert f(x)-A\rvert=\lvert\sqrt x-\sqrt{x_0}\rvert=\frac{\lvert x-x_0\rvert}{\
 
 任给 $\varepsilon>0$，取 $\delta=\min\{x_0,\ \sqrt{x_0}\,\varepsilon\}$，则当 $0<\lvert x-x_0\rvert<\delta$ 时，要使 $\lvert f(x)-A\rvert<\varepsilon$，就有 $\lvert\sqrt x-\sqrt{x_0}\rvert<\varepsilon$，故 $\displaystyle\lim_{x\to x_0}\sqrt x=\sqrt{x_0}$。
 
-这里的 $\delta$ 取了两个数中较小的那个，两头各有一个约束：
+$\delta$ 取二者中较小的一个，是因为两头各有一个约束：
 
-- 一头是**函数要有定义**。$\sqrt x$ 只在 $x\ge0$ 上有意义，所以去心邻域 $(x_0-\delta,x_0+\delta)$ 必须整个落在定义域里，也就是 $x_0-\delta>0$，即 $\delta\le x_0$（此处 $x_0>0$）。
-- 另一头是**误差要小于 $\varepsilon$**。由上面那个不等式，只要 $\lvert x-x_0\rvert<\sqrt{x_0}\,\varepsilon$，就能推出 $\lvert\sqrt x-\sqrt{x_0}\rvert<\varepsilon$，即 $\delta\le\sqrt{x_0}\,\varepsilon$。
+- 定义域：$\sqrt x$ 只在 $x\ge0$ 上有意义，去心邻域必须落在定义域内，即 $x_0-\delta>0$，得 $\delta\le x_0$（设 $x_0>0$）；
+- 误差：由 $\lvert\sqrt x-\sqrt{x_0}\rvert\le\dfrac{\lvert x-x_0\rvert}{\sqrt{x_0}}$，只要 $\lvert x-x_0\rvert<\sqrt{x_0}\,\varepsilon$，就有 $\lvert\sqrt x-\sqrt{x_0}\rvert<\varepsilon$，即 $\delta\le\sqrt{x_0}\,\varepsilon$。
 
-两个上界必须同时成立，而 $\delta$ 越小条件越容易满足，所以取二者中较小的：$\delta=\min\{x_0,\sqrt{x_0}\,\varepsilon\}$。$\delta$ 不能是 $0$，$x_0>0$、$\varepsilon>0$ 保证这个最小值是正的。**记住这个套路**：把 $\lvert f(x)-A\rvert$ 放大成一个含 $\lvert x-x_0\rvert$ 的式子，再让放大后的式子 $<\varepsilon$，反解出 $\delta$ 应该取多大。
+两个上界必须同时成立，故 $\delta=\min\{x_0,\sqrt{x_0}\,\varepsilon\}$；$x_0>0$、$\varepsilon>0$ 保证它大于 $0$。
 
 **例 7**　证明 $\displaystyle\lim_{x\to0}e^x=1$。
 
@@ -151,9 +151,9 @@ $$\lvert f(x)-A\rvert=\lvert\sqrt x-\sqrt{x_0}\rvert=\frac{\lvert x-x_0\rvert}{\
 
 $$\lim_{x\to0}e^x=1.$$
 
-这里同样取了二者中小的那个，理由和例 6 是一回事，只是两头换了：要 $x$ 同时大于 $\ln(1-\varepsilon)$、小于 $\ln(1+\varepsilon)$。因为 $0<\varepsilon<1$，所以 $\ln(1-\varepsilon)<0<\ln(1+\varepsilon)$ —— 左端点是个负数，右端点是个正数。$\lvert x\rvert<\delta$ 意味着 $x$ 落在 $(-\delta,\delta)$ 里，要让它同时不越过左、右两个端点，就要求 $\delta$ 不超过"原点到左端点的距离"与"原点到右端点的距离"：前者是 $-\ln(1-\varepsilon)=\lvert\ln(1-\varepsilon)\rvert$，后者是 $\ln(1+\varepsilon)=\lvert\ln(1+\varepsilon)\rvert$。取小的那个，$x$ 就两头都到不了。
+这里同样取二者中较小的一个。因为 $0<\varepsilon<1$，所以 $\ln(1-\varepsilon)<0<\ln(1+\varepsilon)$：要求 $x$ 同时大于左端、小于右端。$\lvert x\rvert<\delta$ 即 $-\delta<x<\delta$，只要 $\delta$ 不超过 $0$ 到两个端点的距离 $\lvert\ln(1-\varepsilon)\rvert$ 与 $\lvert\ln(1+\varepsilon)\rvert$，两个端点就都不会被越过。
 
-**关于"为什么要取 $\varepsilon$"**：$\varepsilon$ 是别人给的那个误差门槛，它不能由 $\delta$ 推出来，只能由它去**定** $\delta$。所以用定义证极限，动作永远是同一个套路 —— 先写出 $\lvert f(x)-A\rvert$，再解不等式 $\lvert f(x)-A\rvert<\varepsilon$，把解出来的 $\lvert x-x_0\rvert$ 的上界取作 $\delta$。例 3 里 $\delta=\varepsilon$，例 5 里 $\delta=\dfrac{\varepsilon}{2}$，例 6 里 $\delta=\sqrt{x_0}\,\varepsilon$ 与 $x_0$ 取小，例 7 里两个对数与 $\varepsilon$ 一起进 $\min$：$\delta$ 是 $\varepsilon$ 的函数，$\varepsilon$ 变小，$\delta$ 一般也跟着变小。
+用定义证明极限，通法是先把 $\lvert f(x)-A\rvert$ 放大成含 $\lvert x-x_0\rvert$ 的式子，再令它小于 $\varepsilon$，从中解出 $\delta$ 该取多大。$\varepsilon$ 是任给的误差门槛，$\delta$ 由它定出：例 3 中 $\delta=\varepsilon$，例 5 中 $\delta=\dfrac{\varepsilon}{2}$，例 6、例 7 中 $\delta$ 是 $\varepsilon$ 的表达式再与另一项取小。
 
 接下来研究函数在点 $x_0$ 的单侧极限。
 
@@ -165,7 +165,7 @@ $$\lim_{x\to x_0^-}f(x)=A \quad \text{或} \quad f(x)\to A\;(x\to x_0^-) \quad \
 
 $$\lim_{x\to x_0^+}f(x)=A \quad \text{或} \quad f(x)\to A\;(x\to x_0^+) \quad \text{或} \quad f(x_0+0)=A.$$
 
-左极限与右极限统称为单侧极限。两者的差别只在 $x$ 从哪一边靠近 $x_0$：
+左极限与右极限统称为单侧极限，两者的差别只在 $x$ 从哪一边靠近 $x_0$：
 
 | 单侧极限 | 定义中的不等式 | 记法 |
 | --- | --- | --- |
@@ -188,7 +188,7 @@ $$|e^x-1|=e^x-1<\varepsilon,$$
 
 故 $\displaystyle\lim_{x\to0^+}e^x=1$。
 
-例 7 证的是双侧的 $\displaystyle\lim_{x\to0}e^x=1$，需要 $\delta$ 同时照看 $\ln(1-\varepsilon)$ 与 $\ln(1+\varepsilon)$ 两头；这里的 $x$ 只从右边来，只剩 $\ln(1+\varepsilon)$ 一头，$\delta$ 就退成一个数 $\ln(1+\varepsilon)$ 了。同一个函数，过程不同，$\delta$ 的写法跟着变。
+例 7 是双侧极限，$\delta$ 要照看两端；这里 $x$ 只从右侧趋于 $0$，只剩 $\ln(1+\varepsilon)$ 一个约束，$\delta$ 就取作 $\ln(1+\varepsilon)$。
 
 函数在一点处的极限与它在该点处的左极限和右极限有如下关系。
 
@@ -261,13 +261,9 @@ $$-\frac{A}{2}<f(x)-A<\frac{A}{2},$$
 
 故有 $f(x)>A-\dfrac{A}{2}=\dfrac{A}{2}>0$。其他情形证明略。
 
-证明的关键就是取 $\varepsilon=\dfrac{A}{2}$：把误差卡在极限值的一半之内，函数值就再也不可能掉到 $0$ 以下去。同一个手法还给出一条同源的结论：若 $\displaystyle\lim_{x\to x_0}f(x)=A\ne0$，则存在点 $x_0$ 的一个去心邻域，在该邻域内有 $|f(x)|>\dfrac{|A|}{2}$。
+关键在取 $\varepsilon=\dfrac{A}{2}$，把误差限制在极限值的一半之内。由同一手法还有：若 $\displaystyle\lim_{x\to x_0}f(x)=A\ne0$，则存在点 $x_0$ 的去心邻域，在其中 $|f(x)|>\dfrac{|A|}{2}$。
 
-**这个结论反过来不成立。** 由"在点 $x_0$ 的某去心邻域内 $f(x)>0$"推不出"$A>0$"，只能推出 $A\geq0$（这正是下面保序性的内容）。反例：取 $f(x)=x^2$，$x_0=0$。当 $x\ne0$ 时恒有 $f(x)=x^2>0$，可是
-
-$$\lim_{x\to0}x^2=0,$$
-
-极限是 $0$，并不是一个正数。函数值处处为正，极限却可以取到 $0$ —— 保号性只管"由 $A$ 的符号推 $f$ 的符号"这一个方向，反方向要退成不严格的不等号。
+**逆命题不成立**：由"在点 $x_0$ 的某去心邻域内 $f(x)>0$"只能推出 $A\geq0$（即下面的保序性），推不出 $A>0$。例如 $f(x)=x^2$，$x_0=0$：当 $x\ne0$ 时 $f(x)>0$，而 $\displaystyle\lim_{x\to0}x^2=0$。
 
 ### 4．保序性（比较性质）
 
@@ -278,13 +274,13 @@ $$\lim_{x\to0}x^2=0,$$
 
 对 $x\to x_0^-$，$x\to x_0^+$，$x\to-\infty$，$x\to+\infty$ 的情形以及数列极限有同样的结论。如果将定理中的条件 $f(x)\geq0$ 改为 $f(x)\leq0$，则定理的结论应为 $A\leq0$。
 
-**证**（反证法，取 $\varepsilon=\dfrac{A}{2}$ 的同一手法）　设 $A<0$。对 $\varepsilon=\dfrac{|A|}{2}=-\dfrac{A}{2}>0$，$\exists\delta>0$，使得当 $0<|x-x_0|<\delta$ 时，总有 $|f(x)-A|<\dfrac{|A|}{2}$，即
+**证**　反证。设 $A<0$，取 $\varepsilon=\dfrac{|A|}{2}=-\dfrac{A}{2}>0$，则 $\exists\delta>0$，使得当 $0<|x-x_0|<\delta$ 时，总有 $|f(x)-A|<\dfrac{|A|}{2}$，即
 
 $$\frac{3A}{2}<f(x)<\frac{A}{2}<0,$$
 
-这与"在该去心邻域内 $f(x)\geq0$"矛盾，故 $A\geq0$。
+这与该去心邻域内 $f(x)\geq0$ 矛盾，故 $A\geq0$。
 
-也可以用定理 5 来证：设 $A<0$，由局部保号性，存在 $x_0$ 的一个去心邻域使 $f(x)<0$；而题目已给一个去心邻域使 $f(x)\geq0$，两个去心邻域取交（即把半径取成两者中较小的那个）后仍是一个去心邻域，在其中既要 $f(x)<0$ 又要 $f(x)\geq0$，矛盾。
+也可由定理 5 推出：若 $A<0$，由局部保号性存在一个去心邻域使 $f(x)<0$，与已知的 $f(x)\geq0$ 矛盾（两个去心邻域取交即可）。
 
 **推论**
 
@@ -293,19 +289,15 @@ $$\frac{3A}{2}<f(x)<\frac{A}{2}<0,$$
 
 对自变量的其他情况有类似的结论。
 
-**证**（反证法）　只证第一种情形。设 $A<B$，取 $\varepsilon=\dfrac{B-A}{2}>0$。
-
-由 $\displaystyle\lim_{x\to x_0}f(x)=A$，$\exists\delta_1>0$，当 $0<|x-x_0|<\delta_1$ 时，有 $|f(x)-A|<\varepsilon$，即
+**证**　只证第一种情形，反证。设 $A<B$，取 $\varepsilon=\dfrac{B-A}{2}>0$。由 $\displaystyle\lim_{x\to x_0}f(x)=A$，$\exists\delta_1>0$，当 $0<|x-x_0|<\delta_1$ 时 $|f(x)-A|<\varepsilon$，即
 
 $$f(x)<A+\varepsilon=\frac{A+B}{2};$$
 
-由 $\displaystyle\lim_{x\to x_0}g(x)=B$，$\exists\delta_2>0$，当 $0<|x-x_0|<\delta_2$ 时，有 $|g(x)-B|<\varepsilon$，即
+由 $\displaystyle\lim_{x\to x_0}g(x)=B$，$\exists\delta_2>0$，当 $0<|x-x_0|<\delta_2$ 时 $|g(x)-B|<\varepsilon$，即
 
 $$g(x)>B-\varepsilon=\frac{A+B}{2}.$$
 
-取 $\delta=\min\{\delta_1,\delta_2\}$，则当 $0<|x-x_0|<\delta$ 时，两式同时成立，于是 $g(x)>\dfrac{A+B}{2}>f(x)$，与已知的 $f(x)\geq g(x)$ 矛盾，故 $A\geq B$。
-
-这一段的证明只用到 $\varepsilon-\delta$ 定义本身，没有借用极限的四则运算 —— 保序性是"不等式能不能过极限这道关"的最基本结论。
+取 $\delta=\min\{\delta_1,\delta_2\}$，则当 $0<|x-x_0|<\delta$ 时两式同时成立，于是 $g(x)>\dfrac{A+B}{2}>f(x)$，与 $f(x)\geq g(x)$ 矛盾，故 $A\geq B$。证明只用 $\varepsilon$-$\delta$ 定义，未用到极限的四则运算。
 
 ### 5．归并性（函数极限与数列极限的关系）
 
@@ -325,34 +317,30 @@ $$\lim_{n\to\infty}f(x_n)=A.$$
 
 $\displaystyle\lim_{x\to a}f(x)=\infty$ 的证明类似。(2) 的证明与 (1) 的证明类似。
 
-根据定理 7，可以利用函数的极限去求某些数列的极限，也可以通过某些数列不存在极限而得出函数的极限不存在。这条定理通常也叫**海涅定理**，或叫**归结原则**：函数极限存在问题被归结成了数列极限的问题。
+根据定理 7，可以利用函数的极限去求某些数列的极限，也可以通过某些数列不存在极限而得出函数的极限不存在。这条定理也叫**海涅定理**，或叫**归结原则**。
 
 **构造收敛于 $a$ 的数列**
 
-上面充分性的证明摊开来看，动作只有三行：
+充分性的证明可以归为三步：
 
 1. $\forall\varepsilon>0$；
 2. $\exists$ 一列邻域 $U_1,U_2,\dots,U_n,\dots$；
 3. 使得 $x_n\in U_n$。
 
-三行连起来是一件事：**造出一条趋于点 $a$ 的数列 $\{x_n\}$**。
-
-第一步的 $\forall\varepsilon>0$ 是定理陈述里"任给误差"的那一半，它管的是最终要证的结论 $|f(x_n)-A|<\varepsilon$。第二步是造一列**嵌套**的去心邻域，取
+三步合起来，就是造出一条趋于点 $a$ 的数列 $\{x_n\}$。第一步的 $\forall\varepsilon>0$ 是定理结论里任给的误差。第二步取一列嵌套的去心邻域
 
 $$U_n=\left(a-\frac1n,\ a+\frac1n\right)\setminus\{a\},\qquad n=1,2,3,\dots$$
 
-$n$ 越大，$U_n$ 越小，这一列邻域一起向 $a$ 收缩逼近。第三步在每个 $U_n$ 里随便挑一个点 $x_n$：因为 $0<|x_n-a|<\dfrac1n$，所以 $x_n\to a$，并且 $x_n\ne a$ —— 挑出来的 $\{x_n\}$ 自动就是一条合法的数列，它正是"以任意方式接近 $a$"的一种最一般的写法。
+$n$ 越大 $U_n$ 越小，一列邻域向 $a$ 收缩。第三步在每个 $U_n$ 中取一点 $x_n$，由 $0<|x_n-a|<\dfrac1n$ 得 $x_n\to a$ 且 $x_n\ne a$。
 
-**关于这里的 $\varepsilon$ 为什么这样取。** 定理 7 的充分性是反证法，假设 $\displaystyle\lim_{x\to a}f(x)\neq A$。把极限定义否定掉，得到的是：**存在一个固定的正数 $\varepsilon_0$**，使得不论正数 $\delta$ 取多么小，在 $x_0$ 的去心 $\delta$ 邻域里总能找到一个点 $x$，它满足 $|f(x)-A|\geq\varepsilon_0$。
+两个 $\varepsilon$ 的身份不同：
 
-于是出现了两个 $\varepsilon$，分工完全不同：
-
-| 记号 | 身份 | 干什么用 |
+| 记号 | 身份 | 作用 |
 | --- | --- | --- |
-| $\varepsilon$ | 定理结论里**任给**的误差 | 要证"对每一个 $\varepsilon$ 都能做到 $|f(x_n)-A|<\varepsilon$"，所以由它去定 $\delta$ |
-| $\varepsilon_0$ | 反证假设里**固定下来**的那一个 | 来自"极限不等于 $A$"的否定式，是专门用来挑刺的门槛，全程不变 |
+| $\varepsilon$ | 结论里**任给**的误差 | 由它去定 $\delta$ |
+| $\varepsilon_0$ | 反证假设里**固定**的那一个 | 来自"极限不等于 $A$"的否定式，全程不变 |
 
-而第二步里的 $\dfrac{1}{n}$，充当的正是"不论 $\delta$ 取多么小"里那个越来越小的 $\delta$：对 $n=1,2,3,\dots$ 依次取 $\delta=\dfrac1n$，就在每个 $U_n$ 里挑出一个坏点 $x_n$，它满足 $|f(x_n)-A|\geq\varepsilon_0$。这样造出的数列有 $x_n\to a$，可是 $f(x_n)$ 永远跨不过 $\varepsilon_0$ 这道坎，即 $\displaystyle\lim_{n\to\infty}f(x_n)\neq A$，与题设"任何这样的数列都给 $A$"矛盾。**取 $\varepsilon_0$ 之所以合法，是因为它来自一个"否定式"；取 $\dfrac1n$ 之所以可行，是因为 $\delta$ 可以被取得任意小。** 一句话概括这条定理的意思：只要 $x_n\to a$ 且 $x_n\ne a$，那么不管用什么方式靠近 $a$，算出来的 $f(x_n)$ 都得归于同一个 $A$。
+把它与上面的证明对上：充分性反证时设 $\displaystyle\lim_{x\to a}f(x)\neq A$，则存在固定的 $\varepsilon_0>0$，使得不论 $\delta>0$ 取多么小，去心 $\delta$ 邻域内总能找到 $x$ 满足 $|f(x)-A|\geq\varepsilon_0$。第二步里的 $\dfrac1n$ 就是那个"不论多小的 $\delta$"：依次取 $\delta=\dfrac1n$，即得数列 $\{x_n\}$ 满足 $|f(x_n)-A|\geq\varepsilon_0$。于是 $x_n\to a$ 而 $\displaystyle\lim_{n\to\infty}f(x_n)\ne A$，与题设矛盾。$\varepsilon_0$ 取自否定式、全程固定，$\dfrac1n$ 可以任意小，这一步因此总能进行。
 
 **例 10**　证明下列极限不存在：
 
@@ -378,7 +366,7 @@ $$\lim_{n\to\infty}\sin\frac{1}{x_n}=\lim_{n\to\infty}\sin n\pi=0,\qquad \lim_{n
 
 二者不相等，故 $\displaystyle\lim_{x\to0}\sin\frac1x$ 不存在。
 
-例 10 与例 11 用的是同一条思路的另一头：**要证函数极限不存在，就造两条都趋于 $a$ 的数列，让 $f$ 在它们上面的极限不相等**（或有一条不收敛）；反过来，要证某个数列极限存在且等于 $A$，也可以把它看成某个已知函数极限取 $x_n\to a$ 的结果。
+例 10 与例 11 是定理 7 反向的用法：证函数极限不存在，只需造两条趋于 $a$ 的数列，使 $f$ 在其上的极限不相等，或有一条不收敛。
 
 ### 6．绝对值性质
 
