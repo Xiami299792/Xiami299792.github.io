@@ -212,11 +212,11 @@ $$|e^x-1|=e^x-1<\varepsilon,$$
 
 用反证法。如果 $A\neq B$，由于 $\displaystyle\lim_{n\to\infty}y_n=A$，根据数列极限的定义，对 $\varepsilon=\dfrac{|B-A|}{2}$，$\exists N_1>0$，使得当 $n>N_1$ 时，总有
 
-$$|y_n-A|<\frac{|B-A|}{2}. \tag{1}$$
+$$|y_n-A|<\frac{|B-A|}{2}. \qquad \text{(1)}$$
 
 又由于 $\displaystyle\lim_{n\to\infty}y_n=B$，故 $\exists N_2>0$，使得当 $n>N_2$ 时，总有
 
-$$|y_n-B|<\frac{|B-A|}{2}. \tag{2}$$
+$$|y_n-B|<\frac{|B-A|}{2}. \qquad \text{(2)}$$
 
 取 $N=\max\{N_1,N_2\}$，则当 $n>N$ 时，应该有式 (1)、式 (2) 都成立，但由式 (1) 成立却得到
 
@@ -261,7 +261,7 @@ $$-\frac{A}{2}<f(x)-A<\frac{A}{2},$$
 
 故有 $f(x)>A-\dfrac{A}{2}=\dfrac{A}{2}>0$。其他情形证明略。
 
-证明的关键就是取 $\varepsilon=\dfrac{A}{2}$：把误差卡在极限值的一半之内，函数值就再也不可能掉到 $0$ 以下去。课件里还多写了一条同源的结论：若 $\displaystyle\lim_{x\to x_0}f(x)=A\ne0$，则存在点 $x_0$ 的一个去心邻域，在该邻域内有 $|f(x)|>\dfrac{|A|}{2}$。
+证明的关键就是取 $\varepsilon=\dfrac{A}{2}$：把误差卡在极限值的一半之内，函数值就再也不可能掉到 $0$ 以下去。同一个手法还给出一条同源的结论：若 $\displaystyle\lim_{x\to x_0}f(x)=A\ne0$，则存在点 $x_0$ 的一个去心邻域，在该邻域内有 $|f(x)|>\dfrac{|A|}{2}$。
 
 **这个结论反过来不成立。** 由"在点 $x_0$ 的某去心邻域内 $f(x)>0$"推不出"$A>0$"，只能推出 $A\geq0$（这正是下面保序性的内容）。反例：取 $f(x)=x^2$，$x_0=0$。当 $x\ne0$ 时恒有 $f(x)=x^2>0$，可是
 
@@ -327,15 +327,15 @@ $\displaystyle\lim_{x\to a}f(x)=\infty$ 的证明类似。(2) 的证明与 (1) �
 
 根据定理 7，可以利用函数的极限去求某些数列的极限，也可以通过某些数列不存在极限而得出函数的极限不存在。这条定理通常也叫**海涅定理**，或叫**归结原则**：函数极限存在问题被归结成了数列极限的问题。
 
-**板书：怎样构造出收敛于 $a$ 的数列**（老师课堂上补充的写法）
+**构造收敛于 $a$ 的数列**
 
-板书写了三行：
+上面充分性的证明摊开来看，动作只有三行：
 
 1. $\forall\varepsilon>0$；
 2. $\exists$ 一列邻域 $U_1,U_2,\dots,U_n,\dots$；
 3. 使得 $x_n\in U_n$。
 
-三行的意思连起来就是一句话：**怎样造出一条趋于点 $a$ 的数列 $\{x_n\}$**。
+三行连起来是一件事：**造出一条趋于点 $a$ 的数列 $\{x_n\}$**。
 
 第一步的 $\forall\varepsilon>0$ 是定理陈述里"任给误差"的那一半，它管的是最终要证的结论 $|f(x_n)-A|<\varepsilon$。第二步是造一列**嵌套**的去心邻域，取
 
@@ -352,7 +352,7 @@ $n$ 越大，$U_n$ 越小，这一列邻域一起向 $a$ 收缩逼近。第三�
 | $\varepsilon$ | 定理结论里**任给**的误差 | 要证"对每一个 $\varepsilon$ 都能做到 $|f(x_n)-A|<\varepsilon$"，所以由它去定 $\delta$ |
 | $\varepsilon_0$ | 反证假设里**固定下来**的那一个 | 来自"极限不等于 $A$"的否定式，是专门用来挑刺的门槛，全程不变 |
 
-而板书第二步里的 $\dfrac{1}{n}$，充当的正是"不论 $\delta$ 取多么小"里那个越来越小的 $\delta$：对 $n=1,2,3,\dots$ 依次取 $\delta=\dfrac1n$，就在每个 $U_n$ 里挑出一个坏点 $x_n$，它满足 $|f(x_n)-A|\geq\varepsilon_0$。这样造出的数列有 $x_n\to a$，可是 $f(x_n)$ 永远跨不过 $\varepsilon_0$ 这道坎，即 $\displaystyle\lim_{n\to\infty}f(x_n)\neq A$，与题设"任何这样的数列都给 $A$"矛盾。**取 $\varepsilon_0$ 之所以合法，是因为它来自一个"否定式"；取 $\dfrac1n$ 之所以可行，是因为 $\delta$ 可以被取得任意小。** 一句话概括这条定理的意思：只要 $x_n\to a$ 且 $x_n\ne a$，那么不管用什么方式靠近 $a$，算出来的 $f(x_n)$ 都得归于同一个 $A$。
+而第二步里的 $\dfrac{1}{n}$，充当的正是"不论 $\delta$ 取多么小"里那个越来越小的 $\delta$：对 $n=1,2,3,\dots$ 依次取 $\delta=\dfrac1n$，就在每个 $U_n$ 里挑出一个坏点 $x_n$，它满足 $|f(x_n)-A|\geq\varepsilon_0$。这样造出的数列有 $x_n\to a$，可是 $f(x_n)$ 永远跨不过 $\varepsilon_0$ 这道坎，即 $\displaystyle\lim_{n\to\infty}f(x_n)\neq A$，与题设"任何这样的数列都给 $A$"矛盾。**取 $\varepsilon_0$ 之所以合法，是因为它来自一个"否定式"；取 $\dfrac1n$ 之所以可行，是因为 $\delta$ 可以被取得任意小。** 一句话概括这条定理的意思：只要 $x_n\to a$ 且 $x_n\ne a$，那么不管用什么方式靠近 $a$，算出来的 $f(x_n)$ 都得归于同一个 $A$。
 
 **例 10**　证明下列极限不存在：
 
@@ -411,4 +411,4 @@ $$f(x)=\begin{cases}x\sin\dfrac1x,&x>0\\ 10,&x=0\\ 5+x^2,&x<0\end{cases}$$
 
 **解**　$\displaystyle\lim_{x\to0^-}(5+x^2)=5$，左极限存在，$\displaystyle\lim_{x\to0^-}f(x)=5$；$\displaystyle\lim_{x\to0^+}x\sin\frac1x=0$，右极限存在，$\displaystyle\lim_{x\to0^+}f(x)=0$。$\because\displaystyle\lim_{x\to0^-}f(x)\ne\lim_{x\to0^+}f(x)$，$\therefore\displaystyle\lim_{x\to0}f(x)$ 不存在。
 
-（作业：习题 1-2（第 24 页）3(1)(4)，4；习题 1-3（第 28 页）1，4。）
+（练习：习题 1-2 的 3(1)(4)、4；习题 1-3 的 1、4。）
