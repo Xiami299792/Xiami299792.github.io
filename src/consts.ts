@@ -117,6 +117,16 @@ export const SERIES = {
     author: '夏弥',
     note: '',
   },
+  'computer-basics': {
+    title: '电脑应用基础教程',
+    shortTitle: '电脑应用基础',
+    subtitle: '写给大一新生的电脑使用硬指南',
+    unit: '章',
+    description:
+      '从认识机器、键盘输入到文件、软件、联网与安全，一套能照着做的电脑使用硬指南。每一章结尾都放着一台虚拟电脑，题目和动手练当场就能做。',
+    author: '夏弥',
+    note: '章节框架部分取自北京理工大学网络开拓者协会的新生电脑讲座。',
+  },
 } as const;
 
 export type SeriesKey = keyof typeof SERIES;

@@ -1,0 +1,3081 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>第 2 章 键盘与中文输入法 · 电脑应用基础教程</title>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  /* 暖纸 + 铁锈强调 + 米色机壳：与实体机同一套色 */
+  --bg:#f4efe4; --card:#fffdf7; --fg:#221d15; --mut:#7c7364; --line:#e3dac6;
+  --accent:#9c4710; --accent-soft:#f6e9da; --accent-ink:#6d3009;
+  --ok:#2e6b34; --ok-bg:#eaf3ea; --no:#a32a20; --no-bg:#fbece9; --warn:#8a5a00; --warn-bg:#fbf2dc;
+  --key:#fbfcfd; --key-b:#d5dbe2; --shadow:0 1px 2px rgba(60,45,20,.07),0 6px 18px rgba(60,45,20,.07);
+  --r:10px;
+  --ku:33px; --case:#ded5c0; --case-hi:#f4eddd; --case-lo:#a89e86; --case-edge:#8b8269;
+  /* 系统自带字体：宋体做题名，等宽做机打标签 */
+  --serif:"Songti SC","STSong","SimSun","Source Han Serif SC",serif;
+  --mono:"Cascadia Mono","Consolas","Sarasa Mono SC","Courier New",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#15120d; --card:#1e1a13; --fg:#ece5d6; --mut:#a2988a; --line:#332c20;
+    --accent:#e0913f; --accent-soft:#2c2116; --accent-ink:#f0b273;
+    --ok:#8ad08a; --ok-bg:#16251a; --no:#f0918c; --no-bg:#301715; --warn:#e5b06a; --warn-bg:#2e230f;
+    --key:#252b31; --key-b:#3a424b; --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;color:var(--fg);
+  background:
+    radial-gradient(120% 80% at 50% -10%,rgba(156,71,16,.055),transparent 60%),
+    repeating-linear-gradient(0deg,rgba(120,95,55,.035) 0 1px,transparent 1px 4px),
+    var(--bg);
+  font:15px/1.75 var(--sans);
+  padding-bottom:44px;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+a{color:var(--accent)}
+.hidden{display:none!important}
+
+/* 页面入场：一次完整的编排，不再散落 */
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.top .wrap,.tabs,.lead,.tasks{animation:rise .5s cubic-bezier(.2,.7,.3,1) both}
+#quiz .q{animation:rise .5s cubic-bezier(.2,.7,.3,1) both}
+#quiz .q:nth-child(1){animation-delay:.05s}#quiz .q:nth-child(2){animation-delay:.09s}
+#quiz .q:nth-child(3){animation-delay:.13s}#quiz .q:nth-child(4){animation-delay:.17s}
+#quiz .q:nth-child(5){animation-delay:.21s}#quiz .q:nth-child(6){animation-delay:.25s}
+#quiz .q:nth-child(7){animation-delay:.29s}#quiz .q:nth-child(8){animation-delay:.33s}
+#quiz .q:nth-child(9){animation-delay:.37s}#quiz .q:nth-child(10){animation-delay:.41s}
+.rig{animation:rise .6s cubic-bezier(.2,.7,.3,1) .12s both}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+/* ---------- 顶栏 ---------- */
+.top{background:var(--card);background:color-mix(in srgb,var(--card) 92%,transparent);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);padding:14px 0 12px;position:sticky;top:0;z-index:50}
+.top::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:linear-gradient(90deg,var(--accent),rgba(156,71,16,0) 70%)}
+.top .wrap{display:flex;flex-direction:column;gap:6px}
+.back{font-family:var(--mono);font-size:12.5px;text-decoration:none;color:var(--mut);align-self:flex-start}
+.back:hover{color:var(--accent)}
+.top h1{margin:0;font-family:var(--serif);font-size:23px;line-height:1.4;font-weight:700;letter-spacing:.01em}
+.top .sub{margin:0;font-size:13px;color:var(--mut)}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:3px}
+.bar>span{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.stat{font-family:var(--mono);font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums}
+
+/* ---------- 标签页 ---------- */
+.tabs{display:flex;gap:6px;padding-top:14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs button{
+  flex:0 0 auto;font:inherit;font-size:14px;padding:8px 18px;border-radius:8px 8px 0 0;
+  border:1px solid var(--line);border-bottom:0;background:rgba(255,253,247,.6);color:var(--mut);cursor:pointer
+}
+.tabs button[aria-selected=true]{background:var(--card);border-color:var(--accent);color:var(--accent);
+  font-weight:600;box-shadow:inset 0 -2px 0 var(--accent)}
+
+main{padding-top:14px}
+section.tabpane{display:flex;flex-direction:column;gap:12px}
+.lead{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0;
+  padding:12px 15px;font-size:14px;line-height:1.85;color:var(--fg)}
+.lead b{color:var(--accent-ink)}
+
+/* ---------- 题目卡片 ---------- */
+.q{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:15px 15px 14px 17px;box-shadow:var(--shadow)}
+.q::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:var(--r) 0 0 var(--r);
+  background:var(--line)}
+.q.done::before{background:transparent}
+.q.ok{background:var(--ok-bg)} .q.ok::before{background:var(--ok)}
+.q.no{background:var(--no-bg)} .q.no::before{background:var(--no)}
+.qh{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.qn{flex:0 0 auto;width:24px;height:24px;border-radius:6px;background:var(--accent-soft);color:var(--accent);
+    font-family:var(--mono);font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.q.ok .qn{background:var(--ok);color:#fff}
+.q.no .qn{background:var(--no);color:#fff}
+.qt{font-size:15px;font-weight:600;line-height:1.65}
+.tag{display:inline-block;font-family:var(--mono);font-size:10.5px;color:var(--mut);border:1px solid var(--line);
+     border-radius:4px;padding:0 5px;margin-left:6px;vertical-align:1px;font-weight:400}
+
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{
+  display:flex;gap:9px;align-items:flex-start;text-align:left;width:100%;font:inherit;font-size:14.5px;
+  padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);
+  color:var(--fg);cursor:pointer;line-height:1.55;transition:border-color .12s,background .12s
+}
+.opt:hover{border-color:var(--accent);background:var(--accent-soft)}
+.opt i{flex:0 0 auto;font-style:normal;font-family:var(--mono);font-weight:700;color:var(--mut);min-width:15px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.wrong{border-color:var(--no);background:var(--no-bg)}
+.opt[disabled]{cursor:default;opacity:.92}
+.opt[disabled]:hover{background:var(--card)}
+.opt.right:hover{background:var(--ok-bg)} .opt.wrong:hover{background:var(--no-bg)}
+
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.btn{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;border:1px solid var(--accent);
+     background:var(--accent);color:#fff;cursor:pointer;transition:filter .12s}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+.inp{font:inherit;font-size:15px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;
+     background:var(--card);color:var(--fg);width:100%;max-width:320px}
+.inp:focus{outline:0;border-color:var(--accent)}
+
+.fb{margin-top:10px;font-size:14px;line-height:1.75;border-left:3px solid var(--accent);padding:2px 0 2px 10px;color:var(--fg)}
+.q.ok .fb{border-color:var(--ok)}
+.q.no .fb{border-color:var(--no)}
+.fb em{font-style:normal;font-weight:700}
+.fb.ok em{color:var(--ok)} .fb.no em{color:var(--no)}
+
+.chips{display:flex;flex-direction:column;gap:7px}
+.chip{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1px solid var(--line);
+      border-radius:8px;background:var(--bg);cursor:pointer;font-size:14.5px;text-align:left;font:inherit;color:var(--fg)}
+.chip b{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:var(--line);color:var(--fg);
+        font-size:11.5px;display:flex;align-items:center;justify-content:center}
+.chip.picked{border-color:var(--accent);background:var(--accent-soft)}
+.chip.picked b{background:var(--accent);color:#fff}
+
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.match .col{display:flex;flex-direction:column;gap:7px}
+.mi{padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);
+    font:inherit;font-size:14px;text-align:left;cursor:pointer;color:var(--fg);line-height:1.45}
+.mi.sel{border-color:var(--accent);background:var(--accent-soft)}
+.mi.pair{border-color:var(--ok)}
+.mi .dot{display:inline-block;width:16px;height:16px;border-radius:50%;margin-right:7px;
+         font-size:10.5px;line-height:16px;text-align:center;background:var(--line);color:var(--fg);vertical-align:1px}
+.mi.pair .dot{background:var(--ok);color:#fff}
+
+.result{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center;box-shadow:var(--shadow)}
+.result .big{font-family:var(--mono);font-size:32px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+.result p{margin:6px 0 0;font-size:14px;color:var(--mut)}
+.foot{margin-top:24px;font-family:var(--mono);font-size:12px;color:var(--mut);text-align:center;line-height:1.9;
+  border-top:1px dashed var(--line);padding-top:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.card{position:relative;display:block;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+      padding:14px 14px 13px;text-decoration:none;color:var(--fg);box-shadow:var(--shadow);
+      transition:transform .15s,border-color .15s}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card .n{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.08em}
+.card .t{font-family:var(--serif);font-size:17px;font-weight:700;margin:4px 0 6px}
+.card .d{font-size:13px;color:var(--mut);line-height:1.65}
+
+/* ================================================================
+   实体电脑：地下室工位
+   ================================================================ */
+.rig{
+  position:relative;margin:14px 0 0;padding:16px 14px 6px;border-radius:14px;overflow:hidden;
+  display:grid;gap:8px;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"mon" "desk" "kb";
+  align-items:end;justify-items:center;
+  background:linear-gradient(180deg,#1d1813,#262019 45%,#14100c);
+}
+.rig::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:
+    repeating-linear-gradient(90deg,rgba(255,255,255,.024) 0 1px,transparent 1px 7px),
+    repeating-linear-gradient(0deg,rgba(0,0,0,.26) 0 1px,transparent 1px 78px);}
+.rig .desk{grid-area:desk;width:100%;height:12px;position:relative}
+.rig .desk::before{content:"";position:absolute;left:-14px;right:-14px;top:0;bottom:-36px;
+  background:linear-gradient(180deg,#6f5433,#42301d 45%,#241a10)}
+.rig .desk::after{content:"";position:absolute;left:-14px;right:-14px;top:12px;height:36px;
+  background:linear-gradient(180deg,rgba(0,0,0,.38),transparent)}
+
+/* ---------- 大头显示器 ---------- */
+.mon{grid-area:mon;position:relative;width:100%;max-width:600px;z-index:2}
+.crt{position:relative}
+.crt .body{position:relative;border-radius:10px 10px 12px 12px;padding:12px 12px 0;
+  border:1px solid var(--case-edge);
+  background:linear-gradient(172deg,var(--case-hi),var(--case) 40%,#c6bca4 76%,var(--case-lo));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.72),inset 0 -4px 10px rgba(0,0,0,.2),0 8px 20px rgba(0,0,0,.5)}
+.crt .tube{position:relative;padding:7px;border-radius:10px;background:#4c4738;
+  box-shadow:inset 0 0 0 2px #2e2a21,inset 0 3px 12px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.4)}
+.crt .glass-wrap{position:relative;border-radius:8px;overflow:hidden;aspect-ratio:4/3;background:#05070a}
+.scr{position:absolute;inset:0;overflow:hidden;color:#fff;
+  background:
+    radial-gradient(120% 90% at 50% 0%,#1a3a6e 0%,#12305e 30%,#0a2147 60%,#061733 100%);
+  font:12px/1.45 "Segoe UI","Microsoft YaHei",sans-serif;user-select:none;touch-action:none}
+
+/* 玻璃反光与扫描线 */
+.glass{position:absolute;inset:0;z-index:70;pointer-events:none;border-radius:inherit;
+  background:
+    linear-gradient(104deg,rgba(255,255,255,.13) 0 14%,rgba(255,255,255,.03) 26%,transparent 40%),
+    radial-gradient(125% 118% at 50% 46%,transparent 52%,rgba(0,0,0,.5) 100%),
+    repeating-linear-gradient(0deg,rgba(0,0,0,.13) 0 1px,transparent 1px 3px);
+  animation:crtflick 7s infinite}
+@keyframes crtflick{0%,96%,100%{opacity:1}97%{opacity:.9}98%{opacity:1}99%{opacity:.94}}
+.crt .chin{display:flex;align-items:center;gap:9px;padding:8px 4px 10px;color:#4a4436;font-size:10.5px}
+.crt .chin .brand{font-weight:700;letter-spacing:.14em;font-size:11px}
+.crt .chin .model{opacity:.7;letter-spacing:.04em}
+.crt .chin .sp{flex:1}
+.crt .chin .dial{width:20px;height:20px;border-radius:50%;border:1px solid var(--case-edge);
+  background:radial-gradient(circle at 34% 30%,#fdfaf2,#c8bfa7);box-shadow:inset 0 -2px 3px rgba(0,0,0,.18);
+  font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#5b5342}
+.crt .chin .dial:hover{background:radial-gradient(circle at 34% 30%,#fff,#d7cfb9)}
+.crt .chin .led{width:9px;height:9px;border-radius:50%;background:#4a3a2a;box-shadow:inset 0 0 3px #000}
+.crt .chin .led.on{background:#6ee36e;box-shadow:0 0 9px #58d858,inset 0 0 2px #0a3a0a}
+.crt .chin .led.wait{background:#e0a63a;box-shadow:0 0 9px #d8961f}
+.crt .stand{position:relative;height:15px;margin:0 auto;width:34%;
+  background:linear-gradient(180deg,#b3a98f,#8e8570);
+  clip-path:polygon(20% 0,80% 0,100% 100%,0 100%)}
+.crt .base{position:relative;height:11px;margin:0 auto;width:64%;border-radius:5px 5px 10px 10px;
+  background:linear-gradient(180deg,var(--case-hi),var(--case-lo));
+  box-shadow:0 12px 24px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.5)}
+
+/* ---------- 实体键盘 ---------- */
+.kbwrap2{grid-area:kb;width:fit-content;max-width:100%;margin:0 auto;z-index:3}
+.kbwrap2 .kbbar{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:7px;justify-content:center}
+.kbwrap2 .kbbar .btn{padding:5px 11px;font-size:12px}
+.kbwrap2 .kbbar label{font-size:11.5px;color:#a99b83;display:flex;gap:5px;align-items:center;cursor:pointer}
+.kbwrap2 .target{font-size:12.5px;padding:7px 11px;border-radius:7px;background:rgba(124,192,255,.14);
+  color:#cfe3f8;margin-bottom:7px;text-align:center;border:1px solid rgba(124,192,255,.28)}
+.kbwrap2 .target b{color:#8fc6ff}
+.kb2{display:flex;gap:9px;overflow-x:auto;padding:8px 9px 9px;border-radius:7px 7px 11px 11px;
+  border:1px solid var(--case-edge);
+  background:linear-gradient(180deg,#e8e1cf,#cec5af 58%,#b5ab93);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.68),inset 0 -3px 7px rgba(0,0,0,.22),0 6px 14px rgba(0,0,0,.45)}
+.kbblk{display:flex;flex-direction:column;gap:4px;flex:0 0 auto}
+.kbrow{display:flex;gap:4px}
+.kk{flex:0 0 auto;height:29px;min-width:var(--ku);padding:0 5px;border-radius:5px;border:1px solid #9d9479;
+  background:linear-gradient(180deg,#fdfbf4,#e5dfcf);color:#3a3428;font:inherit;font-size:10.5px;line-height:1.05;
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;
+  box-shadow:0 2px 0 #a89e88,inset 0 1px 0 #fff;user-select:none}
+.kk small{font-size:8px;color:#8b8270;line-height:1}
+.kk:hover{background:linear-gradient(180deg,#fff,#ece6d7)}
+.kk.on{background:linear-gradient(180deg,#3f6b9c,#2b4f78);color:#fff;border-color:#223f60;
+  box-shadow:0 2px 0 #1d3550,inset 0 1px 0 rgba(255,255,255,.25)}
+.kk.on small{color:#cfe0f0}
+.kk.hit{transform:translateY(2px);box-shadow:none}
+.kk.tall{height:62px}
+.kk.gap{visibility:hidden}
+.kk.wide{min-width:calc(var(--ku)*1.5)}
+.kinfo{font-size:12.5px;color:#a99b83;min-height:34px;margin-top:7px;text-align:center}
+.kinfo b{color:#e8dcc4}
+.kinfo .combo{color:#8fc6ff;font-weight:700}
+
+/* ================================================================
+   屏内 Windows 界面
+   ================================================================ */
+.scr .dicons{position:absolute;top:8px;left:6px;display:flex;flex-direction:column;gap:3px;width:66px}
+.scr .dicon{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 1px;border-radius:5px;
+  cursor:pointer;text-align:center;line-height:1.2;font-size:9.5px;text-shadow:0 1px 3px rgba(0,0,0,.85);
+  border:1px solid transparent;color:#fff}
+.scr .dicon span{font-size:19px;line-height:1}
+.scr .dicon:hover{background:rgba(255,255,255,.16)}
+.scr .dicon.sel{background:rgba(96,165,250,.36);border-color:rgba(147,197,253,.8)}
+
+.scr .win{position:absolute;background:#f6f6f6;border:1px solid rgba(0,0,0,.4);border-radius:7px;overflow:hidden;
+  display:flex;flex-direction:column;box-shadow:0 14px 32px rgba(0,0,0,.62);min-width:130px;min-height:92px;color:#1b1b1b}
+.scr .win .tb{display:flex;align-items:center;gap:5px;padding:0 3px 0 8px;height:26px;flex:0 0 26px;
+  background:linear-gradient(180deg,#2f6398,#24507d);color:#fff;font-size:11px;cursor:grab;touch-action:none}
+.scr .win.blur .tb{background:linear-gradient(180deg,#5b6672,#4a545e);color:#e6e9ec}
+.scr .win .tb .ic{font-size:11px}
+.scr .win .tb .t{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.scr .win .tb button{width:24px;height:19px;border:0;border-radius:4px;background:transparent;color:#fff;
+  font-size:10px;line-height:1;cursor:pointer;font-family:inherit}
+.scr .win .tb button:hover{background:rgba(255,255,255,.22)}
+.scr .win .tb button.x:hover{background:#c0392b}
+.scr .win .bd{flex:1;overflow:auto;background:#fff;color:#1b1b1b;font-size:11.5px;position:relative}
+.scr .win.min{display:none}
+.scr .win .rs{position:absolute;right:0;bottom:0;width:14px;height:14px;cursor:nwse-resize;touch-action:none;
+  background:linear-gradient(135deg,transparent 46%,#b9c0c8 46%,#b9c0c8 56%,transparent 56%)}
+
+/* 任务栏 */
+.scr .tb2{position:absolute;left:0;right:0;bottom:0;height:34px;display:flex;align-items:center;gap:3px;padding:0 5px;
+  background:rgba(18,24,33,.86);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.1)}
+.scr .tb2 .sb{display:flex;align-items:center;gap:5px;height:26px;padding:0 7px;border:0;border-radius:5px;
+  background:transparent;color:#fff;font:inherit;font-size:11px;cursor:pointer}
+.scr .tb2 .sb:hover{background:rgba(255,255,255,.16)}
+.scr .tb2 .sb .logo{display:grid;grid-template-columns:1fr 1fr;gap:1px;width:12px;height:12px}
+.scr .tb2 .sb .logo i{background:#7cc0ff;border-radius:1px}
+.scr .tb2 .find{width:88px;height:24px;border-radius:999px;border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.1);color:#cdd6e0;font:inherit;font-size:10.5px;padding:0 9px;outline:0}
+.scr .tb2 .pi{position:relative;width:32px;height:26px;border:0;border-radius:5px;background:transparent;
+  color:#fff;font-size:14px;cursor:pointer}
+.scr .tb2 .pi:hover{background:rgba(255,255,255,.16)}
+.scr .tb2 .pi.run::after{content:"";position:absolute;left:10px;right:10px;bottom:2px;height:2px;
+  border-radius:2px;background:#7cc0ff}
+.scr .tb2 .pins2{display:flex;align-items:center;gap:2px;padding:0 4px}
+.scr .tb2 .sp{flex:1}
+.scr .tb2 .tray{display:flex;align-items:center;gap:6px;padding:0 5px;height:26px;border-radius:5px;
+  color:#dfe6ee;font-size:10.5px;cursor:pointer}
+.scr .tb2 .tray:hover{background:rgba(255,255,255,.16)}
+.scr .tb2 .tray .clk{text-align:right;line-height:1.2;font-variant-numeric:tabular-nums}
+.scr .tb2 .ime{width:32px;text-align:center;font-size:10.5px;color:#dfe6ee;border-radius:5px;cursor:pointer}
+.scr .tb2 .ime:hover{background:rgba(255,255,255,.16)}
+
+/* 开始菜单 / 右键 / 托盘 / 贴靠 / 任务视图 */
+.scr .startmenu{position:absolute;left:5px;bottom:40px;width:250px;background:rgba(28,34,42,.97);
+  border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px;color:#e8edf3;font-size:11px;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);z-index:40}
+.scr .startmenu .sk{width:100%;height:26px;border-radius:999px;border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.08);color:#cdd6e0;font:inherit;font-size:10.5px;padding:0 11px;outline:0}
+.scr .startmenu h5{margin:10px 0 5px;font-size:10.5px;font-weight:600;color:#9fb0c2}
+.scr .startmenu .pins{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.scr .startmenu .pins button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;
+  border:0;border-radius:7px;background:transparent;color:#e8edf3;font:inherit;font-size:9.5px;cursor:pointer}
+.scr .startmenu .pins button:hover{background:rgba(255,255,255,.12)}
+.scr .startmenu .pins span{font-size:16px;line-height:1}
+.scr .startmenu .rec div{padding:4px 6px;border-radius:5px;color:#c3ceda;cursor:pointer;font-size:10.5px}
+.scr .startmenu .rec div:hover{background:rgba(255,255,255,.12)}
+.scr .startmenu .ft{display:flex;align-items:center;gap:5px;margin-top:10px;padding-top:8px;
+  border-top:1px solid rgba(255,255,255,.12)}
+.scr .startmenu .ft .u{flex:1;font-size:10.5px;color:#c3ceda}
+.scr .startmenu .ft button{width:26px;height:24px;border:0;border-radius:5px;background:transparent;
+  color:#e8edf3;font-size:12px;cursor:pointer}
+.scr .startmenu .ft button:hover{background:rgba(255,255,255,.16)}
+
+.scr .ctx{position:absolute;min-width:140px;background:rgba(32,38,46,.98);border:1px solid rgba(255,255,255,.13);
+  border-radius:8px;padding:4px;box-shadow:0 14px 30px rgba(0,0,0,.6);font-size:11px;z-index:45}
+.scr .ctx div{padding:6px 10px;border-radius:5px;color:#e8edf3;cursor:pointer;display:flex;gap:8px;align-items:center}
+.scr .ctx div:hover{background:rgba(255,255,255,.14)}
+.scr .ctx hr{border:0;border-top:1px solid rgba(255,255,255,.12);margin:3px 5px}
+
+.scr .snapfly{position:absolute;right:6px;top:30px;background:rgba(32,38,46,.98);border:1px solid rgba(255,255,255,.13);
+  border-radius:8px;padding:6px;display:grid;grid-template-columns:1fr 1fr;gap:5px;z-index:42;
+  box-shadow:0 14px 30px rgba(0,0,0,.6)}
+.scr .snapfly div{width:52px;height:33px;border:1.5px solid #7cc0ff;border-radius:4px;cursor:pointer;
+  background:rgba(124,192,255,.18)}
+.scr .snapfly div:hover{background:rgba(124,192,255,.42)}
+
+.scr .traypop{position:absolute;right:6px;bottom:40px;width:186px;background:rgba(28,34,42,.98);
+  border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:10px;color:#e8edf3;font-size:10.5px;z-index:42;
+  box-shadow:0 14px 30px rgba(0,0,0,.6)}
+.scr .traypop .r{display:flex;justify-content:space-between;margin:5px 0}
+.scr .traypop .wifi{padding:5px 7px;border-radius:5px;cursor:pointer}
+.scr .traypop .wifi:hover{background:rgba(255,255,255,.12)}
+.scr .traypop .wifi.cur{background:rgba(124,192,255,.22);color:#cfe6ff}
+
+.scr .switcher{position:absolute;inset:0;background:rgba(10,16,24,.8);display:flex;align-items:center;
+  justify-content:center;gap:10px;flex-wrap:wrap;padding:18px;z-index:48;backdrop-filter:blur(4px)}
+.scr .switcher .card2{width:120px;border-radius:8px;overflow:hidden;background:rgba(255,255,255,.1);border:2px solid transparent}
+.scr .switcher .card2.cur{border-color:#7cc0ff;background:rgba(124,192,255,.24)}
+.scr .switcher .card2 .h{padding:5px 8px;font-size:10.5px;color:#e8edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.scr .switcher .card2 .p{height:50px;background:rgba(255,255,255,.1)}
+
+.scr .tv{position:absolute;inset:0;background:rgba(10,16,24,.86);backdrop-filter:blur(5px);padding:16px 13px 44px;
+  display:flex;flex-direction:column;gap:9px;z-index:46}
+.scr .tv h6{margin:0;font-size:11px;color:#b9c6d4;font-weight:600}
+.scr .tv .desks{display:flex;gap:11px;flex:1;overflow:auto}
+.scr .tv .dk2{flex:0 0 150px;border-radius:9px;border:2px solid transparent;background:rgba(255,255,255,.07);
+  padding:7px;display:flex;flex-direction:column;gap:5px;cursor:pointer}
+.scr .tv .dk2.cur{border-color:#7cc0ff;background:rgba(124,192,255,.16)}
+.scr .tv .dk2 .lb{font-size:10.5px;color:#dbe4ee}
+.scr .tv .dk2 .th{height:26px;border-radius:5px;background:rgba(255,255,255,.12);font-size:10px;
+  display:flex;align-items:center;padding:0 7px;color:#dbe4ee;gap:5px}
+.scr .tv .add{flex:0 0 48px;border:1px dashed rgba(255,255,255,.4);border-radius:9px;background:transparent;
+  color:#dbe4ee;font-size:18px;cursor:pointer}
+
+.scr .toast{position:absolute;left:50%;bottom:46px;transform:translateX(-50%);background:rgba(24,30,38,.96);
+  border:1px solid rgba(255,255,255,.14);color:#eef3f8;padding:7px 13px;border-radius:8px;font-size:11px;
+  box-shadow:0 12px 26px rgba(0,0,0,.6);z-index:69;pointer-events:none;max-width:84%;text-align:center}
+
+/* 关机 / 开机自检 / 电源菜单 */
+.scr .off{position:absolute;inset:0;background:#05070a;z-index:72;display:flex;align-items:center;justify-content:center;
+  color:#4e5a66;font-size:12px;letter-spacing:.08em;text-align:center;padding:0 20px;line-height:2}
+.scr .off.force{color:#6b4a4a}
+.scr .post{position:absolute;inset:0;background:#05070a;z-index:71;color:#c9c4b4;font:11px/1.8 "Consolas",monospace;
+  padding:14px 18px;white-space:pre-wrap}
+.scr .post b{color:#eae4d2;font-weight:400}
+.scr .shut{position:absolute;inset:0;background:#05070a;z-index:73;display:flex;align-items:center;justify-content:center;
+  color:#c9d4e0;font-size:12px;gap:9px}
+.scr .shut .spin{width:15px;height:15px;border-radius:50%;border:2px solid rgba(255,255,255,.2);
+  border-top-color:#7cc0ff;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.scr .collapse{position:absolute;inset:0;background:#05070a;z-index:74;display:flex;align-items:center;justify-content:center;
+  animation:crtcollapse .6s ease-in forwards}
+.scr .collapse i{display:block;background:#dff3ff;border-radius:50%}
+@keyframes crtcollapse{
+  0%{clip-path:inset(0 0 0 0)}
+  55%{clip-path:inset(48.6% 0 48.6% 0)}
+  80%{clip-path:inset(49.4% 48% 49.4% 48%)}
+  100%{clip-path:inset(49.6% 49.5% 49.6% 49.5%)}
+}
+.scr .pmenu{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:190px;
+  background:rgba(28,34,42,.97);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px;
+  color:#e8edf3;font-size:11.5px;z-index:70;box-shadow:0 20px 44px rgba(0,0,0,.7)}
+.scr .pmenu h5{margin:0 0 8px;font-size:10.5px;color:#9fb0c2;font-weight:600}
+.scr .pmenu div{padding:6px 9px;border-radius:6px;cursor:pointer}
+.scr .pmenu div:hover{background:rgba(255,255,255,.14)}
+.scr .pmenu .tip{margin-top:8px;padding-top:7px;border-top:1px solid rgba(255,255,255,.12);
+  font-size:10px;color:#8d9aa8;line-height:1.6;cursor:default}
+.scr .pmenu .tip:hover{background:transparent}
+
+/* ================================================================
+   屏内应用
+   ================================================================ */
+.ap{display:flex;flex-direction:column;height:100%;font-size:11.5px}
+.ap .hd{display:flex;gap:9px;padding:5px 9px;border-bottom:1px solid #e3e3e3;color:#5c6570;font-size:10.5px;flex-wrap:wrap}
+.ap .hd span{cursor:default}
+.ap .hd span.cl{cursor:pointer}
+.ap .hd span.cl:hover{color:#1f4e79}
+.ap .bar2{display:flex;gap:5px;flex-wrap:wrap;padding:6px 8px;border-bottom:1px solid #e3e3e3;background:#fafafa}
+.ap .bar2 button{font:inherit;font-size:10.5px;padding:4px 8px;border-radius:5px;border:1px solid #d5dbe2;
+  background:#fff;color:#1b1b1b;cursor:pointer}
+.ap .bar2 button:hover{border-color:#1f4e79}
+.ap .bar2 button:disabled{opacity:.4;cursor:default}
+.ap .body2{flex:1;display:flex;overflow:hidden}
+.ap .side2{flex:0 0 92px;border-right:1px solid #e3e3e3;padding:5px;background:#fafafa;overflow:auto}
+.ap .side2 div{padding:4px 6px;border-radius:5px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap .side2 div:hover{background:#e8eef6}
+.ap .side2 div.cur{background:#1f4e79;color:#fff}
+.ap .list2{flex:1;padding:5px;overflow:auto}
+.ap .it2{display:flex;align-items:center;gap:7px;padding:4px 7px;border-radius:5px;cursor:pointer}
+.ap .it2:hover{background:#eef2f7}
+.ap .it2.sel{background:#1f4e79;color:#fff}
+.ap .it2 .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ap .it2 .meta{color:#8b949e;font-size:10px}
+.ap .it2.sel .meta{color:#cfe0f0}
+.ap .empty2{color:#8b949e;padding:18px;text-align:center}
+.ap .pad{padding:9px}
+.ap .note{background:#fff8e6;border:1px solid #f0dfae;border-radius:6px;padding:7px 9px;margin:7px 0;line-height:1.6}
+
+/* 记事本 */
+.ap-np textarea{flex:1;border:0;outline:0;resize:none;padding:8px 10px;background:#fff;color:#1b1b1b;
+  font:12px/1.7 "Consolas","Microsoft YaHei",monospace}
+.ap-np .imebar{display:flex;gap:6px;padding:4px 8px;background:#eceff3;border-bottom:1px solid #dde2e7;
+  font-size:11px;color:#3c4652;align-items:center;flex-wrap:wrap}
+.ap-np .imebar .cand{padding:2px 8px;border-radius:4px;background:#fff;border:1px solid #c8d0d8;cursor:pointer}
+.ap-np .imebar .cand:hover{background:#e8eef6}
+.ap-np .imebar .cand.first{border-color:#1f4e79}
+
+/* 浏览器 */
+.ap-br .tabs2{display:flex;gap:2px;padding:4px 5px 0;background:#dfe4ea;overflow-x:auto}
+.ap-br .tabs2 i{font-style:normal;font-size:10.5px;padding:4px 9px;border-radius:6px 6px 0 0;background:#fff;
+  border:1px solid #ccd3da;border-bottom:0;cursor:pointer;display:flex;gap:5px;align-items:center;
+  white-space:nowrap;flex:0 0 auto}
+.ap-br .tabs2 i.cur{background:#fff;font-weight:600}
+.ap-br .tabs2 i b{cursor:pointer;color:#8b949e;font-weight:400}
+.ap-br .tabs2 i b:hover{color:#c0392b}
+.ap-br .tabs2 .plus{padding:4px 8px;cursor:pointer;color:#5c6570}
+.ap-br .url2{display:flex;gap:5px;align-items:center;padding:4px 6px;background:#f2f4f7;border-bottom:1px solid #ccd3da}
+.ap-br .url2 input{flex:1;font:inherit;font-size:11px;padding:4px 9px;border-radius:999px;border:1px solid #ccd3da;
+  background:#fff;color:#1b1b1b;outline:0}
+.ap-br .page2{flex:1;overflow:auto;padding:9px 11px;background:#fff}
+.ap-br .page2 h4{margin:0 0 7px;font-size:13px}
+.ap-br .sres{padding:6px 2px;border-bottom:1px solid #eef1f4}
+.ap-br .sres b{color:#1a4b8c;font-weight:600}
+.ap-br .sres p{margin:2px 0 0;color:#5c6570;font-size:10.5px}
+.ap-br .dl{display:flex;gap:9px;align-items:center;padding:9px;border:1px solid #e3e3e3;border-radius:7px;margin:7px 0}
+.ap-br .dl .ic2{font-size:24px}
+.ap-br .dl .tx{flex:1}
+.ap-br .dl .tx b{display:block;font-size:11.5px}
+.ap-br .dl .tx span{color:#8b949e;font-size:10px}
+.ap-br .dl button{font:inherit;font-size:10.5px;padding:5px 11px;border-radius:6px;border:1px solid #1f4e79;
+  background:#1f4e79;color:#fff;cursor:pointer}
+.ap-br .dl button.ad{background:#fff;color:#a32020;border-color:#e0b4b4}
+.ap-br .dl button.ad:hover{background:#fdecea}
+.ap-br .dl.true dl{background:#eaf5ea}
+.ap-br .phish{border:1px solid #e3e3e3;border-radius:7px;padding:11px;max-width:330px;margin:9px auto}
+.ap-br .phish .lg{text-align:center;font-size:15px;font-weight:700;color:#1f4e79;margin-bottom:9px}
+.ap-br .phish label{display:block;font-size:10.5px;color:#5c6570;margin:6px 0 2px}
+.ap-br .phish input{width:100%;font:inherit;font-size:11.5px;padding:5px 8px;border:1px solid #ccd3da;border-radius:5px}
+.ap-br .phish .fake{background:#fdecea;border:1px solid #e0b4b4;color:#a32020;border-radius:6px;padding:6px 8px;
+  font-size:10.5px;margin-top:9px;line-height:1.6}
+
+/* 设置 */
+.ap-set .side2{flex:0 0 108px}
+.ap-set .pane{padding:10px 12px;overflow:auto;flex:1}
+.ap-set .pane h4{margin:0 0 9px;font-size:12.5px}
+.ap-set .rw{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f0f0f0}
+.ap-set .rw span{flex:1}
+.ap-set .sw{width:36px;height:19px;border-radius:999px;background:#c8ced6;position:relative;cursor:pointer;
+  border:0;flex:0 0 auto;transition:background .15s}
+.ap-set .sw::after{content:"";position:absolute;left:2px;top:2px;width:15px;height:15px;border-radius:50%;
+  background:#fff;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.ap-set .sw.on{background:#1f6feb}
+.ap-set .sw.on::after{left:19px}
+.ap-set select{font:inherit;font-size:11px;padding:3px 6px;border-radius:5px;border:1px solid #ccd3da;background:#fff}
+.ap-set .bar3{height:9px;border-radius:5px;background:#e3e3e3;overflow:hidden;margin:5px 0}
+.ap-set .bar3 i{display:block;height:100%;background:#1f4e79}
+.ap-set .bar3 i.hot{background:#c0392b}
+
+/* 任务管理器 */
+.ap-tm .list2 .it2{border-bottom:1px solid #f2f2f2}
+.ap-tm .tabs3{display:flex;gap:3px;padding:5px 7px 0;border-bottom:1px solid #e3e3e3}
+.ap-tm .tabs3 b{font-size:10.5px;font-weight:400;padding:4px 9px;border-radius:5px 5px 0 0;cursor:pointer;color:#5c6570}
+.ap-tm .tabs3 b.cur{background:#eef2f7;color:#1b1b1b;font-weight:600}
+.ap-tm .freeze{background:#fdecea}
+
+/* 分类练习 */
+.ap-cls .pool2{display:flex;flex-wrap:wrap;gap:5px;padding:8px;border-bottom:1px solid #e3e3e3;background:#fafafa}
+.ap-cls .pile{font:inherit;font-size:10.5px;padding:5px 10px;border-radius:999px;border:1px solid #ccd3da;
+  background:#fff;cursor:pointer;color:#1b1b1b}
+.ap-cls .pile.sel{border-color:#1f4e79;background:#e8eef6}
+.ap-cls .pile.ok{background:#eaf5ea;border-color:#2e6b2e}
+.ap-cls .pile.bad{background:#fdecea;border-color:#a32020}
+.ap-cls .bins{display:flex;gap:7px;flex:1;padding:8px;overflow:auto}
+.ap-cls .bin{flex:1;border:1.5px dashed #ccd3da;border-radius:8px;padding:7px;min-height:60px;background:#fbfcfd}
+.ap-cls .bin h5{margin:0 0 6px;font-size:10.5px;color:#1f4e79}
+.ap-cls .bin.armed{border-color:#1f4e79;background:#e8eef6}
+.ap-cls .bin .items2{display:flex;flex-wrap:wrap;gap:4px}
+
+/* 安装向导 */
+.ap-ins .steps{display:flex;gap:6px;padding:8px 10px;border-bottom:1px solid #e3e3e3;font-size:10.5px;color:#8b949e}
+.ap-ins .steps b{font-weight:400}
+.ap-ins .steps b.cur{color:#1f4e79;font-weight:700}
+.ap-ins .pane{flex:1;padding:10px 12px;overflow:auto}
+.ap-ins .lk{background:#f7f8fa;border:1px solid #e3e3e3;border-radius:6px;height:74px;overflow:auto;
+  padding:7px;font-size:10px;line-height:1.65;color:#4a5460;margin:6px 0}
+.ap-ins label{display:flex;gap:7px;align-items:flex-start;font-size:11px;margin:5px 0;cursor:pointer;line-height:1.5}
+.ap-ins .bundle{background:#fff8e6;border:1px solid #f0dfae;border-radius:6px;padding:6px 8px}
+.ap-ins .prog{height:11px;border-radius:6px;background:#e3e3e3;overflow:hidden;margin:9px 0}
+.ap-ins .prog i{display:block;height:100%;width:0;background:#1f4e79;transition:width .2s}
+
+/* 邮件 */
+.ap-ml .list2 .it2{align-items:flex-start}
+.ap-ml .danger{background:#fdecea}
+.ap-ml .mailhd{padding:8px 10px;border-bottom:1px solid #e3e3e3;font-size:10.5px;color:#5c6570}
+.ap-ml .mailbd{padding:9px 11px;line-height:1.75}
+.ap-ml .mailbd a{color:#1a4b8c;text-decoration:underline;cursor:pointer}
+
+/* AI 对话 */
+.ap-ai .chat{flex:1;overflow:auto;padding:9px;background:#f7f8fa;display:flex;flex-direction:column;gap:7px}
+.ap-ai .m{max-width:82%;padding:6px 9px;border-radius:9px;line-height:1.6;white-space:pre-wrap;font-size:11px}
+.ap-ai .m.me{align-self:flex-end;background:#1f4e79;color:#fff}
+.ap-ai .m.ai{align-self:flex-start;background:#fff;border:1px solid #e3e3e3}
+.ap-ai .say{display:flex;gap:6px;padding:7px;border-top:1px solid #e3e3e3}
+.ap-ai .say input{flex:1;font:inherit;font-size:11px;padding:5px 9px;border:1px solid #ccd3da;border-radius:6px;outline:0}
+.ap-ai .say button{font:inherit;font-size:11px;padding:5px 11px;border-radius:6px;border:1px solid #1f4e79;
+  background:#1f4e79;color:#fff;cursor:pointer}
+
+/* 磁盘清理 */
+.ap-cl .pane{padding:9px 11px;overflow:auto;flex:1}
+.ap-cl label{display:flex;gap:7px;align-items:center;font-size:11px;padding:5px 0;border-bottom:1px solid #f2f2f2;cursor:pointer}
+.ap-cl label .sz{margin-left:auto;color:#8b949e;font-size:10px}
+
+/* 截图工具 */
+.ap-sn{background:#f7f8fa}
+.scr .cap{position:absolute;inset:0;background:rgba(0,0,0,.42);cursor:crosshair;z-index:55}
+.scr .selbox{position:absolute;border:1.5px solid #7cc0ff;background:rgba(124,192,255,.16);
+  box-shadow:0 0 0 9999px rgba(0,0,0,.42);z-index:56}
+
+/* 照片查看 */
+.ap-img{flex-direction:column}
+.ap-img .hd{flex:0 0 auto}
+.ap-img .imgbox{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;
+  background:#141210;padding:10px}
+.ap-img .imgbox img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+.ap-img .imgcap{flex:0 0 auto;padding:6px 10px;font-size:10.5px;color:#8b949e;text-align:center;background:#f7f8fa;
+  border-top:1px solid #e3e3e3}
+
+/* 蓝屏 */
+.ap-bsod{position:absolute;inset:0;background:#0a4a8f;color:#fff;padding:16px 18px;z-index:66;
+  font-size:11.5px;line-height:1.8;display:flex;flex-direction:column;justify-content:center}
+.ap-bsod .face{font-size:30px;margin-bottom:9px}
+.ap-bsod .pc2{margin-top:12px;font-size:10.5px;color:#cfe0f5}
+
+/* ---------- 任务卡 ---------- */
+.tasks{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px}
+.tasks h4{margin:0 0 9px;font-family:var(--serif);font-size:15px;color:var(--accent-ink);letter-spacing:.02em}
+.tasks ol{margin:0;padding-left:20px;font-size:14px;display:flex;flex-direction:column;gap:6px}
+.tasks li{color:var(--mut);line-height:1.7}
+.tasks li.ok{color:var(--ok);font-weight:600;text-decoration:line-through}
+.tasks li.ok::marker{color:var(--ok)}
+.tasks .fin{margin-top:9px;font-size:13px;color:var(--ok);font-weight:600}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="back" href="index.html">← 返回目录</a>
+  <h1>第 2 章　键盘与中文输入法</h1>
+  <p class="sub">键盘布局、常用按键、中文输入法、中英文符号、打字指法</p>
+  <div class="bar"><span id="pbar"></span></div>
+  <div class="stat" id="stat">已答 0 / 0</div>
+</div></header>
+<nav class="tabs wrap" id="tabs"></nav>
+<main class="wrap">
+  <section class="tabpane" id="tab-quiz" data-name="自测题">
+    <div class="lead">软键盘支持自由探索与挑战两种模式。点「自由探索」查看每个键的作用，点「快捷键挑战」按提示按出组合键。</div>
+    <div id="quiz"></div>
+  </section>
+  <section class="tabpane" id="tab-lab" data-name="动手练">
+    <div class="lead">记事本已经在屏幕上打开，输入法初始为中文。用下面这台机器的键盘打字：敲拼音，候选词出现在记事本上方，按空格或数字键选词；按 Shift 或 Win+空格切换中英文。点实体键盘上的按键即可输入。</div><div class="rig" id="c2"></div><div class="tasks"><h4>动手任务 <span class="stat" id="c2-score"></span></h4><ol id="c2-tasks"></ol></div>
+  </section>
+</main>
+<footer class="wrap foot">
+  电脑应用基础教程 · 第 2 章自测　|　题目依据本章正文<br>
+  进度不跨页保存，刷新后重新开始。
+</footer>
+<script id="qdata" type="application/json">[{"t":"single","q":"删除光标之前的一个字符，应使用？","o":["Delete","Backspace","Insert","Esc"],"a":1,"e":"退格键删除光标之前的字符，删除键删除光标之后的字符。"},{"t":"single","q":"键盘上输入字母、数字与符号的主要区域是？","o":["功能键区","主键盘区","编辑键区","数字键盘区"],"a":1,"e":"键盘分五个区：主键盘区居中偏左，功能键区在顶部，编辑键区在中间，方向键区在右下，数字键盘区在最右。"},{"t":"single","q":"输入拼音后，直接按空格键的作用是？","o":["翻到下一页候选","输入第一个候选字","切换中英文","删除输入内容"],"a":1,"e":"按空格选取第一个候选字，多数情况下第一个即所需字符；翻页用加号、减号或方向键。"},{"t":"multi","q":"下列能提高中文输入准确率的做法有？","o":["整句拼音一次输入完毕再选词","逐字输入并逐个选字","输入生僻字时先输字母 u 再拆字","始终保持全角状态"],"a":[0,2],"e":"整句输入可以让输入法结合上下文推断；全角状态会导致密码与网址无法识别。"},{"t":"single","q":"输入生僻字时，先输入哪个字母可以启用拆字输入？","o":["v","u","i","o"],"a":1,"e":"先输字母 u，再输入组成该字的各部分拼音，例如「犇」输 u 加三个「牛」的拼音。"},{"t":"single","q":"打字时手指的基准位置是？","o":["A 和 ; 键","F 和 J 键","S 和 L 键","空格键两侧"],"a":1,"e":"F 与 J 键上有凸点，作为定位点，无需目视即可触摸到。"},{"t":"single","q":"切换全角与半角的快捷键是？","o":["Shift","Ctrl+空格","Shift+空格","Ctrl+句号"],"a":2,"e":"Shift 切换中英文，Shift+空格切换全角半角，Ctrl+句号切换中英文标点。"},{"t":"single","q":"密码输入正确却一直提示错误，且看不出差别，最可能的原因是？","o":["键盘损坏","使用了中文标点或全角字符","浏览器版本过低","账号被锁定"],"a":1,"e":"密码与网址必须在英文符号、半角状态下输入，中文逗号与英文逗号外观差别很小但系统可以识别。"},{"t":"single","q":"中文标点与英文标点之间的切换快捷键是？","o":["Ctrl+空格","Shift+空格","Ctrl+句号","Win+空格"],"a":2,"e":"输入法状态栏上会显示当前是中文标点还是英文标点。"},{"t":"match","q":"把按键与作用配对","l":["Shift","Win+空格","Caps Lock","Ctrl+Shift"],"r":["中英文切换，输入时使用频率最高","在已安装的多个输入法之间切换","英文大小写锁定","在多个输入法之间轮换"],"e":"这四组是中文输入时最常用的切换键。"}]</script>
+<noscript><div class="wrap" style="margin-top:14px"><div class="lead" style="border-left:3px solid var(--no)">
+本页的题目与演示需要 JavaScript 才能显示。当前页面没有执行脚本，请用浏览器直接打开本文件（在文件管理器中双击），
+而不要通过代码预览器或文本编辑器查看。
+</div></div></noscript>
+<script>
+'use strict';
+/* 脚本报错时在页面上直接显示原因，避免出现空白页 */
+window.addEventListener('error',function(e){
+  if(document.getElementById('boot-error'))return;
+  var box=document.createElement('div');
+  box.id='boot-error'; box.className='lead';
+  box.style.cssText='border-left:3px solid var(--no);margin:14px 0';
+  box.textContent='页面脚本未能执行：'+(e.message||String(e.error||''))+
+    '　如果这是通过代码预览器打开的，请改为用浏览器直接打开本文件（双击即可）。';
+  var m=document.querySelector('main')||document.body;
+  m.insertBefore(box,m.firstChild);
+});
+var $=function(s,r){return (r||document).querySelector(s);};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+var shuf=function(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.random()*(i+1)|0;
+  var t=a[i];a[i]=a[j];a[j]=t;}return a;};
+var norm=function(s){return String(s).toLowerCase().
+  replace(/[\s，。、；：！？「」（）()【】\[\],.;:!?'"\/\\-]/g,'');};
+var LET='ABCDEFGH';
+
+/* ============ 计分 ============ */
+var SC={total:0,ok:0,done:0};
+function syncStat(){
+  var bar=$('#pbar'), st=$('#stat');
+  if(bar) bar.style.width=(SC.total?SC.done/SC.total*100:0)+'%';
+  if(st) st.textContent='已答 '+SC.done+' / '+SC.total+'　正确 '+SC.ok;
+  var r=$('#result');
+  if(r){
+    var pct=SC.total?Math.round(SC.ok/SC.total*100):0;
+    r.innerHTML='<div class="big">'+SC.ok+' / '+SC.total+'</div><p>'+(SC.done<SC.total
+      ? '还有 '+(SC.total-SC.done)+' 题未作答'
+      : (pct>=90?'全部作答完毕，掌握情况良好':pct>=70?'大部分正确，回到错题对应的章节再看一遍':'建议重新阅读本章后重做'))+'</p>';
+  }
+}
+
+/* ============ 题目卡片 ============ */
+function qcard(q,i){
+  var c=document.createElement('div');
+  c.className='q'; c.dataset.i=i;
+  var tag={single:'单选',multi:'多选',order:'排序',match:'配对',text:'填空'}[q.t]||'';
+  c.innerHTML='<div class="qh"><div class="qn">'+(i+1)+'</div><div class="qt">'+esc(q.q)+
+    '<span class="tag">'+tag+'</span></div></div>';
+  var body=document.createElement('div');
+  c.appendChild(body);
+  ({single:mkSingle,multi:mkMulti,order:mkOrder,match:mkMatch,text:mkText})[q.t](c,body,q);
+  return c;
+}
+function settle(card,ok,rightText,explain){
+  if(card.classList.contains('done'))return;
+  card.classList.add('done',ok?'ok':'no');
+  SC.done++; if(ok)SC.ok++;
+  var fb=document.createElement('div');
+  fb.className='fb';
+  fb.innerHTML=(ok?'<em class="ok">正确。</em> ':'<em class="no">不对。</em> ')+
+    (rightText?'正确答案：'+esc(rightText)+'　':'')+esc(explain||'');
+  card.appendChild(fb);
+  if(!ok){
+    var row=document.createElement('div'); row.className='row';
+    var b=document.createElement('button'); b.className='btn ghost'; b.textContent='重做本题';
+    b.onclick=function(){
+      card.classList.remove('done','ok','no');
+      $$('.fb,.row',card).forEach(function(x){x.remove();});
+      $$('.opt,.chip,.mi',card).forEach(function(x){
+        x.disabled=false;x.classList.remove('right','wrong','sel','picked','pair');});
+      $$('.inp',card).forEach(function(x){x.value='';x.disabled=false;});
+      if(card._reset)card._reset();
+      SC.done--; syncStat();
+    };
+    row.appendChild(b); card.appendChild(row);
+  }
+  syncStat();
+}
+
+function mkSingle(card,body,q){
+  var box=document.createElement('div'); box.className='opts';
+  q.o.forEach(function(t,j){
+    var b=document.createElement('button'); b.className='opt';
+    b.innerHTML='<i>'+LET[j]+'</i><span>'+esc(t)+'</span>';
+    b.onclick=function(){
+      if(card.classList.contains('done'))return;
+      $$('.opt',card).forEach(function(x,k){x.disabled=true; if(k===q.a)x.classList.add('right');});
+      if(j!==q.a)b.classList.add('wrong');
+      settle(card,j===q.a,q.o[q.a],q.e);
+    };
+    box.appendChild(b);
+  });
+  body.appendChild(box);
+}
+
+function mkMulti(card,body,q){
+  var box=document.createElement('div'); box.className='opts'; var sel=[];
+  q.o.forEach(function(t,j){
+    var b=document.createElement('button'); b.className='opt';
+    b.innerHTML='<i>'+LET[j]+'</i><span>'+esc(t)+'</span>';
+    b.onclick=function(){ if(card.classList.contains('done'))return;
+      var p=sel.indexOf(j);
+      if(p>=0){sel.splice(p,1);b.classList.remove('sel');}else{sel.push(j);b.classList.add('sel');} };
+    box.appendChild(b);
+  });
+  var row=document.createElement('div'); row.className='row';
+  var sub=document.createElement('button'); sub.className='btn'; sub.textContent='提交答案';
+  sub.onclick=function(){
+    if(card.classList.contains('done'))return;
+    var A=q.a.slice().sort().join(','), B=sel.slice().sort().join(',');
+    $$('.opt',card).forEach(function(x,k){x.disabled=true;
+      if(q.a.indexOf(k)>=0)x.classList.add('right'); else if(sel.indexOf(k)>=0)x.classList.add('wrong');});
+    sub.disabled=true;
+    settle(card,A===B,q.a.map(function(k){return LET[k];}).join('、'),q.e);
+  };
+  row.appendChild(sub); box.appendChild(row); body.appendChild(box);
+}
+
+function mkOrder(card,body,q){
+  var items=shuf(q.items);
+  var box=document.createElement('div'); box.className='chips'; var picked=[];
+  var render=function(){
+    box.innerHTML='';
+    items.forEach(function(t,k){
+      var pos=picked.indexOf(k);
+      var b=document.createElement('button'); b.className='chip'+(pos>=0?' picked':'');
+      b.innerHTML='<b>'+(pos>=0?pos+1:'')+'</b><span>'+esc(t)+'</span>';
+      b.onclick=function(){ if(card.classList.contains('done'))return;
+        var p=picked.indexOf(k);
+        if(p>=0)picked.splice(p,1); else picked.push(k);
+        render();
+        if(picked.length===items.length){
+          var ok=picked.every(function(v,idx){return items[v]===q.items[idx];});
+          settle(card,ok,ok?'':'正确顺序：'+q.items.map(function(t,n){return (n+1)+'. '+t;}).join('　'),q.e);
+        }
+      };
+      box.appendChild(b);
+    });
+  };
+  render();
+  card._reset=function(){picked.length=0;render();};
+  body.appendChild(box);
+  var tip=document.createElement('div'); tip.className='stat'; tip.style.marginTop='8px';
+  tip.textContent='按正确顺序依次点击各项';
+  body.appendChild(tip);
+}
+
+function mkMatch(card,body,q){
+  var R=shuf(q.r);
+  var box=document.createElement('div'); box.className='match';
+  var L=document.createElement('div'); L.className='col';
+  var Rc=document.createElement('div'); Rc.className='col';
+  var cur=null, pair={};
+  var paint=function(){
+    $$('.mi',L).forEach(function(b,i){
+      b.classList.toggle('sel',cur===i);
+      b.classList.toggle('pair',pair[i]!==undefined);
+      $('.dot',b).textContent=pair[i]!==undefined?(Object.keys(pair).indexOf(String(i))+1):'';
+    });
+    $$('.mi',Rc).forEach(function(b,j){
+      var owner=Object.keys(pair).filter(function(k){return pair[k]===j;})[0];
+      b.classList.toggle('pair',owner!==undefined);
+      $('.dot',b).textContent=owner!==undefined?(Object.keys(pair).indexOf(owner)+1):'';
+    });
+  };
+  q.l.forEach(function(t,i){
+    var b=document.createElement('button'); b.className='mi';
+    b.innerHTML='<span class="dot"></span>'+esc(t);
+    b.onclick=function(){ if(card.classList.contains('done'))return; cur=i; paint(); };
+    L.appendChild(b);
+  });
+  R.forEach(function(t,j){
+    var b=document.createElement('button'); b.className='mi';
+    b.innerHTML='<span class="dot"></span>'+esc(t);
+    b.onclick=function(){ if(card.classList.contains('done')||cur===null)return;
+      Object.keys(pair).forEach(function(k){if(pair[k]===j)delete pair[k];});
+      pair[cur]=j; cur=null; paint();
+      if(Object.keys(pair).length===q.l.length){
+        var ok=q.l.every(function(_,i){return R[pair[i]]===q.r[i];});
+        settle(card,ok,ok?'':'正确配对见下表',q.e);
+      }
+    };
+    Rc.appendChild(b);
+  });
+  box.appendChild(L); box.appendChild(Rc); body.appendChild(box);
+  var tip=document.createElement('div'); tip.className='stat'; tip.style.marginTop='8px';
+  tip.textContent='先点左边一项，再点右边对应项';
+  body.appendChild(tip);
+  card._reset=function(){cur=null;Object.keys(pair).forEach(function(k){delete pair[k];});paint();};
+}
+
+function mkText(card,body,q){
+  var row=document.createElement('div'); row.className='row';
+  var inp=document.createElement('input'); inp.className='inp'; inp.placeholder=q.ph||'输入答案';
+  var sub=document.createElement('button'); sub.className='btn'; sub.textContent='提交';
+  var go=function(){
+    if(card.classList.contains('done'))return;
+    var v=norm(inp.value);
+    var ok=q.a.some(function(x){return norm(x)===v;})||
+           (q.contains&&q.contains.some(function(x){return v.indexOf(norm(x))>=0;}));
+    inp.disabled=true; sub.disabled=true;
+    settle(card,ok,q.a[0],q.e);
+  };
+  sub.onclick=go;
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter')go();});
+  row.appendChild(inp); row.appendChild(sub); body.appendChild(row);
+}
+
+function renderQuiz(list){
+  var root=$('#quiz'); if(!root)return;
+  SC.total=list.length;
+  list.forEach(function(q,i){root.appendChild(qcard(q,i));});
+  var box=document.createElement('div'); box.className='result'; box.id='result'; root.appendChild(box);
+  syncStat();
+}
+
+/* ================================================================
+   键盘表：主键区 + 编辑键区 + 数字小键盘
+   ================================================================ */
+var KBMAIN=[
+ [{c:'Esc',n:'退出键 Esc',d:'取消当前操作、关闭弹窗、退出全屏',w:1.2},
+  {c:'F1',f:'🔅−',n:'F1',d:'多数软件中打开帮助文档；笔记本上直接按通常是降低亮度'},
+  {c:'F2',f:'🔅+',n:'F2',d:'重命名文件；Excel 中编辑单元格'},
+  {c:'F3',f:'🖥',n:'F3',d:'文件管理器中搜索当前目录'},
+  {c:'F4',f:'🎤',n:'F4',d:'展开地址栏历史；配合 Alt 关闭窗口'},
+  {c:'F5',f:'🔇',n:'F5',d:'刷新页面；PPT 中开始放映'},
+  {c:'F6',f:'🔉',n:'F6',d:'切换焦点，浏览器中跳到地址栏'},
+  {c:'F7',f:'🔊',n:'F7',d:'Word 中拼写与语法检查；命令提示符中翻历史命令'},
+  {c:'F8',f:'🎬',n:'F8',d:'开机时按住可进入高级启动选项'},
+  {c:'F9',f:'☀',n:'F9',d:'Excel 中重新计算所有公式'},
+  {c:'F10',f:'📶',n:'F10',d:'激活菜单栏；配合 Shift 等同鼠标右键'},
+  {c:'F11',f:'✈',n:'F11',d:'浏览器全屏，再按一次退出'},
+  {c:'F12',f:'🔒',n:'F12',d:'浏览器开发者工具；Office 中另存为'}],
+ [{c:'`',s:'~',n:'反引号键',d:'英文重音符号；中文状态下为「·」'},
+  {c:'1',s:'!',n:'数字 1',d:'Shift 加 1 输入感叹号'},{c:'2',s:'@',n:'数字 2',d:'Shift 加 2 输入 @，写邮箱常用'},
+  {c:'3',s:'#',n:'数字 3'},{c:'4',s:'$',n:'数字 4',d:'Shift 加 4：英文 $，中文 ￥'},
+  {c:'5',s:'%',n:'数字 5'},{c:'6',s:'^',n:'数字 6',d:'Shift 加 6：英文 ^，中文 ……'},
+  {c:'7',s:'&',n:'数字 7'},{c:'8',s:'*',n:'数字 8'},{c:'9',s:'(',n:'数字 9'},{c:'0',s:')',n:'数字 0'},
+  {c:'-',s:'_',n:'减号'},{c:'=',s:'+',n:'等号'},{c:'Backspace',n:'退格键 Backspace',d:'删除光标之前的字符',w:1.9}],
+ [{c:'Tab',n:'制表键 Tab',d:'输入框之间跳转；文档中缩进',w:1.4},
+  {c:'Q'},{c:'W'},{c:'E'},{c:'R'},{c:'T'},{c:'Y'},{c:'U'},{c:'I'},{c:'O'},{c:'P'},
+  {c:'[',s:'{',n:'左方括号'},{c:']',s:'}',n:'右方括号'},{c:'\\',s:'|',n:'反斜杠',d:'文件路径中的分隔符',w:1.4}],
+ [{c:'CapsLock',n:'大写锁定键 Caps Lock',d:'指示灯亮时输入的字母全为大写',w:1.7},
+  {c:'A'},{c:'S'},{c:'D',n:'D 键',d:'与 F 键同为打字基准键'},
+  {c:'F',n:'F 键',d:'键上有凸点，左手食指的定位点'},
+  {c:'G'},{c:'H'},{c:'J',n:'J 键',d:'键上有凸点，右手食指的定位点'},{c:'K'},{c:'L'},
+  {c:';',s:':',n:'分号'},{c:"'",s:'"',n:'单引号'},{c:'Enter',n:'回车键 Enter',d:'确认输入、另起一行',w:2}],
+ [{c:'Shift',n:'换档键 Shift',d:'按住时输入大写字母或上档符号；中文输入法中按一次切换中英文',w:2.2},
+  {c:'Z'},{c:'X'},{c:'C'},{c:'V'},{c:'B'},{c:'N'},{c:'M'},
+  {c:',',s:'<',n:'逗号',d:'Shift 加逗号：英文 <，中文 《'},
+  {c:'.',s:'>',n:'句号',d:'Shift 加句号：英文 >，中文 》'},{c:'/',s:'?',n:'斜杠'},
+  {c:'Shift',n:'换档键 Shift',d:'同上',w:2.2}],
+ [{c:'Ctrl',n:'控制键 Ctrl',d:'修饰键，单独按下不产生动作，要与其它键组合',w:1.3},
+  {c:'Win',n:'徽标键 Windows',d:'单独按下打开开始菜单，也是绝大多数系统快捷键的起点',w:1.1},
+  {c:'Alt',n:'转换键 Alt',d:'修饰键，例如 Alt+Tab 切换窗口',w:1.1},
+  {c:'Space',n:'空格键 Space',d:'输入空格；浏览器中向下翻页；中文输入法中用第一个候选词',w:4,space:1},
+  {c:'Alt',n:'转换键 Alt',d:'同上',w:1.1},
+  {c:'Fn',n:'功能键 Fn',d:'笔记本专用，配合 F 键在两组功能之间切换',w:1.1},
+  {c:'Menu',n:'菜单键 Menu',d:'等同鼠标右键，在当前位置弹出菜单',w:1.1},
+  {c:'Ctrl',n:'控制键 Ctrl',d:'同上',w:1.3}]
+];
+var KBNAV=[
+ [{c:'PrtSc',n:'截屏键 Print Screen',d:'全屏截图到剪贴板；Win+Print Screen 直接存成文件'},
+  {c:'ScrLk',n:'滚动锁定键 Scroll Lock',d:'早年用于锁定表格滚动，现在很少使用'},
+  {c:'Pause',n:'暂停键 Pause',d:'开机自检时暂停画面；配合 Win 打开系统属性'}],
+ [{c:'Ins',n:'插入键 Insert',d:'切换改写与插入模式'},
+  {c:'Home',n:'起始键 Home',d:'光标跳到行首；Ctrl+Home 跳到文档开头'},
+  {c:'PgUp',n:'上翻页键 Page Up',d:'向上翻一页'}],
+ [{c:'Del',n:'删除键 Delete',d:'删除光标之后的字符；文件管理器中删除到回收站'},
+  {c:'End',n:'结束键 End',d:'光标跳到行尾；Ctrl+End 跳到文档末尾'},
+  {c:'PgDn',n:'下翻页键 Page Down',d:'向下翻一页'}],
+ [null,null,null],
+ [null,{c:'↑',n:'上方向键',d:'向上移动光标或选择上一项'},null],
+ [{c:'←',n:'左方向键',d:'向左移动光标'},{c:'↓',n:'下方向键',d:'向下移动光标'},
+  {c:'→',n:'右方向键',d:'向右移动光标'}]
+];
+var KBNUM=[
+ [{c:'NumLock',n:'数字锁定键 Num Lock',d:'指示灯亮时小键盘输入数字，熄灭时充当方向键',w:1.2},
+  {c:'/',n:'小键盘除号'},{c:'*',n:'小键盘乘号'},{c:'-',n:'小键盘减号'}],
+ [{c:'7'},{c:'8'},{c:'9'},{c:'+',n:'小键盘加号',tall:1}],
+ [{c:'4'},{c:'5'},{c:'6'}],
+ [{c:'1'},{c:'2'},{c:'3'},{c:'Enter',n:'小键盘回车',tall:1}],
+ [{c:'0',w:2},{c:'.',n:'小键盘小数点'}]
+];
+var KBALL=[];
+KBMAIN.forEach(function(r){r.forEach(function(k){KBALL.push(k);});});
+KBNAV.forEach(function(r){r.forEach(function(k){if(k)KBALL.push(k);});});
+KBNUM.forEach(function(r){r.forEach(function(k){if(k)KBALL.push(k);});});
+
+/* ================================================================
+   组合键表（96 条）
+   ================================================================ */
+var COMBOS={
+/* —— 编辑与文档 —— */
+'ctrl+c':'复制','ctrl+v':'粘贴','ctrl+x':'剪切','ctrl+z':'撤销','ctrl+y':'重做','ctrl+a':'全选',
+'ctrl+s':'保存','ctrl+shift+s':'另存为','ctrl+f':'查找','ctrl+h':'替换（部分软件）','ctrl+p':'打印',
+'ctrl+n':'新建','ctrl+o':'打开','ctrl+shift+v':'粘贴为纯文本','ctrl+backspace':'删除光标前一个词',
+'ctrl+delete':'删除光标后一个词','ctrl+left':'光标左移一个词','ctrl+right':'光标右移一个词',
+'ctrl+home':'跳到文档开头','ctrl+end':'跳到文档末尾','ctrl+shift+left':'向左选中一个词',
+'ctrl+shift+right':'向右选中一个词','ctrl+shift+home':'从光标处选中到开头',
+'ctrl+shift+end':'从光标处选中到末尾',
+/* —— 浏览器 —— */
+'ctrl+t':'新建标签页','ctrl+w':'关闭当前标签页或窗口','ctrl+shift+t':'恢复刚关闭的标签页',
+'ctrl+tab':'下一个标签页','ctrl+shift+tab':'上一个标签页','ctrl+shift+n':'新建文件夹（浏览器中为隐身窗口）',
+'ctrl+d':'收藏当前页面','ctrl+j':'打开下载内容','ctrl+l':'把焦点定位到地址栏','ctrl+r':'刷新页面',
+'f5':'刷新页面','f6':'在地址栏与页面之间切换焦点','ctrl+plus':'放大页面','ctrl+-':'缩小页面',
+'ctrl+0':'页面缩放恢复 100%','ctrl+shift+delete':'清除浏览数据','ctrl+u':'查看网页源代码',
+'f12':'开发者工具','f4':'展开地址栏历史','f11':'全屏显示','f3':'在当前目录或页面中搜索',
+/* —— 窗口与桌面 —— */
+'alt+tab':'切换窗口','alt+shift+tab':'反向切换窗口','alt+f4':'关闭当前窗口',
+'alt+space':'弹出窗口控制菜单','alt+left':'后退','alt+right':'前进','alt+up':'回到上一级文件夹',
+'alt+enter':'查看所选项目的属性','alt+prtsc':'只截取当前窗口',
+'f2':'重命名','shift+f10':'等同鼠标右键','shift+delete':'不经过回收站永久删除','delete':'删除到回收站',
+'meta+tab':'任务视图','meta+d':'显示桌面','meta+e':'打开文件资源管理器','meta+i':'打开设置',
+'meta+l':'锁定电脑','meta+r':'打开运行框','meta+s':'打开搜索','meta+a':'打开快速设置',
+'meta+v':'剪贴板历史','meta+x':'打开快速链接菜单（开始按钮右键菜单）','meta+z':'打开贴靠布局',
+'meta+prtsc':'全屏截图并自动保存成文件','meta+shift+s':'框选区域截图','meta+shift+r':'框选区域录屏',
+'meta+g':'打开 Xbox Game Bar','meta+alt+r':'开始或停止录屏','meta+space':'切换输入法',
+'meta+ctrl+d':'新建虚拟桌面','meta+ctrl+left':'切换到左边的虚拟桌面','meta+ctrl+right':'切换到右边的虚拟桌面',
+'meta+ctrl+f4':'关闭当前虚拟桌面','meta+arrowleft':'窗口贴到左半屏','meta+arrowright':'窗口贴到右半屏',
+'meta+arrowup':'最大化窗口','meta+arrowdown':'还原或最小化窗口','meta+home':'最小化除当前窗口外的其它窗口',
+'meta+shift+arrowleft':'把窗口移到左侧显示器','meta+p':'选择投影方式','meta+comma':'临时查看桌面',
+'meta+pause':'打开系统属性','meta+b':'把焦点移到通知区','meta+u':'打开辅助功能设置',
+'meta+1':'打开任务栏上第 1 个固定程序','meta+esc':'关闭放大镜','meta+plus':'打开放大镜',
+/* —— 系统级 —— */
+'ctrl+shift+esc':'直接打开任务管理器','ctrl+alt+delete':'安全选项界面','ctrl+shift+enter':'以管理员身份运行',
+'ctrl+space':'切换中英文输入','ctrl+shift':'切换输入法顺序',
+'f1':'打开帮助','f7':'拼写与语法检查','f8':'开机时按住进入高级启动选项','f9':'重新计算所有公式',
+'f10':'激活菜单栏','shift':'按一次切换中英文','esc':'取消当前操作','tab':'在控件之间跳转',
+'enter':'确认输入或另起一行','backspace':'删除光标前一个字符','capslock':'切换大写锁定','numlock':'切换小键盘数字锁定'
+};
+var MODN={Control:'ctrl',Ctrl:'ctrl',Shift:'shift',Alt:'alt',Meta:'meta',Win:'meta'};
+var KEYID={'←':'arrowleft','→':'arrowright','↑':'arrowup','↓':'arrowdown','Space':'space',
+  'Esc':'esc','Enter':'enter','Tab':'tab','Backspace':'backspace','Delete':'delete','Del':'delete',
+  'PrtSc':'prtsc','Menu':'menu','CapsLock':'capslock','NumLock':'numlock'};
+var NAMEMAP={ctrl:'Ctrl',shift:'Shift',alt:'Alt',meta:'Win',arrowleft:'←',arrowright:'→',
+  arrowup:'↑',arrowdown:'↓',left:'←',right:'→',up:'↑',down:'↓',prtsc:'Print Screen',
+  space:'空格',esc:'Esc',enter:'Enter',tab:'Tab',backspace:'Backspace',delete:'Delete',
+  menu:'菜单键',capslock:'Caps Lock',numlock:'Num Lock',plus:'加号',comma:'逗号',minus:'减号'};
+function fmtCombo(s){
+  return s.split('+').map(function(p){
+    if(NAMEMAP[p])return NAMEMAP[p];
+    if(/^f\d+$/.test(p))return p.toUpperCase();
+    if(p.length===1)return p.toUpperCase();
+    return p;
+  }).join(' + ');
+}
+var PINYIN={
+ 'nihao':['你好','你号'],'zhongwen':['中文'],'shurufa':['输入法'],'diannao':['电脑'],
+ 'wenjian':['文件'],'wenjianjia':['文件夹'],'fuzhi':['复制'],'zhantie':['粘贴'],
+ 'jietu':['截图'],'xiazai':['下载'],'anzhuang':['安装'],'beifen':['备份'],
+ 'lianwang':['联网'],'youjian':['邮件'],'mima':['密码'],'xitong':['系统'],
+ 'jiqiao':['技巧'],'beijing':['北京'],'gongzuo':['工作'],'xuexi':['学习'],
+ 'zhanghao':['账号'],'denglu':['登录'],'liulanqi':['浏览器'],'jianpan':['键盘']
+};
+
+/* ================================================================
+   实体电脑模拟器
+   ================================================================ */
+var APPDEF={
+  explorer:{t:'文件管理器',ic:'📁',rw:.60,rh:.72},
+  browser:{t:'浏览器',ic:'🌐',rw:.66,rh:.76},
+  notepad:{t:'记事本',ic:'📝',rw:.48,rh:.58},
+  settings:{t:'设置',ic:'⚙',rw:.62,rh:.72},
+  taskmgr:{t:'任务管理器',ic:'📊',rw:.62,rh:.68},
+  snipping:{t:'截图工具',ic:'✂',rw:.52,rh:.54},
+  classify:{t:'识别练习',ic:'🧩',rw:.62,rh:.66},
+  installer:{t:'安装向导',ic:'📦',rw:.54,rh:.62},
+  mail:{t:'邮件',ic:'✉',rw:.62,rh:.68},
+  chat:{t:'AI 助手',ic:'🤖',rw:.58,rh:.68},
+  cleanup:{t:'磁盘清理',ic:'🧹',rw:.54,rh:.62},
+  recycle:{t:'回收站',ic:'🗑',rw:.50,rh:.56},
+  hwinfo:{t:'硬件信息',ic:'🔧',rw:.58,rh:.64},
+  downloads:{t:'下载内容',ic:'⬇',rw:.56,rh:.6}
+};
+var POSTLINES=[
+ 'BY-COMPUTER  Setup Utility  v2.11',
+ 'Copyright (C) 2004-2026  All Rights Reserved',
+ '',
+ 'CPU Type   : 4 cores @ 2.50GHz',
+ 'Memory Test: 8192M OK',
+ '',
+ 'Detecting SATA drives ...',
+ '  SATA Port 0 : SSD  512G',
+ '  SATA Port 1 : HDD  1024G',
+ '  SATA Port 2 : DVD-RW',
+ '',
+ 'Press DEL to enter SETUP , F12 for Boot Menu',
+ 'Booting from Hard Disk ...'
+];
+
+function initComputer(cfg){
+  var root=$(cfg.root); if(!root) return;
+  var ID=cfg.id;
+  var LS={};   /* 本地状态容器 */
+
+  /* ---------- 状态 ---------- */
+  var pw='off';                 /* off | post | on | shut */
+  var z=10, desk=0, desks=1, selIcon='';
+  var imeCn=(cfg.ime!=='en');
+  var fnLock=false;
+  var held=[], comboFired=false;
+  var done={};
+  var TASKS=cfg.tasks||[];
+  var PY_BUF='';
+  var CLIPBOARD=[];
+  var INSTALLED={};
+
+  /* ---------- 文件系统 ---------- */
+  var FS={};
+  function loadFS(spec){
+    FS={};
+    Object.keys(spec||{}).forEach(function(p){
+      FS[p]=spec[p].map(function(it){
+        return Array.isArray(it)?{n:it[0],d:!!it[1]}:{n:it.n,d:!!it.d};
+      });
+    });
+  }
+  loadFS(cfg.fs||{'C:':[['Windows',1],['Program Files',1],['用户',1]],'D:':[['照片',1],['文档',1]]});
+  var BIN=[];
+  var PHOTOS=cfg.photos||{};
+
+  /* ---------- 应用集合 ---------- */
+  var APPS=cfg.apps||['explorer'];
+  var W={}, WS={};
+  APPS.forEach(function(k){
+    if(!APPDEF[k])return;
+    var d=APPDEF[k];
+    W[k]={t:(k==='classify'&&cfg.clsTitle)?cfg.clsTitle:d.t, ic:d.ic, rw:d.rw, rh:d.rh,
+          x:0,y:0,w:200,h:160,min:false,max:false,closed:true,desk:0,z:0};
+    WS[k]={};
+  });
+  function state(k){ return WS[k]||(WS[k]={}); }
+
+  /* ---------- 桌面图标 ---------- */
+  var ICONS=[];
+  APPS.forEach(function(k){
+    if(!W[k]||!APPDEF[k])return;
+    if(k==='explorer')ICONS.push(['explorer','🖥','此电脑','open']);
+    else if(k==='recycle')ICONS.push(['recycle','🗑','回收站','open']);
+    else ICONS.push([k, W[k].ic, W[k].t, 'open']);
+  });
+  ICONS.push(['bin2','📂','项目资料','folder']);
+
+  /* ================================================================
+     骨架
+     ================================================================ */
+  root.className='rig';
+  root.innerHTML=
+   '<div class="mon"><div class="crt">'+
+     '<div class="body">'+
+       '<div class="tube"><div class="glass-wrap"><div class="scr" id="'+ID+'-scr"></div>'+
+       '<div class="glass"></div></div></div>'+
+       '<div class="chin"><span class="brand">BY-COMPUTER</span><span class="model">VX-1526</span>'+
+       '<span class="sp"></span>'+
+       '<button class="dial" data-pwr="1" title="电源键：短按弹出电源菜单，按住 3 秒强制关机">⏻</button>'+
+       '<span class="dial" title="亮度 −">−</span><span class="dial" title="亮度 +">+</span>'+
+       '<span class="led" id="'+ID+'-led"></span></div>'+
+     '</div>'+
+     '<div class="stand"></div><div class="base"></div>'+
+   '</div></div>'+
+   '<div class="desk"></div>'+
+   '<div class="kbwrap2">'+
+     '<div class="kbbar">'+
+       '<button class="btn" id="'+ID+'-mode">快捷键挑战</button>'+
+       '<label><input type="checkbox" id="'+ID+'-fn"> Fn Lock</label>'+
+     '</div>'+
+     '<div class="target hidden" id="'+ID+'-target"></div>'+
+     '<div class="kb2" id="'+ID+'-kb"></div>'+
+     '<div class="kinfo" id="'+ID+'-info">点按下面实体键盘上的按键，或在电脑键盘上直接敲击，这里会显示它的作用。'+
+     '按 Ctrl、Shift、Win 这类修饰键时，先按住再按下一个键，就是一个组合键。</div>'+
+   '</div>';
+
+  var scr=$('#'+ID+'-scr',root), kb=$('#'+ID+'-kb',root),
+      info=$('#'+ID+'-info',root), tgt=$('#'+ID+'-target',root),
+      led=$('#'+ID+'-led',root);
+
+  /* ================================================================
+     屏幕骨架
+     ================================================================ */
+  scr.innerHTML=
+    '<div class="dicons">'+ICONS.map(function(c){
+      return '<div class="dicon" data-open="'+c[0]+'"><span>'+c[1]+'</span>'+c[2]+'</div>';}).join('')+'</div>'+
+    '<div class="tb2">'+
+      '<button class="sb" data-act="start"><span class="logo"><i></i><i></i><i></i><i></i></span>开始</button>'+
+      '<input class="find" placeholder="搜索" readonly tabindex="-1">'+
+      '<span class="pins2" id="'+ID+'-pins"></span>'+
+      '<span class="sp"></span>'+
+      '<span class="ime" data-act="ime" title="切换中英文输入">'+(imeCn?'中':'英')+'</span>'+
+      '<div class="tray" data-act="tray"><span>📶</span><span>🔊</span><span>🔋</span>'+
+      '<span class="clk" id="'+ID+'-clock"></span></div>'+
+    '</div>';
+
+  /* 窗口 DOM */
+  Object.keys(W).forEach(function(k){
+    var el=document.createElement('div');
+    el.className='win min'; el.dataset.w=k;
+    el.innerHTML='<div class="tb"><span class="ic">'+W[k].ic+'</span><span class="t">'+esc(W[k].t)+'</span>'+
+      '<button data-a="min" title="最小化">─</button>'+
+      '<button data-a="max" title="最大化">□</button>'+
+      '<button data-a="close" class="x" title="关闭">✕</button></div>'+
+      '<div class="bd"></div><div class="rs"></div>';
+    scr.appendChild(el);
+  });
+
+  function el(k){ return $('.win[data-w="'+k+'"]',scr); }
+  function bd(k){ return $('.bd',el(k)); }
+  function maxH(){ return scr.clientHeight-34; }
+  function maxW(){ return scr.clientWidth; }
+
+  /* ================================================================
+     通用渲染工具
+     ================================================================ */
+  function mark(k){ if(k&&!done[k]){ done[k]=1; paintTasks(); } }
+  function paintTasks(){
+    var ol=$('#'+ID+'-tasks',document); if(!ol)return;
+    if(!ol.dataset.b){ ol.dataset.b='1'; TASKS.forEach(function(t){
+      var li=document.createElement('li'); li.textContent=t.t; li.dataset.k=t.k; ol.appendChild(li); }); }
+    $$('li',ol).forEach(function(li){ li.classList.toggle('ok',!!done[li.dataset.k]); });
+    var n=TASKS.filter(function(t){return done[t.k];}).length, s=$('#'+ID+'-score');
+    if(s)s.textContent='已完成 '+n+' / '+TASKS.length+' 项';
+    if(TASKS.length&&TASKS.every(function(t){return done[t.k];})){
+      if(!$('#'+ID+'-fin',ol.parentNode)){
+        var f=document.createElement('div'); f.className='fin'; f.id=ID+'-fin';
+        f.textContent='这一节的操作全部完成。'; ol.parentNode.appendChild(f); mark('__all'); }
+    }
+  }
+  function toast(msg){
+    var t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+    scr.appendChild(t);
+    setTimeout(function(){ t.remove(); },1900);
+  }
+  function beep(){ if(led){ led.classList.add('wait'); setTimeout(function(){ setLed(pw==='on'?'on':''); },160);} }
+  function active(k){
+    if(k&&!W[k].closed&&!W[k].min&&W[k].desk===desk)return k;
+    var vis=Object.keys(W).filter(function(x){return !W[x].closed&&!W[x].min&&W[x].desk===desk;});
+    if(vis.length)return vis.sort(function(a,b){return W[a].z-W[b].z;})[vis.length-1];
+    var pool=Object.keys(W).filter(function(x){return !W[x].closed&&W[x].desk===desk;});
+    if(!pool.length)return '';
+    return pool.sort(function(a,b){return W[a].z-W[b].z;})[pool.length-1];
+  }
+  function bring(k){ W[k].z=++z; el(k).style.zIndex=W[k].z; syncBlur(); }
+  function syncBlur(){
+    var top=active();
+    Object.keys(W).forEach(function(k){ el(k).classList.toggle('blur',k!==top); });
+  }
+
+  /* ================================================================
+     电源
+     ================================================================ */
+  var powerHold=null, powerLong=false, hintShown=false, frozen=false;
+  function bindPower(node){
+    function down(e){
+      if(e.button!==undefined&&e.button!==0)return;
+      e.preventDefault(); powerLong=false;
+      powerHold=setTimeout(function(){
+        powerHold=null; powerLong=true; forceOff();
+      },3000);
+      setTimeout(function(){ if(powerHold&&!hintShown){ hintShown=true;
+        toast('继续按住不放，满 3 秒就会强制关机'); } },1100);
+    }
+    function up(){
+      if(powerHold){ clearTimeout(powerHold); powerHold=null; if(!powerLong)powerTap(); }
+    }
+    node.addEventListener('pointerdown',down);
+    node.addEventListener('pointerup',up);
+    node.addEventListener('pointerleave',function(){ if(powerHold){clearTimeout(powerHold);powerHold=null;} });
+    node.addEventListener('pointercancel',function(){ if(powerHold){clearTimeout(powerHold);powerHold=null;} });
+    node.addEventListener('contextmenu',function(e){ e.preventDefault(); });
+  }
+  $$('[data-pwr]',root).forEach(bindPower);
+
+  function setLed(cls){ if(!led)return; led.className='led'+(cls?' '+cls:''); }
+  function setOn(on){
+    var off=$('.off',scr), post=$('.post',scr), shut=$('.shut',scr), col=$('.collapse',scr);
+    if(off)off.remove(); if(shut)shut.remove(); if(col)col.remove();
+    if(!on){ if(post)post.remove(); }
+  }
+  function screenOff(msg,cls){
+    setOn(false); pw='off'; setLed('');
+    var d=document.createElement('div'); d.className='off'+(cls?' '+cls:'');
+    d.innerHTML=msg; scr.appendChild(d);
+  }
+  function goLive(){
+    if(frozen)return;
+    $$('.post,.shut,.off,.collapse',scr).forEach(function(n){ n.remove(); });
+    pw='on'; setLed('on'); layout(); paintAll(); mark('power');
+    var bs=state('booted');
+    if(!bs.b){
+      bs.b=1;
+      if(cfg.startPage&&W.browser){
+        newTab(cfg.startPage,cfg.startTitle||'新标签页',cfg.startUrl||'');
+        open('browser');
+      }
+      (cfg.openAtBoot||[]).forEach(function(k){ if(W[k])open(k); });
+    }
+  }
+  function boot(){
+    if(pw!=='off')return;
+    pw='post'; setLed('wait'); beep(); mark('boot');
+    var pre=document.createElement('div'); pre.className='post';
+    var i=0;
+    function step(){
+      if(pw!=='post')return;
+      pre.innerHTML=POSTLINES.slice(0,i).map(esc).join('\n');
+      i++;
+      if(i<=POSTLINES.length) setTimeout(step,cfg.postSpeed||90);
+      else setTimeout(finishBoot,420);
+    }
+    function finishBoot(){ if(pw!=='post')return; goLive(); }
+    scr.appendChild(pre); step();
+    pre.addEventListener('click',function(){ i=POSTLINES.length+1; finishBoot(); });
+  }
+  function shutdown(kind){
+    if(pw!=='on')return;
+    pw='shut'; closeAll(); setLed('');
+    if(kind==='force'){
+      var c=document.createElement('div'); c.className='collapse'; c.innerHTML='<i></i>';
+      scr.appendChild(c);
+      setTimeout(function(){ c.remove(); screenOff('已强制关机，没有走正常的关机流程。<br>'+
+        '下次开机可能提示「磁盘检查」，重要文件容易损坏，只在这一种情况下使用：<br>'+
+        '屏幕完全卡死、鼠标与电源菜单都没有反应。','force'); mark('force'); },380);
+      return;
+    }
+    var s=document.createElement('div'); s.className='shut';
+    s.innerHTML='<span class="spin"></span>正在关机';
+    scr.appendChild(s);
+    setTimeout(function(){ s.remove();
+      var c=document.createElement('div'); c.className='collapse'; c.innerHTML='<i></i>';
+      scr.appendChild(c);
+      setTimeout(function(){ c.remove();
+        screenOff('已关机。<br>按显示器上的电源键开机。'); mark('shutdown'); },620);
+    },1100);
+  }
+  function powerTap(){
+    beep();
+    if(frozen){ toast('屏幕完全没有反应，短按电源键也不起作用。要按住不放 3 秒。'); return; }
+    if(pw==='off'){ boot(); return; }
+    if(pw==='on'){ powerMenu(); return; }
+  }
+  function forceOff(){ if(pw==='off')return; frozen=false; shutdown('force'); }
+  function powerMenu(){
+    closeAll();
+    var m=document.createElement('div'); m.className='pmenu';
+    m.innerHTML='<h5>电源选项</h5>'+
+      '<div data-p="sleep">🌙　睡眠</div>'+
+      '<div data-p="shut">⏻　关机</div>'+
+      '<div data-p="reboot">↻　重启</div>'+
+      '<div data-p="lock">🔒　锁定</div>'+
+      '<div class="tip">短按电源键弹出这个菜单；按住电源键不放满 3 秒会强制关机。</div>';
+    m.addEventListener('click',function(e){
+      var d=e.target.closest('[data-p]'); if(!d)return;
+      var v=d.dataset.p; closeAll();
+      if(v==='shut')shutdown();
+      else if(v==='reboot'){ pw='on'; shutdown(); setTimeout(boot,1300); }
+      else if(v==='lock'){ toast('已锁定，需要密码才能回到桌面'); mark('lock'); }
+      else toast('已进入睡眠，按任意键唤醒');
+    });
+    scr.appendChild(m); pop(m,'pm');
+  }
+
+  /* ================================================================
+     弹出层管理
+     ================================================================ */
+  var pops={};
+  function closeAll(){
+    $$('.startmenu,.ctx,.snapfly,.traypop,.pmenu,.tv,.switcher',scr).forEach(function(n){ n.remove(); });
+    pops={};
+  }
+  function pop(node,which){ closeAll(); scr.appendChild(node); pops[which]=node; return node; }
+  function closeTV(){ var t=$('.tv',scr); if(t)t.remove(); }
+  function closeSW(){ var s=$('.switcher',scr); if(s)s.remove(); }
+
+  /* ================================================================
+     窗口布局
+     ================================================================ */
+  var cascade=0;
+  function defBox(k){
+    var W0=maxW(), H0=maxH(), d=W[k];
+    var w=Math.max(148,Math.round(W0*d.rw)), h=Math.max(104,Math.round(H0*d.rh));
+    if(W0<520){ w=Math.max(140,W0-24); h=Math.max(100,H0-26); }
+    var ox=(cascade%4)*14, oy=(cascade%4)*12; cascade++;
+    return {w:w,h:h,x:Math.max(4,Math.round((W0-w)/2)-24+ox),y:Math.max(4,Math.round((H0-h)/2)-16+oy)};
+  }
+  function clampWin(k){
+    var w=W[k], SW=maxW(), SH=maxH();
+    w.w=Math.min(w.w,Math.max(140,SW-8));
+    w.h=Math.min(w.h,Math.max(96,SH-8));
+    w.x=Math.min(Math.max(0,w.x),Math.max(0,SW-w.w));
+    w.y=Math.min(Math.max(0,w.y),Math.max(0,SH-w.h));
+  }
+  function open(k){
+    if(!W[k])return;
+    if(W[k].closed||W[k]._new){ var b=defBox(k); W[k].w=b.w; W[k].h=b.h; W[k].x=b.x; W[k].y=b.y; W[k]._new=false; }
+    W[k].closed=false; W[k].min=false; W[k].desk=desk;
+    paint(k); bring(k); layout(); mark('open:'+k); mark('open'); beep();
+  }
+  function closeWin(k){
+    if(!W[k])return;
+    W[k].closed=true; el(k).style.display='none'; layout(); mark('close:'+k); mark('close');
+    var onClose=(APP[k]&&APP[k].onClose); if(onClose)onClose(k);
+  }
+  function minWin(k){ if(!W[k])return; W[k].min=true; layout(); mark('min'); }
+  function maxWin(k){
+    if(!W[k])return;
+    W[k].max=!W[k].max; W[k].min=false; bring(k); layout(); mark('max');
+  }
+  function snap(k,side){
+    var w=W[k]; if(!w)return;
+    var SW=maxW(), SH=maxH();
+    w.max=false; w.min=false;
+    if(side==='max'){ w.max=true; w.x=0; w.y=0; w.w=SW; w.h=SH; }
+    else { w.w=Math.round(SW/2)-2; w.h=SH; w.y=0; w.x=(side==='left')?0:Math.round(SW/2)+2; }
+    bring(k); layout();
+    if(side==='left')mark('snapL'); if(side==='right')mark('snapR');
+  }
+  function toggle(k){
+    var w=W[k]; if(!w)return;
+    if(w.closed){open(k);return;}
+    w.min=!w.min; if(!w.min)bring(k); layout();
+    if(!w.min)mark('open:'+k);
+  }
+  function layout(){
+    var SW=maxW(), SH=maxH();
+    Object.keys(W).forEach(function(k){
+      var w=W[k], e=el(k);
+      if(w.closed||w.min||w.desk!==desk){ e.classList.add('min'); e.style.display='none'; return; }
+      e.classList.remove('min'); e.style.display='flex';
+      if(w.max){ w.x=0; w.y=0; w.w=SW; w.h=SH; }
+      clampWin(k);
+      e.style.left=w.x+'px'; e.style.top=w.y+'px';
+      e.style.width=w.w+'px'; e.style.height=w.h+'px';
+    });
+    syncBar(); syncBlur();
+  }
+  function syncBar(){
+    var holder=$('#'+ID+'-pins',scr); if(!holder)return;
+    var running=APPS.filter(function(k){ return W[k]&&!W[k].closed&&W[k].desk===desk; });
+    holder.innerHTML=running.map(function(k){
+      return '<button class="pi run" data-app="'+k+'" title="'+esc(W[k].t)+'">'+W[k].ic+'</button>';
+    }).join('');
+  }
+  window.addEventListener('resize',function(){ layout(); });
+
+  /* ================================================================
+     屏内坐标与右键
+     ================================================================ */
+  function localPt(e){
+    var r=scr.getBoundingClientRect();
+    return {x:Math.max(0,Math.min(scr.clientWidth,e.clientX-r.left)),
+            y:Math.max(0,Math.min(scr.clientHeight,e.clientY-r.top))};
+  }
+  /* 桌面原生右键：preventDefault 压掉浏览器自带菜单，换成屏幕里的右键菜单 */
+  scr.addEventListener('contextmenu',function(e){
+    e.preventDefault();
+    var p=localPt(e);
+    ctxAt(p.x,p.y,e.target);
+  });
+
+  /* ================================================================
+     右键菜单
+     ================================================================ */
+  var lastTarget=null;
+  function ctxAt(x,y,target){
+    if(pw!=='on')return;
+    mark('ctx');
+    var ic=target&&target.closest?target.closest('.dicon'):null;
+    var inWin=target&&target.closest?target.closest('.win'):null;
+    if(ic) ctxMenu(x,y,[['open','打开'],['-'],['rename','重命名'],['del','删除到回收站']]);
+    else if(inWin){
+      var k=inWin.dataset.w;
+      if(k==='explorer')ctxMenu(x,y,[['paste','粘贴'],['-'],['newfolder','新建文件夹'],
+        ['rename','重命名'],['del','删除'],['-'],['props','属性']]);
+      else ctxMenu(x,y,[['refresh','刷新'],['-'],['props','属性']]);
+    }
+    else ctxMenu(x,y,[['view','查看'],['sort','排序方式'],['refresh','刷新'],['-'],
+      ['newfolder','新建文件夹'],['-'],['display','显示设置'],['pers','个性化']]);
+  }
+  function ctxMenu(x,y,items){
+    var m=document.createElement('div'); m.className='ctx';
+    m.innerHTML=items.map(function(it){
+      return it==='-'?'<hr>':'<div data-c="'+it[0]+'">'+it[1]+'</div>';}).join('');
+    m.style.left=Math.min(x,maxW()-150)+'px';
+    m.style.top=Math.min(y,maxH()-140)+'px';
+    m.addEventListener('click',function(e){
+      e.stopPropagation();
+      var d=e.target.closest('[data-c]'); if(!d)return;
+      var c=d.dataset.c; closeAll(); mark('ctx:'+c);
+      if(c==='refresh'){ toast('已刷新'); }
+      else if(c==='newfolder'){ newFolder(); }
+      else if(c==='view'){ toast('查看：大图标 / 中图标 / 小图标 / 列表'); }
+      else if(c==='sort'){ toast('排序方式：名称 / 修改日期 / 类型 / 大小'); }
+      else if(c==='display'){ open('settings'); setSel('settings','display'); paint('settings'); }
+      else if(c==='pers'){ toast('打开个性化设置'); }
+      else if(c==='props'){ toast('属性窗口（演示）'); }
+      else if(c==='rename'){ toast('按 F2 可以重命名选中的项目'); }
+      else if(c==='del'){ toast('已移入回收站（演示）'); }
+      else if(c==='open'){ openIcon(selIcon||'explorer'); }
+      else if(c==='paste'){ pasteClip(); }
+    });
+    pop(m,'ctx');
+  }
+  function newFolder(){
+    var arr=FS['D:']||(FS['D:']=[]);
+    var n='新建文件夹', i=2;
+    while(arr.some(function(x){return x.n===n;})){ n='新建文件夹 ('+(i++)+')'; }
+    arr.push({n:n,d:1});
+    if(!W.explorer){
+      toast('已在 D 盘新建文件夹「'+n+'」');
+    }else{
+      open('explorer'); FSEL.path='D:'; paint('explorer');
+      toast('已在 D 盘新建文件夹「'+n+'」');
+    }
+    mark('newfolder');
+  }
+  function pasteClip(){
+    if(!CLIPBOARD.length){ toast('剪贴板里没有内容'); return; }
+    var path=(W.explorer&&FSEL.path)||'D:';
+    var arr=FS[path]||(FS[path]=[]);
+    CLIPBOARD.forEach(function(it){
+      arr.push({n:it.n,d:it.d});
+      if(it.cut){ var src=FS[it.from]||[]; var i=src.indexOf(it.ref); if(i>=0)src.splice(i,1); }
+    });
+    if(W.explorer){ paint('explorer'); }
+    toast('已粘贴到 '+path);
+    mark('paste');
+    CLIPBOARD=CLIPBOARD.filter(function(it){return !it.cut;});
+  }
+
+  /* ================================================================
+     图标与桌面交互
+     ================================================================ */
+  function openIcon(key){
+    if(key==='bin2'){ FSEL.path='D:\\照片'; open('explorer'); return; }
+    if(key==='dl'){ if(W.downloads)open('downloads'); else toast('没有下载记录'); return; }
+    if(W[key]){ open(key); return; }
+    toast('演示环境里没有安装这个程序');
+  }
+
+  scr.addEventListener('click',function(e){
+    if(pw!=='on')return;
+    var a=e.target.closest('[data-act]');
+    if(a){
+      var v=a.dataset.act;
+      if(v==='start'){ pops.sm?(closeAll()):startMenu(); return; }
+      if(v==='tray'){ pops.tray?(closeAll()):trayPanel(); return; }
+      if(v==='ime'){ imeCn=!imeCn; a.textContent=imeCn?'中':'英'; mark('ime'); return; }
+    }
+    var wbtn=e.target.closest('[data-a]');
+    if(wbtn){
+      var kk=wbtn.closest('.win').dataset.w, act=wbtn.dataset.a;
+      if(act==='min')minWin(kk); else if(act==='max')maxWin(kk); else closeWin(kk);
+      return;
+    }
+    var app=e.target.closest('.pi');
+    if(app){ toggle(app.dataset.app); return; }
+    var ic=e.target.closest('.dicon');
+    if(ic){
+      var was=selIcon, key=ic.dataset.open;
+      $$('.dicon',scr).forEach(function(d){d.classList.remove('sel');});
+      ic.classList.add('sel'); selIcon=key; closeAll();
+      if(was===key)openIcon(key);
+      return;
+    }
+    var w=e.target.closest('.win');
+    if(w){ bring(w.dataset.w); return; }
+    if(e.target===scr||e.target.classList.contains('dicons')){
+      $$('.dicon',scr).forEach(function(d){d.classList.remove('sel');}); selIcon=''; closeAll(); return;
+    }
+    closeAll();
+  });
+  scr.addEventListener('dblclick',function(e){
+    var ic=e.target.closest('.dicon');
+    if(ic){ openIcon(ic.dataset.open); return; }
+    var tb=e.target.closest('.tb');
+    if(tb)maxWin(tb.closest('.win').dataset.w);
+  });
+
+  /* 拖动与缩放 */
+  var drag=null;
+  scr.addEventListener('pointerdown',function(e){
+    var rs=e.target.closest('.rs');
+    if(rs){
+      var k=rs.closest('.win').dataset.w, w=W[k];
+      drag={k:k,rs:true,sx:e.clientX,sy:e.clientY,ow:w.w,oh:w.h};
+      try{ rs.setPointerCapture(e.pointerId); }catch(err){}
+      return;
+    }
+    var tb=e.target.closest('.tb');
+    if(!tb||e.target.closest('button'))return;
+    var k2=tb.closest('.win').dataset.w, w2=W[k2];
+    if(w2.max)return;
+    drag={k:k2,sx:e.clientX,sy:e.clientY,ox:w2.x,oy:w2.y};
+    try{ tb.setPointerCapture(e.pointerId); }catch(err){}
+    bring(k2);
+  });
+  scr.addEventListener('pointermove',function(e){
+    if(!drag)return;
+    var w=W[drag.k];
+    if(drag.rs){
+      w.w=Math.max(140,drag.ow+e.clientX-drag.sx);
+      w.h=Math.max(96,drag.oh+e.clientY-drag.sy);
+    }else{
+      w.x=drag.ox+e.clientX-drag.sx;
+      w.y=drag.oy+e.clientY-drag.sy;
+    }
+    clampWin(drag.k);
+    el(drag.k).style.left=w.x+'px'; el(drag.k).style.top=w.y+'px';
+    el(drag.k).style.width=w.w+'px'; el(drag.k).style.height=w.h+'px';
+    if(drag.rs)mark('resize'); else mark('drag');
+  });
+  scr.addEventListener('pointerup',function(){ drag=null; });
+
+  /* ================================================================
+     开始菜单 / 托盘 / 贴靠 / 任务视图
+     ================================================================ */
+  function startMenu(){
+    var apps=APPS.filter(function(k){return APPDEF[k];});
+    function renderPins(filter){
+      var f=(filter||'').trim();
+      var list=apps.filter(function(k){
+        return !f || W[k].t.indexOf(f)>=0 || k.indexOf(f)>=0;
+      });
+      if(!list.length)list=apps;
+      return list.map(function(k){
+        return '<button data-app="'+k+'"><span>'+W[k].ic+'</span>'+esc(W[k].t)+'</button>';}).join('');
+    }
+    var m=document.createElement('div'); m.className='startmenu';
+    m.innerHTML='<input class="sk" placeholder="搜索应用，输入后回车直接打开">'+
+      '<h5>已固定</h5><div class="pins" data-pins>'+renderPins('')+'</div>'+
+      '<h5>推荐的项目</h5><div class="rec">'+
+      '<div data-app="explorer">风景.jpg　刚刚添加</div>'+
+      '<div data-app="notepad">会议记录.txt　昨天</div>'+
+      '<div data-app="settings">显示设置　常用</div></div>'+
+      '<div class="ft"><span class="u">👤 同学</span>'+
+      '<button data-p="lock" title="锁定">🔒</button><button data-p="sleep" title="睡眠">🌙</button>'+
+      '<button data-p="shut" title="关机">⏻</button><button data-p="reboot" title="重启">↻</button></div>';
+    var sk=$('.sk',m), box=$('[data-pins]',m);
+    sk.addEventListener('input',function(){ box.innerHTML=renderPins(sk.value); });
+    sk.addEventListener('keydown',function(e){
+      e.stopPropagation();
+      if(e.key==='Enter'){
+        var first=box.querySelector('[data-app]');
+        if(first){ var k=first.dataset.app; closeAll(); if(W[k])open(k); }
+      }
+    });
+    sk.addEventListener('click',function(e){ e.stopPropagation(); });
+    m.addEventListener('click',function(e){
+      e.stopPropagation();
+      var a=e.target.closest('[data-app]');
+      if(a){ closeAll(); var k=a.dataset.app; if(W[k])open(k); else toast('演示环境里没有安装这个程序'); return; }
+      var p=e.target.closest('[data-p]');
+      if(p){ closeAll(); mark('start:'+p.dataset.p);
+        var v=p.dataset.p;
+        if(v==='shut')shutdown();
+        else if(v==='reboot'){ shutdown(); setTimeout(boot,1300); }
+        else if(v==='lock')toast('已锁定，需要密码才能回到桌面');
+        else toast('已进入睡眠，按任意键唤醒'); }
+    });
+    pop(m,'sm');
+  }
+  function trayPanel(){
+    var p=document.createElement('div'); p.className='traypop';
+    p.innerHTML='<div><b>网络</b>'+
+      '<div class="wifi cur" data-w="家">家庭 Wi-Fi　已连接</div>'+
+      '<div class="wifi" data-w="lib">BIT-Web　需要认证</div>'+
+      '<div class="wifi" data-w="off">飞行模式　关闭</div></div>'+
+      '<div style="border-top:1px solid rgba(255,255,255,.14);margin:8px 0"></div>'+
+      '<div><b>音量</b><input type="range" min="0" max="100" value="60" style="width:100%"></div>'+
+      '<div class="r"><span>电池</span><span>82%（养护模式）</span></div>'+
+      '<div class="r"><span>输入法</span><span>'+(imeCn?'中文':'英文')+'</span></div>';
+    p.addEventListener('click',function(e){
+      e.stopPropagation();
+      var w=e.target.closest('[data-w]'); if(!w)return;
+      $$('.wifi',p).forEach(function(x){x.classList.remove('cur');});
+      w.classList.add('cur');
+      toast('已切换到「'+w.textContent.split('　')[0]+'」');
+      mark('wifi');
+    });
+    pop(p,'tray');
+  }
+  function snapFly(k){
+    var f=document.createElement('div'); f.className='snapfly';
+    f.innerHTML='<div data-s="left" title="左半屏"></div><div data-s="right" title="右半屏"></div>'+
+      '<div data-s="max" title="最大化"></div><div data-s="min" title="最小化"></div>';
+    f.addEventListener('click',function(e){
+      e.stopPropagation();
+      var d=e.target.closest('[data-s]'); if(!d)return;
+      var v=d.dataset.s; closeAll();
+      if(v==='min')minWin(k); else if(v==='max')maxWin(k); else snap(k,v);
+    });
+    pop(f,'fly');
+  }
+  scr.addEventListener('mouseover',function(e){
+    var b=e.target.closest('[data-a="max"]');
+    if(b&&!pops.fly)snapFly(b.closest('.win').dataset.w);
+    else if(!b&&pops.fly&&!e.target.closest('.snapfly')){ pops.fly.remove(); delete pops.fly; }
+  });
+  function altTab(){
+    var ids=Object.keys(W).filter(function(k){return !W[k].closed&&W[k].desk===desk;});
+    if(!ids.length){ toast('没有打开的窗口'); return; }
+    var cur=ids.indexOf(active()); var nxt=ids[(cur+1)%ids.length];
+    var s=document.createElement('div'); s.className='switcher';
+    s.innerHTML=ids.map(function(k){
+      return '<div class="card2'+(k===nxt?' cur':'')+'"><div class="h">'+W[k].ic+' '+esc(W[k].t)+
+        '</div><div class="p"></div></div>';}).join('');
+    closeSW(); scr.appendChild(s);
+    if(W[nxt]){ W[nxt].min=false; bring(nxt); layout(); }
+    mark('alt');
+    setTimeout(closeSW,900);
+  }
+  function taskView(){
+    var t=document.createElement('div'); t.className='tv';
+    var html='<h6>桌面</h6><div class="desks">';
+    for(var i=0;i<desks;i++){
+      var ws=Object.keys(W).filter(function(k){return !W[k].closed&&W[k].desk===i;});
+      html+='<div class="dk2'+(i===desk?' cur':'')+'" data-d="'+i+'"><div class="lb">桌面 '+(i+1)+'</div>'+
+        (ws.length?ws.map(function(k){return '<div class="th">'+W[k].ic+' '+esc(W[k].t)+'</div>';}).join('')
+          :'<div class="th" style="opacity:.5">空</div>')+'</div>';
+    }
+    html+='<button class="add" data-add>＋</button></div>';
+    t.innerHTML=html;
+    t.addEventListener('click',function(e){
+      var d=e.target.closest('[data-d]');
+      if(d){ desk=+d.dataset.d; closeTV(); layout(); return; }
+      if(e.target.closest('[data-add]')){ newDesk(); closeTV(); taskView(); return; }
+      if(e.target===t)closeTV();
+    });
+    closeTV(); scr.appendChild(t); mark('taskview');
+  }
+  function newDesk(){ desks++; desk=desks-1; layout(); mark('newdesk'); toast('已新建桌面 '+desks); }
+  function showDesk(){
+    var any=Object.keys(W).some(function(k){return !W[k].closed&&!W[k].min&&W[k].desk===desk;});
+    Object.keys(W).forEach(function(k){ if(W[k].desk===desk&&!W[k].closed)W[k].min=any; });
+    layout(); mark('show');
+  }
+  function cycleDesk(dir){
+    if(desks<2){ toast('当前只有一个虚拟桌面'); return; }
+    desk=(desk+dir+desks)%desks; layout(); mark('desk');
+  }
+  function closeDesk(){
+    if(desks<2){ toast('至少要保留一个虚拟桌面'); return; }
+    Object.keys(W).forEach(function(k){ if(W[k].desk===desk)W[k].closed=true; });
+    desks--; desk=Math.max(0,desk-1); layout(); mark('deskclose');
+  }
+
+  /* ================================================================
+     组合键派发
+     ================================================================ */
+  function onCombo(s){
+    if(pw!=='on')return;
+    var a=active();
+    if(s==='meta'){ pops.sm?closeAll():startMenu(); }
+    else if(s==='meta+d')showDesk();
+    else if(s==='meta+e'){ if(W.explorer)open('explorer'); else toast('演示环境里没有文件管理器'); }
+    else if(s==='meta+i'){ if(W.settings)open('settings'); }
+    else if(s==='meta+l'){ toast('已锁定电脑，需要密码才能回到桌面'); mark('lock'); }
+    else if(s==='meta+r'){ toast('运行框：输入程序名或路径后回车'); mark('run'); }
+    else if(s==='meta+s'){ toast('打开搜索'); }
+    else if(s==='meta+a'){ pops.tray?closeAll():trayPanel(); }
+    else if(s==='meta+x'){ quickLink(); }
+    else if(s==='meta+v'){ clipHistory(); }
+    else if(s==='meta+z'){ if(a&&!W[a].max)snapFly(a); }
+    else if(s==='meta+tab')taskView();
+    else if(s==='meta+shift+s'){ if(W.snipping){ open('snipping'); startShot(); } else toast('区域截图（演示）'); mark('shot'); }
+    else if(s==='meta+prtsc'){ toast('已截取全屏并保存到 图片\\屏幕截图'); mark('shot'); }
+    else if(s==='meta+shift+r'){ toast('区域录屏已开始，再按一次结束'); mark('record'); }
+    else if(s==='meta+space'||s==='ctrl+space'||s==='ctrl+shift'||s==='shift'){
+      imeCn=!imeCn; var ie=$('.ime',scr); if(ie)ie.textContent=imeCn?'中':'英';
+      toast('输入法已切换到'+(imeCn?'中文':'英文')); mark('ime');
+    }
+    else if(s==='meta+ctrl+d')newDesk();
+    else if(s==='meta+ctrl+left')cycleDesk(-1);
+    else if(s==='meta+ctrl+right')cycleDesk(1);
+    else if(s==='meta+ctrl+f4')closeDesk();
+    else if(s==='meta+arrowleft')snap(a,'left');
+    else if(s==='meta+arrowright')snap(a,'right');
+    else if(s==='meta+arrowup'){ if(a)maxWin(a); }
+    else if(s==='meta+arrowdown'){ if(a){ W[a].max=false; W[a].min=true; layout(); } }
+    else if(s==='meta+home'){ Object.keys(W).forEach(function(k){
+      if(k!==a&&!W[k].closed&&W[k].desk===desk)W[k].min=true; }); layout(); }
+    else if(s==='alt+tab'||s==='alt+shift+tab')altTab();
+    else if(s==='alt+f4'){ if(a)closeWin(a); else toast('没有可以关闭的窗口'); }
+    else if(s==='alt+space'){ if(a)toast('窗口控制菜单：还原 / 移动 / 大小 / 最小化 / 最大化 / 关闭'); }
+    else if(s==='alt+enter'){ if(a)toast('属性：'+W[a].t); }
+    else if(s==='alt+up'){ if(a==='explorer')upDir(); }
+    else if(s==='ctrl+shift+esc'){ if(W.taskmgr)open('taskmgr'); else toast('任务管理器'); mark('taskmgr'); }
+    else if(s==='ctrl+alt+delete'){ toast('安全选项界面：锁定 / 切换用户 / 注销 / 任务管理器'); mark('cad'); }
+    else if(s==='f2'){ if(a==='explorer')renameSel(); }
+    else if(s==='delete'){ if(a==='explorer')delSel(false); }
+    else if(s==='shift+delete'){ if(a==='explorer')delSel(true); }
+    else if(s==='ctrl+c'){ if(a==='explorer')clipSel(false); }
+    else if(s==='ctrl+x'){ if(a==='explorer')clipSel(true); }
+    else if(s==='ctrl+v'){ if(a==='explorer')pasteSel(); }
+    else if(s==='ctrl+z'){ if(a==='explorer')undoExplorer(); }
+    else if(s==='ctrl+a'){ if(a==='explorer'){ var arr=FS[FSEL.path]||[];
+      FSEL.sel=(FSEL.path==='回收站')?-1:0; paint('explorer'); toast('已全选 '+arr.length+' 项'); } }
+    else if(s==='ctrl+p'){ toast('按 Ctrl+P 可以打印当前文档'); }
+    else if(s==='f5'){ if(a==='browser')toast('页面已刷新'); else toast('已刷新'); }
+    else if(s==='f11'){ toast('进入全屏，再按一次退出'); }
+    else if(s==='f12'){ toast('开发者工具（演示）'); }
+    else if(s==='shift+f10'){ ctxAt(Math.round(maxW()/2),Math.round(maxH()/2),null); }
+    else if(s==='ctrl+shift+n'){ newFolder(); }
+    else if(s==='ctrl+t'){ browserCombo('newtab'); }
+    else if(s==='ctrl+w'){ if(a==='browser')browserCombo('closetab'); else if(a)closeWin(a); }
+    else if(s==='ctrl+shift+t'){ browserCombo('restoretab'); }
+    else if(s==='ctrl+tab'||s==='ctrl+shift+tab'){ browserCombo('cycletab'); }
+    else if(s==='ctrl+d'){ browserCombo('bookmark'); }
+    else if(s==='ctrl+j'){ if(W.downloads)open('downloads'); }
+    else if(s==='ctrl+l'){ browserCombo('focusurl'); }
+    else if(s==='ctrl+r'){ toast('页面已刷新'); }
+    else if(s==='ctrl+plus'||s==='ctrl+-'||s==='ctrl+0'){
+      mark('zoom'); toast(s==='ctrl+0'?'页面缩放已恢复 100%':'页面缩放已调整'); }
+    else if(s==='ctrl+f'||s==='ctrl+h'){ toast('在当前页面中查找'); }
+    else if(s==='f3'){ toast('在当前目录或页面中搜索'); }
+    else if(s==='f6'){ toast('焦点已在地址栏与页面之间切换'); }
+    else if(s==='meta+pause'){ toast('系统属性：设备管理器、高级设置、系统保护'); }
+    else if(s==='meta+plus'){ toast('放大镜已打开，Win+Esc 关闭'); }
+    else if(s==='meta+esc'){ toast('放大镜已关闭'); }
+    else if(s==='shift'){ }
+    else { /* 其它组合键：只显示说明，不改变桌面 */ }
+  }
+  function browserCombo(what){
+    if(!W.browser||W.browser.closed){ toast('先打开浏览器再试这个组合键'); return; }
+    bring('browser');
+    var s=state('browser');
+    if(what==='newtab'){ newTab({kind:'home'},'新标签页',''); mark('tab-new'); toast('已新建标签页'); }
+    else if(what==='closetab'){
+      if(BROW.tabs.length>1){ BROW.tabs.splice(BROW.cur,1);
+        BROW.cur=Math.max(0,BROW.cur-1); mark('tab-close'); toast('已关闭当前标签页'); }
+      else toast('只剩一个标签页，Ctrl+W 会关闭整个窗口');
+    }
+    else if(what==='restoretab'){ newTab({kind:'home'},'已恢复的标签页',''); mark('tab-restore');
+      toast('已恢复刚关闭的标签页'); }
+    else if(what==='cycletab'){ if(BROW.tabs.length>1){ BROW.cur=(BROW.cur+1)%BROW.tabs.length;
+      toast('已切换到下一个标签页'); } }
+    else if(what==='bookmark'){ s.book=1; mark('bookmark'); toast('已把当前页面加入收藏夹'); }
+    else if(what==='focusurl'){ var u=$('[data-url]',bd('browser')); if(u){ u.focus(); toast('光标已定位到地址栏'); } }
+    paint('browser');
+  }
+  function quickLink(){    var items=[['app','应用和功能'],['pwr','电源选项'],['sys','系统'],['dev','设备管理器'],
+      ['net','网络连接'],['disk','磁盘管理'],['term','终端'],['set','设置'],['task','任务管理器'],
+      ['exp','文件资源管理器'],['search','搜索'],['run','运行']];
+    var m=document.createElement('div'); m.className='ctx';
+    m.innerHTML='<div style="color:#9fb0c2;font-size:10px;padding:4px 10px">快速链接（Win+X）</div>'+
+      items.map(function(it){return '<div data-q="'+it[0]+'">'+it[1]+'</div>';}).join('');
+    m.style.left='6px'; m.style.top='6px';
+    m.addEventListener('click',function(e){
+      e.stopPropagation();
+      var d=e.target.closest('[data-q]'); if(!d)return;
+      var q=d.dataset.q; closeAll(); mark('quick:'+q);
+      if(q==='task'&&W.taskmgr)open('taskmgr');
+      else if(q==='exp'&&W.explorer)open('explorer');
+      else if(q==='set'&&W.settings)open('settings');
+      else toast(d.textContent+'（演示）');
+    });
+    pop(m,'ctx');
+  }
+  function clipHistory(){
+    var m=document.createElement('div'); m.className='ctx';
+    m.innerHTML='<div style="color:#9fb0c2;font-size:10px;padding:4px 10px">剪贴板历史（Win+V）</div>'+
+      (CLIPBOARD.length?CLIPBOARD.map(function(it){return '<div data-i="1">📄 '+esc(it.n)+'</div>';}).join('')
+        :'<div style="color:#9fb0c2;padding:5px 10px">还没有记录，先复制一次内容</div>')+
+      '<hr><div data-pin="1">📌 固定常用内容</div>';
+    m.style.right='6px'; m.style.left='auto'; m.style.bottom='40px'; m.style.top='auto';
+    m.addEventListener('click',function(e){ e.stopPropagation(); closeAll(); toast('已从剪贴板历史中粘贴'); mark('cliphist'); });
+    pop(m,'ctx');
+  }
+
+  /* ================================================================
+     屏内应用
+     ================================================================ */
+  var APP={};
+  var FSEL={path:'D:',sel:-1};
+  var CLIPF=null, UNDO=null, EDITING=null;
+
+  function paint(k){
+    if(!APP[k]||!APP[k].body)return;
+    /* 每次整块替换 .bd，避免 bind 反复往同一个节点上叠加监听器 */
+    var w0=el(k), old=$('.bd',w0);
+    var nb=document.createElement('div'); nb.className='bd';
+    nb.innerHTML=APP[k].body(k);
+    w0.replaceChild(nb,old);
+    if(APP[k].bind)APP[k].bind(k);
+  }
+  function paintAll(){ Object.keys(W).forEach(function(k){ if(!W[k].closed)paint(k); }); }
+
+  /* ---------- 文件管理器 ---------- */
+  var LOCS=[['D:','D 盘（数据盘）'],['D:\\照片','　照片'],['D:\\文档','　文档'],['D:\\归档','　归档'],
+            ['C:','C 盘（系统盘）'],['回收站','回收站']];
+  APP.explorer={
+    body:function(){
+      var s=state('explorer');
+      if(s.view){
+        return '<div class="ap ap-img"><div class="hd"><span data-back>← 返回文件夹</span>'+
+          '<span>'+esc(s.view)+'</span></div>'+
+          '<div class="imgbox"><img src="'+esc(PHOTOS[s.view]||'')+'" alt="'+esc(s.view)+'"></div>'+
+          '<div class="imgcap">'+esc(s.view)+'　双击打开的文件会在这里显示。</div></div>';
+      }
+      var p=FSEL.path, arr=p==='回收站'?BIN:(FS[p]||[]);
+      var showExt=!!state('explorer').ext;
+      var list;
+      if(p==='回收站'){
+        list=arr.length?arr.map(function(it,i){
+          return '<div class="it2'+(i===FSEL.sel?' sel':'')+'" data-i="'+i+'"><span>🗑</span>'+
+            '<span class="nm">'+esc(it.n)+'</span><span class="meta">来自 '+esc(it.from)+'</span></div>';}).join('')
+          :'<div class="empty2">回收站是空的</div>';
+      }else{
+        list=arr.map(function(it,i){
+          if(EDITING&&EDITING.mode==='rename'&&EDITING.i===i){
+            return '<div class="it2"><span>📁</span><input class="inp" data-edit style="max-width:180px;'+
+              'padding:2px 6px;font-size:11px" value="'+esc(it.n)+'"></div>';
+          }
+          var nm=it.n;
+          if(!showExt&&!it.d){ var dot=nm.lastIndexOf('.'); if(dot>0)nm=nm.slice(0,dot); }
+          return '<div class="it2'+(i===FSEL.sel?' sel':'')+'" data-i="'+i+'"><span>'+(it.d?'📁':'📄')+
+            '</span><span class="nm">'+esc(nm)+'</span></div>';
+        }).join('')+(EDITING&&EDITING.mode==='new'
+          ?'<div class="it2"><span>📁</span><input class="inp" data-edit value="" '+
+            'placeholder="输入名称后按 Enter" style="max-width:180px;padding:2px 6px;font-size:11px"></div>':'');
+        if(!arr.length&&!(EDITING&&EDITING.mode==='new'))list='<div class="empty2">此文件夹为空</div>';
+      }
+      var addr=p==='回收站'?'回收站':(p.length>2?p:p+'\\');
+      var barhtml=p==='回收站'
+        ? '<div class="bar2"><button data-b="restore">还原选中项</button>'+
+          '<button data-b="emptybin">清空回收站</button></div>'
+        : '<div class="bar2">'+
+          '<button data-b="mkdir">新建文件夹</button>'+
+          '<button data-b="rename">重命名 (F2)</button>'+
+          '<button data-b="copy">复制 (Ctrl+C)</button>'+
+          '<button data-b="cut">剪切 (Ctrl+X)</button>'+
+          '<button data-b="paste">粘贴 (Ctrl+V)</button>'+
+          '<button data-b="del">删除 (Delete)</button>'+
+          '<button data-b="delp">永久删除 (Shift+Del)</button>'+
+          '<button data-b="ext">'+(showExt?'隐藏扩展名':'显示扩展名')+'</button>'+
+        '</div>';
+      return '<div class="ap ap-fm">'+
+        '<div class="hd"><span data-a="new">新建</span><span data-a="copy">复制</span>'+
+        '<span data-a="cut">剪切</span><span data-a="paste">粘贴</span><span data-a="ren">重命名</span>'+
+        '<span data-a="del">删除</span><span data-a="undo">撤销</span></div>'+
+        barhtml+
+        '<div class="hd" style="background:#fafafa">位置：<code style="color:#1b1b1b">'+esc(addr)+'</code></div>'+
+        '<div class="body2">'+
+          '<div class="side2">'+LOCS.map(function(l){
+            return '<div class="'+(l[0]===p?'cur':'')+'" data-p="'+l[0]+'">'+esc(l[1])+
+              (l[0]==='回收站'?' ('+BIN.length+')':'')+'</div>';}).join('')+'</div>'+
+          '<div class="list2">'+list+'</div>'+
+        '</div></div>';
+    },
+    bind:function(k){
+      var e=bd(k);
+      var eb=$('[data-edit]',e);
+      if(eb){
+        setTimeout(function(){ eb.focus(); eb.select(); },0);
+        eb.addEventListener('keydown',function(ev){
+          ev.stopPropagation();
+          if(ev.key==='Enter'){
+            var v=(eb.value||'').trim();
+            if(EDITING.mode==='new'){
+              if(v){ (FS[FSEL.path]||(FS[FSEL.path]=[])).push({n:v,d:1});
+                if(FSEL.path==='D:\\照片'&&v==='已整理')mark('mkdir');
+                if(FSEL.path==='D:\\归档'&&/照片|风景/.test(v))mark('mkdir');
+                toast('已新建文件夹「'+v+'」'); }
+            }else{
+              var arr=FS[FSEL.path]||[]; var it=arr[EDITING.i];
+              if(it&&v){ var old=it.n; it.n=v; UNDO=function(){it.n=old;};
+                if(/已整理|归档|备份/.test(v))mark('rename');
+                toast('已重命名为「'+v+'」'); }
+            }
+            EDITING=null; paint(k);
+          }else if(ev.key==='Escape'){ EDITING=null; paint(k); }
+        });
+      }
+      e.addEventListener('click',function(ev){
+        var back=ev.target.closest('[data-back]');
+        if(back){ state('explorer').view=null; paint(k); return; }
+        var b=ev.target.closest('[data-b],[data-a]');
+        if(b){ explorerAct(b.dataset.b||b.dataset.a); return; }
+        var s=ev.target.closest('[data-p]');
+        if(s){ FSEL.path=s.dataset.p; FSEL.sel=-1; EDITING=null; state('explorer').view=null; paint(k); mark('nav'); return; }
+        var it=ev.target.closest('[data-i]');
+        if(it){ FSEL.sel=+it.dataset.i; paint(k); return; }
+      });
+      e.addEventListener('dblclick',function(ev){
+        var it=ev.target.closest('[data-i]');
+        if(!it||FSEL.path==='回收站')return;
+        var arr=FS[FSEL.path]||[], o=arr[+it.dataset.i];
+        if(!o)return;
+        if(o.d){ FSEL.path=FSEL.path+(FSEL.path.slice(-1)===':'?'':'\\')+o.n; FSEL.sel=-1;
+          state('explorer').view=null; paint(k); mark('enter');
+          if(!(FS[FSEL.path]||[]).length)toast('这个文件夹是空的'); }
+        else if(PHOTOS[o.n]){ state('explorer').view=o.n; paint(k); mark('photo'); }
+        else toast('这是文件，需要对应的程序才能打开');
+      });
+      if(pops.fly){ delete pops.fly; }
+    },
+    onClose:function(){}
+  };
+  function explorerAct(a){
+    var arr=FSEL.path==='回收站'?null:(FS[FSEL.path]||(FS[FSEL.path]=[]));
+    if(a==='restore'){
+      if(FSEL.sel<0||!BIN[FSEL.sel]){ toast('先点一下要还原的文件'); return; }
+      var o=BIN.splice(FSEL.sel,1)[0];
+      (FS[o.from]||(FS[o.from]=[])).push({n:o.n,d:o.d});
+      FSEL.sel=-1;
+      if(/草稿|作业|风景|合影|说明/.test(o.n))mark('restore');
+      toast('已还原到 '+o.from); paint('explorer'); return;
+    }
+    if(a==='emptybin'){ BIN.length=0; FSEL.sel=-1; paint('explorer'); toast('回收站已清空'); return; }
+    if(a==='mkdir'){ if(!arr)return; EDITING={mode:'new'}; FSEL.sel=-1; paint('explorer'); return; }
+    if(a==='rename'||a==='ren'){ if(!arr||FSEL.sel<0){ toast('先选中一个项目'); return; }
+      EDITING={mode:'rename',i:FSEL.sel}; paint('explorer'); return; }
+    if(a==='ext'){ var s=state('explorer'); s.ext=!s.ext;
+      if(s.ext)mark('ext');
+      toast(s.ext?'已显示文件扩展名':'已隐藏文件扩展名');
+      paint('explorer'); return; }
+    if(a==='copy'||a==='cut'){
+      if(!arr||FSEL.sel<0){ toast('先选中一个项目'); return; }
+      var it=arr[FSEL.sel];
+      CLIPF={from:FSEL.path,i:FSEL.sel,cut:a==='cut',n:it.n,d:it.d};
+      CLIPBOARD=[{n:it.n,d:it.d,from:FSEL.path,cut:a==='cut',ref:it}];
+      toast(a==='cut'?'已剪切「'+it.n+'」':'已复制「'+it.n+'」');
+      mark(a==='cut'?'cut':'copy'); paint('explorer'); return;
+    }
+    if(a==='paste'){
+      if(!CLIPF){ toast('剪贴板里没有内容'); return; }
+      if(!arr){ toast('回收站里不能粘贴'); return; }
+      var src=FS[CLIPF.from]||[], item=src[CLIPF.i];
+      if(!item){ CLIPF=null; paint('explorer'); return; }
+      arr.push({n:item.n,d:item.d});
+      var moved=CLIPF.cut, nm=CLIPF.n, from=CLIPF.from;
+      if(moved)src.splice(CLIPF.i,1);
+      CLIPF=null; FSEL.sel=-1;
+      if(nm==='风景.jpg'&&from==='D:\\照片'&&FSEL.path==='D:\\归档')mark('copy');
+      if(nm==='合影.jpg'&&moved&&FSEL.path==='D:\\归档')mark('cut');
+      if(nm==='合影.jpg'&&!moved&&FSEL.path==='D:\\备份')mark('backup');
+      toast('已粘贴到 '+FSEL.path); paint('explorer'); return;
+    }
+    if(a==='del'||a==='delp'){
+      if(!arr||FSEL.sel<0){ toast('先选中一个项目'); return; }
+      var it2=arr[FSEL.sel];
+      arr.splice(FSEL.sel,1);
+      if(a==='del'){ BIN.push({n:it2.n,d:it2.d,from:FSEL.path}); UNDO=function(){BIN.pop();arr.push(it2);}; }
+      else { UNDO=function(){arr.push(it2);}; }
+      if(a==='delp')mark('delp');
+      toast(a==='del'?'已删除到回收站「'+it2.n+'」':'已永久删除「'+it2.n+'」');
+      FSEL.sel=-1; paint('explorer'); return;
+    }
+    if(a==='undo'){ if(UNDO){ UNDO(); UNDO=null; toast('已撤销上一步'); paint('explorer'); } else toast('没有可以撤销的操作'); }
+  }
+  function upDir(){
+    var p=FSEL.path;
+    if(p==='D:'||p==='C:'||p==='回收站'){ toast('已经在最上层'); return; }
+    var i=p.lastIndexOf('\\');
+    FSEL.path=i<0?p:p.slice(0,i); if(FSEL.path.length===2)FSEL.path+=':';
+    if(!FS[FSEL.path])FSEL.path=FSEL.path.slice(0,2);
+    FSEL.sel=-1; paint('explorer'); mark('up');
+  }
+
+  /* ---------- 浏览器 ---------- */
+  var BROW={tabs:[],cur:0};
+  function newTab(page,title,url){
+    BROW.tabs.push({page:page||{kind:'home'},title:title||'新标签页',url:url||''});
+    BROW.cur=BROW.tabs.length-1;
+    return BROW.cur;
+  }
+  function browserPage(pg){
+    var kind=pg.kind;
+    if(kind==='home'){
+      return '<div style="text-align:center;padding:16px 0"><div style="font-size:22px;font-weight:700;'+
+        'color:#1f4e79">必应</div><div style="color:#8b949e;font-size:10.5px">在地址栏输入关键词或网址后回车</div></div>';
+    }
+    if(kind==='search'){
+      var kw=pg.kw||'北理工 教务部';
+      return '<h4>'+esc(kw)+'　搜索结果</h4>'+
+        '<div class="sres"><b>北京理工大学教务部</b><p>jwc.bit.edu.cn　官方站点</p></div>'+
+        '<div class="sres"><b>通知公告 — 北京理工大学教务部</b><p>搜索时用关键词加空格，不要输入一整句话</p></div>'+
+        '<div class="sres"><b>本科教学 — 教务管理系统</b><p>建议用 Edge 或 Chrome 打开</p></div>'+
+        '<div class="note" style="font-size:10.5px">看结果先看域名：以 edu.cn 结尾的是教育机构域名，'+
+        '搜索结果里排在最前面的广告位会有「广告」标记。</div>';
+    }
+    if(kind==='download'){
+      return '<h4>××压缩 官方下载</h4>'+
+        '<div style="color:#8b949e;font-size:10.5px;margin-bottom:8px">www.××yasuo.com　官方网站</div>'+
+        '<div class="dl true"><span class="ic2">📦</span><div class="tx"><b>××压缩 2026 正式版（官方）</b>'+
+        '<span>32.6 MB　更新于 2026-08-20　无捆绑</span></div>'+
+        '<button data-dl="ok">官方下载</button></div>'+
+        '<div class="dl"><span class="ic2">⚡</span><div class="tx"><b>高速下载器</b>'+
+        '<span>广告位　会先装一个下载器</span></div><button class="ad" data-dl="ad1">高速下载</button></div>'+
+        '<div class="dl"><span class="ic2">🎁</span><div class="tx"><b>本地下载（推荐）</b>'+
+        '<span>广告位　安装包里带三款其它软件</span></div><button class="ad" data-dl="ad2">立即下载</button></div>'+
+        '<div class="dl"><span class="ic2">🔧</span><div class="tx"><b>××压缩 绿色版</b>'+
+        '<span>广告位　来源不明的第三方站点</span></div><button class="ad" data-dl="ad3">进入下载页</button></div>';
+    }
+    if(kind==='phish'){
+      return '<div class="phish"><div class="lg">校园邮箱　登录</div>'+
+        '<label>学号</label><input value="1120260000" readonly>'+
+        '<label>密码</label><input type="password" value="00000000" readonly>'+
+        '<label>银行卡号（用于验证身份）</label><input value="" readonly placeholder="请输入">'+
+        '<div class="row" style="margin-top:10px">'+
+        '<button class="btn" style="font-size:11px;padding:5px 12px" data-ph="login">登录</button>'+
+        '<button class="btn ghost" style="font-size:11px;padding:5px 12px" data-ph="close">关闭并举报此网站</button>'+
+        '</div></div>'+
+        '<div style="color:#8b949e;font-size:10px;text-align:center">如遇账号异常，请联系信息化办公室</div>';
+    }
+    if(kind==='article'){
+      return '<h4>'+esc(pg.title||'网页')+'</h4><div style="line-height:1.8">'+
+        esc(pg.text||'页面内容')+'</div>';
+    }
+    return '<div class="empty2">无法显示此页面</div>';
+  }
+  APP.browser={
+    body:function(){
+      if(!BROW.tabs.length)newTab({kind:'home'},'新标签页','');
+      var t=BROW.tabs[BROW.cur]||BROW.tabs[0];
+      return '<div class="ap ap-br">'+
+        '<div class="tabs2">'+BROW.tabs.map(function(x,i){
+          return '<i class="'+(i===BROW.cur?'cur':'')+'" data-t="'+i+'">'+esc(x.title)+
+            '<b data-x="'+i+'">✕</b></i>';}).join('')+
+          '<span class="plus" data-new="1">＋</span></div>'+
+        '<div class="url2">🔒<input data-url value="'+esc(t.url)+'" spellcheck="false"></div>'+
+        '<div class="page2">'+browserPage(t.page)+'</div>'+
+      '</div>';
+    },
+    bind:function(k){
+      var e=bd(k);
+      e.addEventListener('click',function(ev){
+        var x=ev.target.closest('[data-x]');
+        if(x){ var i=+x.dataset.x; BROW.tabs.splice(i,1);
+          if(BROW.cur>=BROW.tabs.length)BROW.cur=Math.max(0,BROW.tabs.length-1);
+          mark('tab-close'); paint(k); return; }
+        var t=ev.target.closest('[data-t]');
+        if(t){ BROW.cur=+t.dataset.t; paint(k); return; }
+        if(ev.target.closest('[data-new]')){ newTab({kind:'home'},'新标签页',''); mark('tab-new'); paint(k); return; }
+        var d=ev.target.closest('[data-dl]');
+        if(d){
+          var v=d.dataset.dl;
+          if(v==='ok'){
+            mark('dl-ok');
+            var s=state('browser'); s.dl='××压缩_2026_官方版.exe';
+            newTab({kind:'article',title:'下载内容',text:'正在下载 ××压缩_2026_官方版.exe　32.6 MB'},'下载内容','');
+            open('installer'); toast('已开始下载官方安装包');
+            paint(k); mark('download');
+          }else{
+            mark('dl-ad');
+            var s2=state('browser');
+            newTab({kind:'article',title:'下载器安装','text':
+              '你点的是广告位的「高速下载」。这种按钮下载到的通常是一个下载器，'+
+              '运行之后会先给你装上一堆用不到的软件，正版软件只是顺带装上的。\n\n'+
+              '回到上一个标签页，认准官网上那个标注「官方」的下载按钮。'},'高速下载器','');
+            toast('这个按钮是广告位，不是官方下载');
+            paint(k);
+          }
+          return;
+        }
+        var ph=ev.target.closest('[data-ph]');
+        if(ph){
+          if(ph.dataset.ph==='login'){
+            toast('密码已经提交到 bit-edu-mail.top，这是一次钓鱼演练');
+            mark('phish-login');
+          }else{
+            mark('phish-close');
+            var i2=BROW.tabs.findIndex(function(x2){return x2.page.kind==='phish';});
+            if(i2>=0)BROW.tabs.splice(i2,1);
+            BROW.cur=Math.max(0,BROW.tabs.length-1);
+            toast('已关闭并举报，浏览器会把这个域名加入拦截名单');
+            paint(k);
+          }
+        }
+      });
+      var url=$('[data-url]',e);
+      if(url){
+        url.addEventListener('keydown',function(ev){
+          ev.stopPropagation();
+          if(ev.key!=='Enter')return;
+          var v=(url.value||'').trim();
+          var t=BROW.tabs[BROW.cur];
+          if(/bit-edu-mail\.top/.test(v)){ t.page={kind:'phish'}; t.title='校园邮箱 登录'; t.url=v; }
+          else if(/^https?:|\.(com|cn|edu\.cn|net|org)/.test(v)){
+            t.page={kind:'article',title:v,text:'已打开 '+v+'　演示环境只提供有限的几个页面。'};
+            t.title=v; t.url=v;
+          }else{
+            t.page={kind:'search',kw:v||'北理工 教务部'};
+            t.title=(v||'搜索')+' - 必应'; t.url='https://cn.bing.com/search?q='+encodeURIComponent(v);
+            mark('search');
+          }
+          paint(k);
+        });
+        url.addEventListener('click',function(ev){ ev.stopPropagation(); });
+      }
+    }
+  };
+  function openPage(pg,title,url){ newTab(pg,title,url); open('browser'); }
+
+  /* ---------- 记事本 ---------- */
+  APP.notepad={
+    body:function(){
+      var s=state('notepad');
+      return '<div class="ap ap-np"><div class="imebar" data-ime></div>'+
+        '<textarea data-ta spellcheck="false" placeholder="在这里输入文字">'+esc(s.txt||cfg.note||'')+
+        '</textarea></div>';
+    },
+    bind:function(k){
+      var e=bd(k), ta=$('[data-ta]',e);
+      if(ta){
+        ta.addEventListener('input',function(){ state('notepad').txt=ta.value; });
+      }
+      e.addEventListener('click',function(ev){
+        var c=ev.target.closest('[data-c]');
+        if(c){ ev.stopPropagation(); commitPy(+c.dataset.c); }
+      });
+      paintIme();
+      if(ta&&!cfg.noFocus)setTimeout(function(){ ta.focus(); },0);
+    }
+  };
+  function paintIme(){
+    var bar=$('[data-ime]',bd('notepad')); if(!bar)return;
+    if(!imeCn||!PY_BUF){ bar.innerHTML=imeCn
+      ?'<span style="color:#8b949e">中文输入法：直接在键盘上敲拼音，候选词会出现在这里</span>'
+      :'<span style="color:#8b949e">英文输入法</span>'; return; }
+    var list=PINYIN[PY_BUF]||[];
+    bar.innerHTML='<span>拼音：<b>'+esc(PY_BUF)+'</b></span>'+
+      (list.length?list.map(function(c,i){
+        return '<span class="cand'+(i===0?' first':'')+'" data-c="'+i+'">'+(i+1)+' '+esc(c)+'</span>';}).join('')
+        :'<span style="color:#a32020">没有匹配的候选词</span>')+
+      '<span style="color:#8b949e">按空格或数字键选词</span>';
+  }
+  function commitPy(i){
+    var list=PINYIN[PY_BUF]||[];
+    if(!list.length){ PY_BUF=''; paintIme(); return; }
+    var word=list[Math.min(i,list.length-1)];
+    PY_BUF=''; insertNotepad(word); paintIme();
+    mark('type-cn');
+  }
+  function insertNotepad(text){
+    var s=state('notepad');
+    mark('type-any');
+    var ta=W.notepad?$('[data-ta]',bd('notepad')):null;
+    if(ta){
+      var a=ta.selectionStart||0, b=ta.selectionEnd||0;
+      ta.value=ta.value.slice(0,a)+text+ta.value.slice(b);
+      ta.selectionStart=ta.selectionEnd=a+text.length;
+      s.txt=ta.value;
+      try{ ta.focus(); }catch(err){}
+    }else{
+      s.txt=(s.txt||'')+text;
+    }
+  }
+  function backNotepad(){
+    if(PY_BUF){ PY_BUF=PY_BUF.slice(0,-1); paintIme(); return; }
+    var ta=W.notepad?$('[data-ta]',bd('notepad')):null;
+    if(!ta)return;
+    var a=ta.selectionStart||0;
+    if(a<=0)return;
+    ta.value=ta.value.slice(0,a-1)+ta.value.slice(a);
+    ta.selectionStart=ta.selectionEnd=a-1;
+    state('notepad').txt=ta.value;
+    try{ ta.focus(); }catch(err){}
+  }
+  function typeChar(ch){
+    if(ch==='Backspace'){ backNotepad(); return; }
+    if(ch==='Enter'){ insertNotepad('\n'); return; }
+    if(ch===' '){
+      if(imeCn&&PY_BUF){ commitPy(0); return; }
+      insertNotepad(' '); return;
+    }
+    if(ch.length===1&&/[a-zA-Z]/.test(ch)){
+      if(imeCn){ PY_BUF+=ch.toLowerCase(); paintIme(); return; }
+      insertNotepad(ch); mark('type-en'); return;
+    }
+    if(ch.length===1&&/[0-9]/.test(ch)){ insertNotepad(ch); return; }
+    if(ch.length===1&&imeCn){
+      var m={',':'，','.':'。','?':'？','!':'！',';':'；',':':'：','(':'（',')':'）',
+             '<':'《','>':'》','\\':'、','[':'【',']':'】',"'":'‘','"':'“','`':'·',
+             '~':'～','@':'＠','#':'＃','$':'￥','%':'％','^':'……','&':'＆','*':'＊',
+             '-':'－','=':'＝','/':'、'};
+      if(m[ch]){ insertNotepad(m[ch]); mark('sym-cn'); return; }
+    }
+    if(ch.length===1){ insertNotepad(ch); mark('type-en'); }
+  }
+  function clearPy(){ if(PY_BUF){ PY_BUF=''; paintIme(); } }
+
+  /* ---------- 设置 ---------- */
+  var PANES={
+    display:{t:'系统 → 显示',h:function(){
+      var s=state('settings');
+      return '<h4>显示</h4>'+
+        '<div class="rw"><span>亮度</span><input type="range" min="0" max="100" value="70"></div>'+
+        '<div class="rw"><span>缩放（文字与图标大小）</span>'+
+        '<select data-set="zoom"><option>100%</option><option>125%</option><option>150%</option></select></div>'+
+        '<div class="rw"><span>显示器分辨率</span><span style="color:#8b949e">1920 × 1080（推荐）</span></div>'+
+        '<div class="rw"><span>夜间模式</span><button class="sw'+(s.night?' on':'')+'" data-sw="night"></button></div>'+
+        '<div class="rw"><span>高级缩放设置</span><span style="color:#8b949e">修复模糊应用</span></div>'+
+        '<div class="note">分辨率决定一屏能放下多少内容，缩放决定元素显示多大。'+
+        '高分屏上字太小，调缩放而不是调低分辨率。</div>';}},
+    personal:{t:'个性化',h:function(){
+      return '<h4>个性化</h4>'+
+        '<div class="rw"><span>背景</span><span style="color:#8b949e">图片</span></div>'+
+        '<div class="rw"><span>颜色模式</span><select data-set="theme"><option>浅色</option><option>深色</option></select></div>'+
+        '<div class="rw"><span>主题</span><span style="color:#8b949e">Windows 浅色</span></div>'+
+        '<div class="rw"><span>桌面图标设置</span><span style="color:#8b949e">此电脑 / 回收站 / 用户的文件</span></div>';}},
+    lock:{t:'个性化 → 锁屏界面',h:function(){
+      var s=state('settings');
+      return '<h4>锁屏界面</h4>'+
+        '<div class="rw"><span>个性化锁屏界面</span>'+
+        '<select data-set="lockbg"><option>Windows 聚焦</option><option>图片</option><option>幻灯片放映</option></select></div>'+
+        '<div class="rw"><span>在锁屏界面上获取花絮、提示、技巧</span>'+
+        '<button class="sw'+(!s.recOff?' on':'')+'" data-sw="rec"></button></div>'+
+        '<div class="rw"><span>在登录屏幕上显示锁屏界面背景图片</span>'+
+        '<button class="sw on" data-sw="loginbg"></button></div>'+
+        '<div class="note">锁屏上的推荐内容来自「Windows 聚焦」。把背景改成「图片」，'+
+        '再关掉花絮与提示，锁屏就只剩时间与日期。</div>';}},
+    net:{t:'网络和 Internet',h:function(){
+      return '<h4>网络和 Internet</h4>'+
+        '<div class="rw"><span>WLAN</span><span style="color:#8b949e">家庭 Wi-Fi　已连接</span></div>'+
+        '<div class="rw"><span>飞行模式</span><button class="sw" data-sw="fly"></button></div>'+
+        '<div class="rw"><span>移动热点</span><button class="sw" data-sw="hot"></button></div>'+
+        '<div class="rw"><span>代理</span><span style="color:#8b949e">自动检测设置</span></div>'+
+        '<div class="note">校园网通常要先连上信号，再在浏览器里登录认证页面，'+
+        '认证通过之后才能访问校外网站。</div>';}},
+    storage:{t:'系统 → 存储',h:function(){
+      var s=state('settings');
+      return '<h4>存储</h4>'+
+        '<div class="rw"><span>本地磁盘 (C:)</span><span style="color:#8b949e">已用 168 GB / 512 GB</span></div>'+
+        '<div class="bar3"><i style="width:33%"></i></div>'+
+        '<div class="rw"><span>数据 (D:)</span><span style="color:#8b949e">已用 402 GB / 1024 GB</span></div>'+
+        '<div class="bar3"><i class="hot" style="width:39%"></i></div>'+
+        '<div class="rw"><span>存储感知（自动清理临时文件）</span>'+
+        '<button class="sw'+(s.sense?' on':'')+'" data-sw="sense"></button></div>'+
+        '<div class="rw"><span>新内容的保存位置</span>'+
+        '<select data-set="saveat"><option>系统盘 (C:)</option><option>数据盘 (D:)</option></select></div>'+
+        '<div class="note">默认安装位置在新版本中可以改为 D 盘；'+
+        '系统盘留出足够空间，才不会因为临时文件把 C 盘塞满。</div>';}},
+    update:{t:'Windows 更新',h:function(){
+      return '<h4>Windows 更新</h4>'+
+        '<div class="rw"><span>上次检查更新</span><span style="color:#8b949e">今天 09:12</span></div>'+
+        '<div class="rw"><span>暂停更新</span><select><option>不暂停</option><option>暂停 1 周</option></select></div>'+
+        '<div class="note">更新失败时先检查网络与剩余空间，重启之后再试一次。'+
+        '不要从第三方站点下载所谓的「补丁包」。</div>';}},
+    privacy:{t:'隐私和安全性',h:function(){
+      return '<h4>隐私和安全性</h4>'+
+        '<div class="rw"><span>Windows 安全中心</span><span style="color:#8b949e">病毒和威胁防护已开启</span></div>'+
+        '<div class="rw"><span>应用权限 → 摄像头</span><button class="sw on" data-sw="cam"></button></div>'+
+        '<div class="rw"><span>应用权限 → 麦克风</span><button class="sw on" data-sw="mic"></button></div>'+
+        '<div class="rw"><span>应用权限 → 位置</span><button class="sw" data-sw="loc"></button></div>';}}
+  };
+  APP.settings={
+    body:function(){
+      var s=state('settings'), cur=s.pane||cfg.pane||'display';
+      var panes=cfg.panes||Object.keys(PANES);
+      if(panes.indexOf(cur)<0)cur=panes[0];
+      state('settings').pane=cur;
+      return '<div class="ap ap-set">'+
+        '<div class="body2"><div class="side2">'+panes.map(function(p){
+          return '<div class="'+(p===cur?'cur':'')+'" data-pane="'+p+'">'+esc((PANES[p]||{t:p}).t)+'</div>';}).join('')+
+        '</div><div class="pane">'+(PANES[cur]?PANES[cur].h():'<div class="empty2">这个页面在演示环境中没有实现</div>')+
+        '</div></div></div>';
+    },
+    bind:function(k){
+      var e=bd(k);
+      e.addEventListener('click',function(ev){
+        var p=ev.target.closest('[data-pane]');
+        if(p){ state('settings').pane=p.dataset.pane; paint(k); mark('pane:'+p.dataset.pane); return; }
+        var sw=ev.target.closest('[data-sw]');
+        if(sw){
+          sw.classList.toggle('on');
+          var on=sw.classList.contains('on'), which=sw.dataset.sw;
+          if(which==='rec'){ state('settings').recOff=!on;
+            toast(on?'锁屏上会显示花絮、提示与技巧':'锁屏上的推荐内容已关闭');
+            if(!on)mark('rec-off'); mark('rec-toggle'); }
+          else if(which==='sense'){ mark('sense'); toast(on?'已开启存储感知，临时文件会自动清理':'已关闭存储感知'); }
+          else if(which==='night')mark('night');
+          else mark('sw:'+which);
+        }
+      });
+      e.addEventListener('change',function(ev){
+        var s2=ev.target.closest('[data-set]'); if(!s2)return;
+        var v=s2.dataset.set;
+        if(v==='zoom'){ mark('zoom'); toast('缩放已设为 '+s2.value+'，重新登录后生效'); }
+        else if(v==='saveat'){ mark('saveat'); toast('新的内容将保存到 '+s2.value); }
+        else mark('set:'+v);
+      });
+    }
+  };
+  function setSel(app,pane){ state(app).pane=pane; }
+
+  /* ---------- 任务管理器 ---------- */
+  var PROCS=[
+    {n:'Windows 资源管理器',c:'1.2%',m:'86 MB'},
+    {n:'Microsoft Edge',c:'4.8%',m:'512 MB'},
+    {n:'记事本',c:'0.2%',m:'24 MB'},
+    {n:'无响应演示程序',c:'0.0%',m:'1.2 GB',freeze:1},
+    {n:'Windows 安全中心',c:'0.6%',m:'72 MB'},
+    {n:'桌面窗口管理器',c:'2.1%',m:'148 MB'}
+  ];
+  var STARTS=[
+    {n:'微信',on:1},{n:'××压缩助手',on:1},{n:'云盘同步',on:1},{n:'Windows 安全通知',on:1}
+  ];
+  APP.taskmgr={
+    body:function(){
+      var s=state('taskmgr'), tab=s.tab||'proc';
+      var html='<div class="ap ap-tm"><div class="tabs3">'+
+        '<b class="'+(tab==='proc'?'cur':'')+'" data-tb="proc">进程</b>'+
+        '<b class="'+(tab==='start'?'cur':'')+'" data-tb="start">启动应用</b>'+
+        '<b class="'+(tab==='perf'?'cur':'')+'" data-tb="perf">性能</b></div><div class="list2">';
+      if(tab==='proc'){
+        html+=PROCS.map(function(p,i){
+          return '<div class="it2'+(p.freeze?' freeze':'')+'" data-i="'+i+'"><span>'+(p.freeze?'⚠':'▣')+
+            '</span><span class="nm">'+esc(p.n)+'</span><span class="meta">'+p.c+'　'+p.m+'</span></div>';}).join('');
+      }else if(tab==='start'){
+        html+=STARTS.map(function(p,i){
+          return '<div class="it2" data-si="'+i+'"><span>'+(!p.on?'○':'●')+'</span>'+
+            '<span class="nm">'+esc(p.n)+'</span><span class="meta">'+(p.on?'已启用':'已禁用')+'</span>'+
+            '<span class="meta">'+(p.on?'影响：中':'—')+'</span></div>';}).join('');
+        html+='<div class="note" style="margin:8px">开机变慢时，先看这一页。禁用不等于卸载，'+
+          '只是不让它开机自动运行，需要的时候仍然可以手动打开。</div>';
+      }else{
+        html+='<div class="pad"><div class="rw" style="display:flex;justify-content:space-between">'+
+          '<span>CPU</span><span>12%　2.50 GHz</span></div>'+
+          '<div class="bar3" style="height:9px;border-radius:5px;background:#e3e3e3;overflow:hidden">'+
+          '<i style="display:block;height:100%;width:12%;background:#1f4e79"></i></div>'+
+          '<div class="rw" style="display:flex;justify-content:space-between;margin-top:8px">'+
+          '<span>内存</span><span>5.1 / 8.0 GB（64%）</span></div>'+
+          '<div class="bar3" style="height:9px;border-radius:5px;background:#e3e3e3;overflow:hidden">'+
+          '<i style="display:block;height:100%;width:64%;background:#1f4e79"></i></div>'+
+          '<div class="rw" style="display:flex;justify-content:space-between;margin-top:8px">'+
+          '<span>磁盘 0 (C:)</span><span>3%</span></div>'+
+          '<div class="bar3" style="height:9px;border-radius:5px;background:#e3e3e3;overflow:hidden">'+
+          '<i style="display:block;height:100%;width:3%;background:#1f4e79"></i></div></div>';
+      }
+      html+='</div></div>';
+      return html;
+    },
+    bind:function(k){
+      bd(k).addEventListener('click',function(ev){
+        var t=ev.target.closest('[data-tb]');
+        if(t){ state('taskmgr').tab=t.dataset.tb; paint(k); return; }
+        var it=ev.target.closest('[data-i]');
+        if(it){
+          var p=PROCS[+it.dataset.i];
+          if(p.freeze){ p.freeze=0; p.c='0.3%'; mark('kill');
+            toast('已结束「'+p.n+'」的任务，窗口随即关闭'); paint(k); }
+          else toast('结束这个进程会让对应程序直接退出，先确认它是不是真的卡住了');
+          return;
+        }
+        var si=ev.target.closest('[data-si]');
+        if(si){
+          var st=STARTS[+si.dataset.si]; st.on=st.on?0:1;
+          if(!st.on)mark('startup-off');
+          toast(st.on?'已启用「'+st.n+'」的开机自启':'已禁用「'+st.n+'」的开机自启');
+          paint(k);
+        }
+      });
+    }
+  };
+
+  /* ---------- 分类练习 ---------- */
+  APP.classify={
+    body:function(){
+      var c=cfg.cls||{cats:[{k:'a',t:'A'},{k:'b',t:'B'}],items:[]};
+      var s=state('classify');
+      s.order=s.order||shuf(c.items.map(function(_,i){return i;}));
+      s.placed=s.placed||{};
+      var pool=c.items.map(function(it,i){
+        var pl=s.placed[i];
+        return '<button class="pile'+(pl?' '+pl:'')+(s.sel===i?' sel':'')+'" data-it="'+i+'">'+
+          esc(it.t)+'</button>';}).join('');
+      var bins=c.cats.map(function(cat){
+        var items=c.items.map(function(it,i){
+          return s.placed[i]===('ok:'+cat.k)||s.placed[i]===('bad:'+cat.k)
+            ?'<span class="pile '+s.placed[i].slice(0,2)+'">'+esc(it.t)+'</span>':'';}).join('');
+        return '<div class="bin'+(s.armed===cat.k?' armed':'')+'" data-bin="'+cat.k+'">'+
+          '<h5>'+esc(cat.t)+'</h5><div class="items2">'+items+'</div></div>';}).join('');
+      var fin=s.placed.__fin?'<div class="note" style="margin:0 8px 8px">'+
+        '<b>'+esc(s.placed.__fin)+'</b></div>':'';
+      return '<div class="ap ap-cls">'+
+        '<div class="pool2">'+pool+'</div>'+fin+
+        '<div class="bins">'+bins+'</div></div>';
+    },
+    bind:function(k){
+      var c=cfg.cls||{items:[]};
+      bd(k).addEventListener('click',function(ev){
+        var s=state('classify');
+        var p=ev.target.closest('[data-it]');
+        if(p){
+          var i=+p.dataset.it;
+          if(s.placed[i])return;
+          s.sel=(s.sel===i?-1:i); paint(k); return;
+        }
+        var b=ev.target.closest('[data-bin]');
+        if(b&&s.sel>=0){
+          var it=c.items[s.sel], kk=b.dataset.bin, ok=it.c===kk;
+          s.placed[s.sel]=ok?('ok:'+kk):('bad:'+kk);
+          s.right=(s.right||0)+(ok?1:0);
+          s.total=(s.total||0)+1;
+          s.sel=-1;
+          if(s.total===c.items.length){
+            s.placed.__fin=(s.right===c.items.length?'全部判断正确。':'判断正确 '+s.right+' / '+
+              c.items.length+' 项，标红的放错了，已经归到正确的一侧。');
+            mark('cls-done');
+          }
+          paint(k);
+        }
+      });
+    }
+  };
+
+  /* ---------- 安装向导 ---------- */
+  APP.installer={
+    body:function(){
+      var s=state('installer'); s.step=s.step||0; var step=s.step;
+      var steps=['许可协议','选择位置','正在安装','完成'];
+      var head='<div class="steps">'+steps.map(function(t,i){
+        return '<b class="'+(i===step?'cur':'')+'">'+(i+1)+'. '+t+'</b>';}).join('<span>›</span>')+'</div>';
+      var pane='';
+      if(step===0){
+        pane='<div class="pane"><h4>××压缩 2026 正式版　安装向导</h4>'+
+          '<div class="lk">一、许可范围\n本软件供个人在自有设备上免费使用。\n\n'+
+          '二、安装位置\n默认安装到系统盘，可以在下一步中修改。\n\n'+
+          '三、附加组件\n安装程序可能会推荐其它软件，是否安装由你决定。\n\n'+
+          '四、卸载\n可以在「设置 → 应用」中随时卸载。</div>'+
+          '<label><input type="checkbox" data-ag> 我已阅读并同意许可协议</label>'+
+          '<div class="row"><button class="btn" data-next>下一步</button></div></div>';
+      }else if(step===1){
+        pane='<div class="pane"><h4>选择安装位置</h4>'+
+          '<label><input type="radio" name="pth" value="C:" '+(s.path!=='D:'?'checked':'')+'> '+
+          '系统盘（C:）　默认</label>'+
+          '<label><input type="radio" name="pth" value="D:" '+(s.path==='D:'?'checked':'')+'> '+
+          '数据盘（D:）　推荐，重装系统时不丢失</label>'+
+          '<div style="margin-top:10px;font-size:11px">附加组件</div>'+
+          '<label class="bundle"><input type="checkbox" data-bundle '+(s.bundleOff?'':'checked')+'> '+
+          '安装「××安全卫士」与两款推荐软件<div style="color:#a65d00">这一类勾选默认是打开的，'+
+          '不需要就取消勾选。</div></label>'+
+          '<div class="row"><button class="btn ghost" data-back>上一步</button>'+
+          '<button class="btn" data-next>开始安装</button></div></div>';
+      }else if(step===2){
+        pane='<div class="pane"><h4>正在安装</h4><div class="prog"><i id="'+ID+'-prog"></i></div>'+
+          '<div style="color:#8b949e">正在复制文件……</div></div>';
+      }else{
+        pane='<div class="pane"><h4>安装完成</h4>'+
+          '<div class="note">安装位置：'+esc(s.path||'C:')+'　　附加组件：'+
+          (s.bundleOff?'未安装':'已安装')+'</div>'+
+          (s.bundleOff?'':'<div class="note" style="background:#fdecea;border-color:#e0b4b4;color:#a32020">'+
+            '桌面上会多出两三个图标，右下角还会多一个常驻的小图标。这些都不是你要装的软件。</div>')+
+          '<div class="row"><button class="btn" data-fin>完成</button></div></div>';
+      }
+      return '<div class="ap ap-ins">'+head+pane+'</div>';
+    },
+    bind:function(k){
+      var e=bd(k);
+      e.addEventListener('change',function(ev){
+        var s=state('installer');
+        if(ev.target.matches('[data-bundle]')){
+          s.bundleOff=!ev.target.checked;
+          if(s.bundleOff)mark('bundle-off');
+        }
+        if(ev.target.name==='pth'){
+          s.path=ev.target.value;
+          if(ev.target.value==='D:')mark('path-d');
+        }
+      });
+      e.addEventListener('click',function(ev){
+        var s=state('installer');
+        if(ev.target.closest('[data-next]')){
+          if(s.step===0){
+            var ag=$('[data-ag]',e);
+            if(ag&&!ag.checked){ toast('需要先勾选同意许可协议才能继续'); return; }
+            s.step=1; paint(k); return;
+          }
+          if(s.step===1){
+            s.step=2; paint(k);
+            var i=0, el2=$('#'+ID+'-prog',scr);
+            var t=setInterval(function(){
+              i+=8; if(el2)el2.style.width=Math.min(100,i)+'%';
+              if(i>=100){ clearInterval(t); state('installer').step=3; paint(k); mark('installed'); }
+            },60);
+            return;
+          }
+          if(s.step===3){ s.step=0; closeWin('installer'); toast('安装向导已关闭'); return; }
+          return;
+        }
+        if(ev.target.closest('[data-back]')){ s.step=0; paint(k); return; }
+        if(ev.target.closest('[data-fin]')){ s.step=0; closeWin('installer'); toast('向导已关闭'); }
+      });
+    }
+  };
+
+  /* ---------- 邮件 ---------- */
+  APP.mail={
+    body:function(){
+      var s=state('mail'), list=cfg.mail||[];
+      if(s.open!==undefined&&list[s.open]){
+        var m=list[s.open];
+        return '<div class="ap ap-ml"><div class="hd"><span data-back>← 返回收件箱</span></div>'+
+          '<div class="mailhd">发件人：'+esc(m.from)+'　主题：'+esc(m.subj)+'</div>'+
+          '<div class="mailbd">'+m.body+
+          (m.danger?'<div class="row"><button class="btn" data-m="report">举报并删除</button>'+
+            '<button class="btn ghost" data-m="ignore">暂时不管</button></div>':'')+
+          '</div></div>';
+      }
+      return '<div class="ap ap-ml"><div class="hd"><span>收件箱　'+list.length+' 封</span></div>'+
+        '<div class="list2">'+list.map(function(m,i){
+          return '<div class="it2'+(m.danger?' danger':'')+'" data-ml="'+i+'">'+
+            '<span>'+(m.danger?'⚠':'✉')+'</span><span class="nm">'+esc(m.subj)+'</span>'+
+            '<span class="meta">'+esc(m.from)+'</span></div>';}).join('')+'</div></div>';
+    },
+    bind:function(k){
+      bd(k).addEventListener('click',function(ev){
+        var s=state('mail');
+        var ml=ev.target.closest('[data-ml]');
+        if(ml){ s.open=+ml.dataset.ml; paint(k); mark('mail-open'); return; }
+        if(ev.target.closest('[data-back]')){ s.open=undefined; paint(k); return; }
+        var m=ev.target.closest('[data-m]');
+        if(m){
+          if(m.dataset.m==='report'){ mark('mail-report');
+            var list=cfg.mail||[]; var i=s.open; list[i].reported=1;
+            s.open=undefined; toast('已举报并删除该邮件');
+          }else{ toast('这类邮件不要点里面的链接，也不要回复'); }
+          paint(k);
+        }
+      });
+    }
+  };
+
+  /* ---------- AI 对话 ---------- */
+  var CHATLOG=[];
+  APP.chat={
+    body:function(){
+      var s=state('chat');
+      s.log=s.log||[{r:'ai',t:'我是演示用的 AI 助手。把要问的内容写清楚，我会按演示脚本回复。'}];
+      return '<div class="ap ap-ai">'+
+        '<div class="chat">'+s.log.map(function(m){
+          return '<div class="m '+(m.r==='me'?'me':'ai')+'">'+esc(m.t)+'</div>';}).join('')+'</div>'+
+        '<div class="say"><input data-say placeholder="输入你的问题" spellcheck="false">'+
+        '<button data-send>发送</button></div></div>';
+    },
+    bind:function(k){
+      var e=bd(k), inp=$('[data-say]',e);
+      function send(){
+        var s=state('chat'); var v=(inp.value||'').trim(); if(!v)return;
+        s.log.push({r:'me',t:v});
+        var reply=aiReply(v);
+        s.log.push({r:'ai',t:reply});
+        inp.value=''; paint(k);
+        var c=$('.chat',e); if(c)c.scrollTop=c.scrollHeight;
+      }
+      if(inp){
+        inp.addEventListener('keydown',function(ev){ ev.stopPropagation(); if(ev.key==='Enter')send(); });
+        inp.addEventListener('click',function(ev){ ev.stopPropagation(); });
+      }
+      e.addEventListener('click',function(ev){ if(ev.target.closest('[data-send]'))send(); });
+    }
+  };
+  function aiReply(v){
+    var t=v.toLowerCase();
+    if(/身份证|学号|密码|银行卡|手机号/.test(v)){
+      mark('ai-privacy');
+      return '你这段话里包含了个人身份信息。这类内容不要发给任何在线服务，'+
+        '包括我。如果确实需要处理，先把姓名、证件号这些字段删掉，只留下真正要问的部分。';
+    }
+    if(v.length<8){
+      return '问题太短了，我不知道你想问什么。把背景、你的目标、已经试过的方法写进去，'+
+      '回答才有用。比如不要只写「电脑卡」，而是写「开机后五分钟内鼠标一顿一顿，'+
+      '任务管理器里磁盘占用 100%，是机械硬盘的老笔记本」。';
+    }
+    mark('ai-ask');
+    return '收到。演示环境中我不会真正作答，但可以看你的问法：\n'+
+      '1. 是否交代了背景与目标；\n2. 是否给出了具体现象或报错原文；\n'+
+      '3. 是否说明了已经尝试过什么。\n\n'+
+      '三条都有，才算一个能用的提问。另外，AI 给的答案要自己核对一遍，'+
+      '尤其是数字、日期和命令，写错一个字符结果就完全不同。';
+  }
+
+  /* ---------- 磁盘清理 ---------- */
+  APP.cleanup={
+    body:function(){
+      var s=state('cleanup'), items=cfg.cleanup||[
+        {n:'临时文件',sz:'2.4 GB',keep:0},{n:'回收站',sz:'1.1 GB',keep:0},
+        {n:'缩略图缓存',sz:'380 MB',keep:0},{n:'Windows 更新缓存',sz:'3.2 GB',keep:0},
+        {n:'下载文件夹',sz:'6.8 GB',keep:1},{n:'桌面',sz:'1.2 GB',keep:1},
+        {n:'文档',sz:'14 GB',keep:1},{n:'系统文件（Windows.old）',sz:'8 GB',keep:0}
+      ];
+      s.ck=s.ck||{};
+      return '<div class="ap ap-cl"><div class="pane"><h4>磁盘清理 — 本地磁盘 (C:)</h4>'+
+        items.map(function(it,i){
+          return '<label><input type="checkbox" data-ck="'+i+'" '+(s.ck[i]?'checked':'')+'> '+
+            esc(it.n)+'<span class="sz">'+it.sz+'</span></label>';}).join('')+
+        '<div class="note">可以清理的是系统生成的临时内容；下载文件夹、桌面、文档里放的是你自己的东西，'+
+        '清理工具不会替你判断哪一份还要用。</div>'+
+        '<div class="row"><button class="btn" data-run>清理选中项</button></div>'+
+        (s.msg?'<div class="note">'+esc(s.msg)+'</div>':'')+
+        '</div></div>';
+    },
+    bind:function(k){
+      bd(k).addEventListener('click',function(ev){
+        var s=state('cleanup');
+        var ck=ev.target.closest('[data-ck]');
+        if(ck){ s.ck[+ck.dataset.ck]=ck.checked; return; }
+        if(ev.target.closest('[data-run]')){
+          var items=cfg.cleanup||[];
+          var bad=0, good=0;
+          Object.keys(s.ck).forEach(function(i){
+            if(!s.ck[i])return;
+            var it=items[+i]; if(!it)return;
+            if(it.keep)bad++; else good++;
+          });
+          if(!good&&!bad){ toast('还没有勾选任何一项'); return; }
+          s.msg='已清理 '+(bad?'0':'若干')+' 项。'+(bad?'其中 '+bad+' 项是你自己的文件，'+
+            '这些内容删掉之后要到回收站里找，或者根本找不回来。':'临时文件已清理，系统盘空出约 7 GB。');
+          if(!bad&&good)mark('clean-ok');
+          if(bad)mark('clean-bad');
+          paint(k);
+        }
+      });
+    }
+  };
+
+  /* ---------- 截图工具 ---------- */
+  APP.snipping={
+    body:function(){
+      var s=state('snipping');
+      return '<div class="ap ap-sn"><div class="bar2">'+
+        '<button data-shot>新建截图</button>'+
+        '<button data-shot data-kind="win">截取当前窗口</button>'+
+        '<button data-shot data-kind="full">全屏截图</button></div>'+
+        '<div class="pad">'+
+        (s.shot?'<div class="note">已截取并复制到剪贴板，同时保存到<br><b>图片 → 屏幕截图</b>。</div>'
+          :'<div style="color:#5c6570">点「新建截图」，然后在屏幕上按住左键拖出一个矩形。</div>')+
+        '<div style="margin-top:8px;color:#8b949e">Win+Shift+S 可以在任何界面下直接框选区域，'+
+        'Win+Shift+R 用来录制屏幕。</div></div></div>';
+    },
+    bind:function(k){
+      bd(k).addEventListener('click',function(ev){
+        var b=ev.target.closest('[data-shot]'); if(!b)return;
+        if(b.dataset.kind){ state('snipping').shot=1; mark('shot'); paint(k);
+          toast('已截取并保存到 图片\\屏幕截图'); return; }
+        startShot();
+      });
+    }
+  };
+  function startShot(){
+    if($('.cap',scr))return;
+    var cap=document.createElement('div'); cap.className='cap';
+    var box=document.createElement('div'); box.className='selbox'; box.style.display='none';
+    cap.appendChild(box); scr.appendChild(cap);
+    var sx=0,sy=0,on=false;
+    function done(){
+      cap.remove();
+      state('snipping').shot=1; if(W.snipping)paint('snipping');
+      mark('shot'); toast('已框选区域并复制到剪贴板');
+    }
+    cap.addEventListener('pointerdown',function(e){
+      var p=localPt(e); sx=p.x; sy=p.y; on=true;
+      box.style.display='block'; box.style.left=sx+'px'; box.style.top=sy+'px';
+      box.style.width='0px'; box.style.height='0px';
+      try{ cap.setPointerCapture(e.pointerId); }catch(err){}
+    });
+    cap.addEventListener('pointermove',function(e){
+      if(!on)return;
+      var p=localPt(e);
+      box.style.left=Math.min(sx,p.x)+'px'; box.style.top=Math.min(sy,p.y)+'px';
+      box.style.width=Math.abs(p.x-sx)+'px'; box.style.height=Math.abs(p.y-sy)+'px';
+    });
+    cap.addEventListener('pointerup',function(){
+      if(!on)return; on=false;
+      if(parseFloat(box.style.width)<6||parseFloat(box.style.height)<6){ cap.remove(); return; }
+      done();
+    });
+    cap.addEventListener('contextmenu',function(e){ e.preventDefault(); cap.remove(); });
+  }
+
+  /* ---------- 硬件信息 ---------- */
+  APP.hwinfo={
+    body:function(){
+      var s=state('hwinfo');
+      return '<div class="ap"><div class="pad"><h4 style="margin:0 0 8px">这台电脑的硬件</h4>'+
+        '<div class="rw" style="display:flex;justify-content:space-between;border-bottom:1px solid #f0f0f0;padding:5px 0">'+
+        '<span>处理器</span><span>4 核 2.50 GHz</span></div>'+
+        '<div class="rw" style="display:flex;justify-content:space-between;border-bottom:1px solid #f0f0f0;padding:5px 0">'+
+        '<span>内存（运行内存）</span><span>8 GB</span></div>'+
+        '<div class="rw" style="display:flex;justify-content:space-between;border-bottom:1px solid #f0f0f0;padding:5px 0">'+
+        '<span>硬盘 0（系统盘）</span><span>512 GB 固态</span></div>'+
+        '<div class="rw" style="display:flex;justify-content:space-between;border-bottom:1px solid #f0f0f0;padding:5px 0">'+
+        '<span>硬盘 1（数据盘）</span><span>1024 GB 机械</span></div>'+
+        '<div class="rw" style="display:flex;justify-content:space-between;padding:5px 0">'+
+        '<span>显卡</span><span>集成显卡</span></div>'+
+        '<div class="note">内存是通电时的工作台，断电内容就没了；硬盘是柜子，关机之后东西还在。'+
+        '内存越大，能同时开的程序越多；硬盘越大，能存的文件越多。</div>'+
+        (s.read?'':'<div class="row"><button class="btn" data-read>读取一次硬件信息</button></div>')+
+        '</div></div>';
+    },
+    bind:function(k){
+      bd(k).addEventListener('click',function(ev){
+        if(ev.target.closest('[data-read]')){ state('hwinfo').read=1; mark('hw-read');
+          toast('已读取硬件信息'); paint(k); }
+      });
+    }
+  };
+
+  /* ---------- 下载内容 ---------- */
+  APP.downloads={
+    body:function(){
+      var s=state('browser');
+      return '<div class="ap"><div class="list2">'+
+        (s.dl?'<div class="it2"><span>📦</span><span class="nm">'+esc(s.dl)+'</span>'+
+          '<span class="meta">32.6 MB　已完成</span></div>':'<div class="empty2">还没有下载记录</div>')+
+        '</div></div>';
+    }
+  };
+
+  /* ---------- 回收站（独立窗口） ---------- */
+  APP.recycle={
+    body:function(){
+      var s=state('recycle');
+      return '<div class="ap"><div class="bar2"><button data-r="restore">还原选中项</button>'+
+        '<button data-r="empty">清空回收站</button></div><div class="list2">'+
+        (BIN.length?BIN.map(function(it,i){
+          return '<div class="it2'+(s.sel===i?' sel':'')+'" data-ri="'+i+'"><span>🗑</span>'+
+            '<span class="nm">'+esc(it.n)+'</span><span class="meta">来自 '+esc(it.from)+'</span></div>';}).join('')
+          :'<div class="empty2">回收站是空的</div>')+
+        '</div></div>';
+    },
+    bind:function(k){
+      bd(k).addEventListener('click',function(ev){
+        var s=state('recycle');
+        var it=ev.target.closest('[data-ri]');
+        if(it){ s.sel=+it.dataset.ri; paint(k); return; }
+        var b=ev.target.closest('[data-r]'); if(!b)return;
+        if(b.dataset.r==='empty'){ BIN.length=0; s.sel=-1; paint(k); toast('回收站已清空'); return; }
+        if(s.sel===undefined||s.sel<0||!BIN[s.sel]){ toast('先选中一项'); return; }
+        var o=BIN.splice(s.sel,1)[0];
+        (FS[o.from]||(FS[o.from]=[])).push({n:o.n,d:o.d});
+        if(/草稿|作业|风景|合影/.test(o.n))mark('restore');
+        toast('已还原到 '+o.from); s.sel=-1; paint(k);
+      });
+    }
+  };
+  if(W.recycle&&!APP.recycle)delete W.recycle;
+  function renameSel(){ explorerAct('rename'); }
+  function delSel(){ explorerAct('del'); }
+  function clipSel(){ explorerAct('cut'); }
+  function pasteSel(){ explorerAct('paste'); }
+  function undoExplorer(){ explorerAct('undo'); }
+
+  /* ================================================================
+     键盘
+     ================================================================ */
+  var clef=0, clist=[], challenge=null;
+  function drawKb(){
+    var html='';
+    function block(rows){
+      var s='<div class="kbblk">';
+      rows.forEach(function(row){
+        s+='<div class="kbrow">';
+        row.forEach(function(k){
+          if(!k){ s+='<span class="kk gap"></span>'; return; }
+          var top=k.c, small='';
+          if(/^F\d+$/.test(k.c)&&!fnLock&&k.f){ top=k.c; small=k.f; }
+          else if(k.c.length===1&&k.s){ small=k.s; }
+          var w=(k.w||1)*1;
+          s+='<button class="kk'+(k.space?' wide':'')+(k.tall?' tall':'')+'" data-c="'+esc(k.c)+'" '+
+             'style="min-width:calc(var(--ku) * '+w.toFixed(2)+')" title="'+esc(k.n||k.c)+'">'+
+             '<span>'+esc(top)+'</span>'+(small?'<small>'+esc(small)+'</small>':'')+'</button>';
+        });
+        s+='</div>';
+      });
+      return s+'</div>';
+    }
+    html+=block(KBMAIN)+block(KBNAV)+block(KBNUM);
+    kb.innerHTML=html;
+    syncKb();
+  }
+  var SHOWMOD={ctrl:'Ctrl',shift:'Shift',alt:'Alt',meta:'Win'};
+  function modOf(code){
+    if(code==='Win')return 'meta';
+    if(code==='Ctrl')return 'ctrl';
+    if(code==='Shift')return 'shift';
+    if(code==='Alt')return 'alt';
+    return '';
+  }
+  function syncKb(){
+    $$('.kk',kb).forEach(function(b){
+      b.classList.toggle('on',held.indexOf(modOf(b.dataset.c))>=0);
+    });
+  }
+  function findKey(code){
+    for(var i=0;i<KBALL.length;i++) if(KBALL[i]&&KBALL[i].c===code) return KBALL[i];
+    /* 小键盘的数字与主键区同名，返回一个通用对象 */
+    return {c:code};
+  }
+  function showKey(name,desc){
+    info.innerHTML='<b>'+esc(name)+'</b>　'+esc(desc||'');
+  }
+  function fire(s){
+    var name=COMBOS[s];
+    var txt='<span class="combo">'+esc(fmtCombo(s))+'</span> → '+
+      (name?esc(name):'本教程未收录这个组合，可以到第 6 章对照完整清单');
+    info.innerHTML=txt;
+    if(name){
+      try{ onCombo(s); }catch(err){}
+      comboFired=true;
+      if(challenge&&challenge.k===s){ clef++; nextChallenge(); }
+    }
+  }
+  function nextChallenge(){
+    if(!clist.length)return;
+    if(clef>=clist.length){
+      tgt.innerHTML='<b>挑战完成</b>　'+clist.length+' 项全部按对。可以切换到自由探索，逐个查看每个键的作用。';
+      challenge=null; mark('challenge-done'); return;
+    }
+    challenge=clist[clef];
+    tgt.innerHTML='<b>第 '+(clef+1)+' / '+clist.length+' 项</b>　请按出「'+esc(challenge.a)+'」';
+  }
+  function keyName(e){
+    if(e.key===' ')return 'Space';
+    if(e.key==='Meta')return 'Win';
+    if(e.key==='Control')return 'Ctrl';
+    if(e.key==='Escape')return 'Esc';
+    if(e.key==='PrintScreen')return 'PrtSc';
+    if(e.key==='ScrollLock')return 'ScrLk';
+    if(e.key==='Insert')return 'Ins';
+    if(e.key==='PageUp')return 'PgUp';
+    if(e.key==='PageDown')return 'PgDn';
+    if(e.key==='ContextMenu')return 'Menu';
+    if(e.key.indexOf('Arrow')===0)
+      return {'ArrowLeft':'←','ArrowRight':'→','ArrowUp':'↑','ArrowDown':'↓'}[e.key];
+    if(e.key.length===1&&/[A-Z]/.test(e.key))return e.key;
+    if(e.key.length===1&&/[a-z]/.test(e.key))return e.key.toUpperCase();
+    return e.key;
+  }
+  function mods(){
+    return ['ctrl','shift','alt','meta'].filter(function(m){return held.indexOf(m)>=0;});
+  }
+  function comboKey(key){
+    var m=mods();
+    return m.join('+')+(m.length?'+':'')+key;
+  }
+
+  var NOFIRE={enter:1,tab:1,backspace:1,space:1,shift:1,ctrl:1,alt:1,meta:1,numlock:1,capslock:1};
+  kb.addEventListener('click',function(e){
+    var b=e.target.closest('.kk'); if(!b)return;
+    var k=findKey(b.dataset.c);
+    if(['Ctrl','Win','Alt','Shift','Fn'].indexOf(k.c)>=0){
+      if(k.c==='Fn'){ showKey('功能键 Fn','笔记本上配合 F1–F12 在两组功能之间切换。'); return; }
+      var m=modOf(k.c), i=held.indexOf(m);
+      if(i>=0){
+        held.splice(i,1); syncKb();
+        if(!held.length){
+          if(!comboFired&&COMBOS[m]){ fire(m); }
+          else if(!comboFired){
+            info.innerHTML='<span class="combo">'+esc(SHOWMOD[m])+'</span> → 修饰键，单独按下不产生动作，'+
+              '要按住再按下一个键才组成组合键。';
+          }
+          comboFired=false;
+        }else{
+          showKey('已按住 '+held.map(function(x){return SHOWMOD[x];}).join(' + '),
+            '这时再按下一个普通键，就是一个组合键。');
+        }
+        return;
+      }
+      held.push(m); if(held.length===1)comboFired=false;
+      syncKb();
+      showKey('已按住 '+held.map(function(x){return SHOWMOD[x];}).join(' + '),
+        '这时再按下一个普通键，就是一个组合键。');
+      return;
+    }
+    var m2=mods();
+    var single=(KEYID[k.c]||k.c.toLowerCase());
+    mark('key:'+k.c);
+    if(m2.length){
+      showKey(k.n||(k.c+' 键'),k.d||'');
+      fire(comboKey(single));
+      held.length=0; syncKb(); comboFired=false;
+      return;
+    }
+    if(!NOFIRE[single]&&COMBOS[single]&&/^(f\d+|esc|prtsc|delete)$/.test(single)){
+      fire(single);
+    }else{
+      showKey(k.n||(k.c+' 键'),k.d||'');
+    }
+    if(W.notepad&&!W.notepad.closed&&!W.notepad.min){
+      if(k.c.length===1)typeChar(k.c);
+      else if(k.c==='Space')typeChar(' ');
+      else if(k.c==='Enter')typeChar('Enter');
+      else if(k.c==='Backspace')typeChar('Backspace');
+    }
+    if(k.c==='CapsLock'){ info.innerHTML='<b>大写锁定键 Caps Lock</b>　指示灯亮起时输入的字母全为大写。'+
+      '密码框里的大小写是敏感的，误开了它就会一直提示密码错误。'; }
+  });
+
+  document.addEventListener('keydown',function(e){
+    if(!document.body.contains(root))return;
+    var t=e.target, tag=t&&t.tagName;
+    if(tag==='INPUT'&&scr.contains(t))return;
+    if((tag==='INPUT'||tag==='TEXTAREA')&&!scr.contains(t))return;
+    if(pw!=='on')return;
+    var name=keyName(e), m=MODN[e.key];
+    if(m){
+      if(held.indexOf(m)<0){ held.push(m); if(held.length===1)comboFired=false; }
+      syncKb();
+      $$('.kk',kb).forEach(function(b){ if(b.dataset.c===name)b.classList.add('on'); });
+      return;
+    }
+    $$('.kk',kb).forEach(function(b){ if(b.dataset.c===name)b.classList.add('hit'); });
+    var isEditing=!!(W.notepad&&!W.notepad.closed&&tag==='TEXTAREA'&&scr.contains(t));
+    var onlyShift=e.shiftKey&&!e.ctrlKey&&!e.altKey&&!e.metaKey;
+    if((e.ctrlKey||e.altKey||e.metaKey||e.shiftKey)&&!(onlyShift&&name.length===1)){
+      if(!isEditing)e.preventDefault();
+      fire(comboKey(KEYID[name]||name.toLowerCase()));
+      return;
+    }
+    var k=findKey(name);
+    showKey(k.n||(name+' 键'),k.d||'');
+    mark('key:'+name);
+    if(isEditing){
+      if(e.key==='Escape'){ clearPy(); return; }
+      if(e.key==='Enter'){ clearPy(); return; }
+      if(e.key==='Tab'){ e.preventDefault(); return; }
+      if(imeCn&&PY_BUF&&e.key===' '){ e.preventDefault(); commitPy(0); return; }
+      if(imeCn&&PY_BUF&&/^[1-5]$/.test(e.key)){ e.preventDefault(); commitPy(+e.key-1); return; }
+      if(e.key==='Backspace'){ if(PY_BUF||imeCn){ e.preventDefault(); backNotepad(); } return; }
+      if(imeCn&&e.key.length===1){ e.preventDefault(); typeChar(e.key); return; }
+      if(!imeCn&&(e.key.length===1||e.key===' ')){ mark('type-en'); return; }
+      return;
+    }
+    if(W.notepad&&!W.notepad.closed&&!W.notepad.min&&e.key.length===1){ typeChar(e.key); e.preventDefault(); return; }
+    if(['Tab','F4','F10','F11','F12',' ','Backspace','ArrowLeft','ArrowRight','ArrowUp',
+        'ArrowDown','F1','F2','F3','F5','F6','F7','Delete','Enter'].indexOf(e.key)>=0)e.preventDefault();
+  });
+  document.addEventListener('keyup',function(e){
+    var m=MODN[e.key];
+    if(m){
+      var idx=held.indexOf(m);
+      if(idx>=0)held.splice(idx,1);
+      $$('.kk',kb).forEach(function(b){ if(b.dataset.c===keyName(e))b.classList.remove('hit'); });
+      if(!held.length){
+        syncKb();
+        if(!comboFired){
+          if(COMBOS[m])fire(m);
+          else info.innerHTML='<span class="combo">'+esc(SHOWMOD[m])+'</span> → 修饰键，'+
+            '单独按下不产生动作。要发挥作用，得在按住的同时再按一个键。';
+        }
+        comboFired=false;
+      }
+    }
+    $$('.kk',kb).forEach(function(b){ if(b.dataset.c===keyName(e))b.classList.remove('hit'); });
+  });
+  $('#'+ID+'-fn',root).onchange=function(e){ fnLock=e.target.checked; drawKb();
+    mark('fnlock');
+    info.innerHTML='<b>Fn Lock 已'+(fnLock?'开启':'关闭')+'</b>　'+(fnLock
+      ? '现在直接按 F 行执行的是 F1 到 F12 本身。'
+      : '现在直接按 F 行执行的是键帽上方图标对应的功能，要执行 F1 到 F12 需按住 Fn。'); };
+  var mb=$('#'+ID+'-mode',root);
+  mb.onclick=function(){
+    if(challenge){ challenge=null; clef=0; mb.textContent='快捷键挑战'; tgt.classList.add('hidden'); return; }
+    clist=shuf(cfg.challenge||[{a:'复制',k:'ctrl+c'},{a:'粘贴',k:'ctrl+v'},{a:'撤销',k:'ctrl+z'}]);
+    clef=0; mb.textContent='退出挑战'; tgt.classList.remove('hidden'); nextChallenge(); mark('challenge');
+  };
+  drawKb();
+
+  scr.addEventListener('wheel',function(e){
+    var w=e.target.closest('.win');
+    if(w){ var el2=$('.bd',w); if(el2){ el2.scrollTop+=e.deltaY; e.preventDefault(); } }
+  },{passive:false});
+
+  /* ================================================================
+     时钟
+     ================================================================ */
+  function clock(){
+    var d=new Date(), c=$('#'+ID+'-clock',scr);
+    if(c)c.innerHTML=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+
+      '<br>'+(d.getMonth()+1)+'/'+d.getDate();
+  }
+  clock(); setInterval(clock,20000);
+
+  /* ================================================================
+     对外接口
+     ================================================================ */
+  var API={
+    open:open, close:function(k){ closeWin(k||active()); }, min:function(){ minWin(active()); },
+    max:function(){ var a=active(); if(a)maxWin(a); },
+    snapL:function(){ snap(active(),'left'); }, snapR:function(){ snap(active(),'right'); },
+    alt:altTab, show:showDesk, task:taskView, newDesk:newDesk, cycleDesk:cycleDesk,
+    boot:boot, power:powerTap, forceOff:forceOff, shutdown:shutdown, on:goLive,
+    skipPost:function(){ if(pw==='post'||pw==='off')goLive(); },
+    combo:function(s){ fire(s); return COMBOS[s]||''; },
+    combos:function(){ return Object.keys(COMBOS); },
+    openPage:openPage, setPane:function(p){ setSel('settings',p); if(W.settings){open('settings');paint('settings');} },
+    notepadText:function(){ var ta=$('[data-ta]',bd('notepad')); return ta?ta.value:(state('notepad').txt||''); },
+    setIme:function(v){ imeCn=(v!=='en'); var ie=$('.ime',scr); if(ie)ie.textContent=imeCn?'中':'英'; },
+    type:function(ch){ typeChar(ch); },
+    state:function(){ return {pw:pw,desk:desks,cur:desk,open:Object.keys(W).filter(function(k){
+      return !W[k].closed;}),done:Object.keys(done).filter(function(k){return k!=='__all';}),
+      ime:imeCn?'cn':'en',fs:FS,bin:BIN,targets:challenge?challenge.k:''}; },
+    tasks:function(){ return TASKS.map(function(t){return {t:t.t,k:t.k,ok:!!done[t.k]};}); }
+  };
+  window['pc_'+ID]=API;
+  window['dsk_'+ID]=API;
+  window['kb_'+ID]=API;
+
+  /* ================================================================
+     启动
+     ================================================================ */
+  paintTasks();
+  if(cfg.bsod){
+    /* 故障场景：一开机就是蓝屏，必须先强制关机 */
+    setTimeout(function(){
+      frozen=true;
+      var b=document.createElement('div'); b.className='ap-bsod';
+      b.innerHTML='<div class="face">:(</div>'+
+        '<div>你的电脑遇到问题，需要重新启动。我们只收集某些错误信息，然后为你重新启动。</div>'+
+        '<div style="margin-top:10px;font-size:20px">0% 完成</div>'+
+        '<div class="pc2">停止代码：CRITICAL_PROCESS_DIED<br>'+
+        '屏幕上的一切都没有反应，鼠标也不动。<br>'+
+        '按电源键短按一次没有回应 —— 这时候只能按住电源键约 3 秒强制关机。</div>';
+      scr.appendChild(b); setLed('on'); pw='on'; layout();
+    },400);
+  }else if(cfg.startOff){
+    screenOff('显示器没有信号。<br>按显示器上的电源键开机。');
+  }else{
+    setTimeout(function(){ boot(); },260);
+  }
+  setTimeout(function(){ layout(); paintAll(); },0);
+}
+
+
+/* ============ 启动 ============ */
+function initTabs(){
+  var tabs=$('#tabs'); if(!tabs)return;
+  var panes=$$('.tabpane');
+  var names={quiz:'自测题',lab:'动手练'};
+  var btns=[];
+  function show(i){
+    btns.forEach(function(x){ x.setAttribute('aria-selected','false'); });
+    if(btns[i])btns[i].setAttribute('aria-selected','true');
+    panes.forEach(function(x){ x.classList.add('hidden'); });
+    if(panes[i])panes[i].classList.remove('hidden');
+  }
+  panes.forEach(function(p,i){
+    var b=document.createElement('button');
+    b.textContent=(p.dataset.name||names[p.id.replace('tab-','')]||('第'+(i+1)+'部分'));
+    b.onclick=function(){ show(i); window.scrollTo({top:0,behavior:'smooth'}); };
+    tabs.appendChild(b); btns.push(b);
+  });
+  var want=(location.hash||'').replace('#','');
+  var k=-1;
+  panes.forEach(function(p,i){ if(p.dataset.name===want||p.id==='tab-'+want)k=i; });
+  show(k>=0?k:0);
+  window.addEventListener('hashchange',function(){
+    var h=(location.hash||'').replace('#','');
+    var j=-1;
+    panes.forEach(function(p,i){ if(p.dataset.name===h||p.id==='tab-'+h)j=i; });
+    if(j>=0)show(j);
+  });
+}
+document.addEventListener('DOMContentLoaded',function(){
+  try{
+    initTabs();
+    var d=$('#qdata');
+    if(d&&$('#quiz')) renderQuiz(JSON.parse(d.textContent));
+  }catch(err){
+    var box=document.createElement('div');
+    box.className='lead'; box.id='boot-error';
+    box.style.cssText='border-left:3px solid var(--no);margin:14px 0';
+    box.textContent='页面未能正常初始化：'+err.message+
+      '　请用浏览器直接打开本文件（双击），不要通过代码预览器查看。';
+    var m=$('main')||document.body;
+    m.insertBefore(box,m.firstChild);
+  }
+});
+</script>
+<script>initComputer({apps:['notepad'],openAtBoot:['notepad'],challenge:[{a:'复制',k:'ctrl+c'},{a:'切换中英文输入法',k:'meta+space'},{a:'全选',k:'ctrl+a'}],tasks:[{t:'在记事本里输入「你好」两个字',k:'type-cn'},{t:'切换到英文状态，输入几个字母',k:'type-en'},{t:'在中文状态下打出句号与逗号',k:'sym-cn'},{t:'用键盘切换一次中英文输入法',k:'ime'}],root:'#c2',id:'c2'});</script>
+</body>
+</html>
