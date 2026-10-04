@@ -4,7 +4,7 @@ date: 2026-10-02
 category: tech
 section: hard
 series: computer-basics
-order: 16
+order: 17
 part: 附录
 summary: "全局快捷键 · 编辑与浏览器快捷键"
 draft: false

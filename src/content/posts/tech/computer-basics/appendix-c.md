@@ -4,7 +4,7 @@ date: 2026-10-02
 category: tech
 section: hard
 series: computer-basics
-order: 18
+order: 19
 part: 附录
 summary: "术语对照表"
 draft: false

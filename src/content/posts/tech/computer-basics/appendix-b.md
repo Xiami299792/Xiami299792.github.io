@@ -4,7 +4,7 @@ date: 2026-10-02
 category: tech
 section: hard
 series: computer-basics
-order: 17
+order: 18
 part: 附录
 summary: "Win+R 常用命令速查"
 draft: false
