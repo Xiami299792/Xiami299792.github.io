@@ -4,7 +4,7 @@ date: 2026-10-02
 category: tech
 section: hard
 series: computer-basics
-order: 18
+order: 19
 part: 附录
 summary: "Win+R 常用命令速查"
 draft: false
@@ -21,7 +21,7 @@ Win+R 打开运行框，输入以下命令并回车，可直接打开对应系�
 | taskmgr | 任务管理器 |
 | devmgmt.msc | 设备管理器，用于检查驱动 |
 | diskmgmt.msc | 磁盘管理，用于查看分区和盘符 |
-| cleanmgr | 磁盘清理 |
+| cleanmgr | 磁盘清理（微软已逐步转向「设置」→「系统」→「存储」） |
 | appwiz.cpl | 程序和功能，用于卸载软件 |
 | ncpa.cpl | 网络连接，用于设置网卡 |
 | services.msc | 服务 |

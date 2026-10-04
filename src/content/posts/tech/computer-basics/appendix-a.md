@@ -4,7 +4,7 @@ date: 2026-10-02
 category: tech
 section: hard
 series: computer-basics
-order: 17
+order: 18
 part: 附录
 summary: "全局快捷键 · 编辑与浏览器快捷键"
 draft: false
@@ -40,7 +40,7 @@ draft: false
 | Alt+F4 | 关闭当前窗口 |
 | Alt+空格 | 窗口控制菜单 |
 | Ctrl+Shift+Esc | 任务管理器 |
-| Ctrl+Shift+N | 新建文件夹 |
+| Ctrl+Shift+N | 在文件资源管理器中新建文件夹 |
 | Delete | 删除到回收站 |
 | Shift+Delete | 永久删除 |
 | F2 | 重命名 |
@@ -61,6 +61,7 @@ draft: false
 | Ctrl+Shift+T | 恢复刚关闭的标签页 |
 | Ctrl+Tab | 下一个标签页 |
 | Ctrl+数字 1 到 8 | 跳到第几个标签页 |
+| Ctrl+9 | 跳到最后一个标签页 |
 | Ctrl+D | 收藏当前页 |
 | Ctrl+H | 历史记录 |
 | Ctrl+J | 下载内容 |
