@@ -931,7 +931,6 @@ var COMBOS={
 'meta+1':'打开任务栏上第 1 个固定程序','meta+esc':'关闭放大镜','meta+plus':'打开放大镜',
 /* —— 系统级 —— */
 'ctrl+shift+esc':'直接打开任务管理器','ctrl+alt+delete':'安全选项界面','ctrl+shift+enter':'以管理员身份运行',
-'ctrl+space':'切换中英文输入','ctrl+shift':'切换输入法顺序',
 'f1':'打开帮助','f7':'拼写与语法检查','f8':'开机时按住进入高级启动选项','f9':'重新计算所有公式',
 'f10':'激活菜单栏','shift':'按一次切换中英文','esc':'取消当前操作','tab':'在控件之间跳转',
 'enter':'确认输入或另起一行','backspace':'删除光标前一个字符','capslock':'切换大写锁定','numlock':'切换小键盘数字锁定'
@@ -1672,7 +1671,7 @@ function initComputer(cfg){
     else if(s==='meta+shift+s'){ if(W.snipping){ open('snipping'); startShot(); } else toast('区域截图（演示）'); mark('shot'); }
     else if(s==='meta+prtsc'){ toast('已截取全屏并保存到 图片\\屏幕截图'); mark('shot'); }
     else if(s==='meta+shift+r'){ toast('区域录屏已开始，再按一次结束'); mark('record'); }
-    else if(s==='meta+space'||s==='ctrl+space'||s==='ctrl+shift'||s==='shift'){
+    else if(s==='meta+space'||s==='shift'){
       imeCn=!imeCn; var ie=$('.ime',scr); if(ie)ie.textContent=imeCn?'中':'英';
       toast('输入法已切换到'+(imeCn?'中文':'英文')); mark('ime');
     }
