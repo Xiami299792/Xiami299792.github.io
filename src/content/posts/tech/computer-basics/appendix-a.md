@@ -16,7 +16,7 @@ draft: false
 | 快捷键 | 作用 |
 |---|---|
 | Win | 打开或关闭开始菜单 |
-| Win+E | 打开文件资源管理器 |
+| Win+E | 打开资源管理器 |
 | Win+D | 显示桌面，再按恢复 |
 | Win+L | 锁屏 |
 | Win+I | 打开设置 |
@@ -40,7 +40,7 @@ draft: false
 | Alt+F4 | 关闭当前窗口 |
 | Alt+空格 | 窗口控制菜单 |
 | Ctrl+Shift+Esc | 任务管理器 |
-| Ctrl+Shift+N | 在文件资源管理器中新建文件夹 |
+| Ctrl+Shift+N | 在资源管理器中新建文件夹 |
 | Delete | 删除到回收站 |
 | Shift+Delete | 永久删除 |
 | F2 | 重命名 |
