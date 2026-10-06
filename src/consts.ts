@@ -131,6 +131,43 @@ export const SERIES = {
 
 export type SeriesKey = keyof typeof SERIES;
 
+/**
+ * 访问统计：51.LA（v6）
+ *
+ * 为什么是它：GitHub Pages 是纯静态托管，自己不提供任何站点流量数据
+ * （仓库 Insights 里的 Traffic 统计的是 GitHub 仓库页面，不是博客）。
+ * 所以要看到访问量，必须在页面里装一段第三方统计代码。
+ *
+ * 两件事分开：
+ *   1. 埋点 —— Analytics.astro 里的 SDK。数据进 51.LA 后台，
+ *      在「页面分析 / 受访页面」里就能看到各栏目（/category/tech/ 等）的访问量。
+ *   2. 页脚数字 —— 51.LA 的「数据挂件」。在后台「数据挂件」页启用后会生成
+ *      一段 https://v6-widget.51.la/v6/<ID>/quote.js 的脚本，页脚直接用它渲染
+ *      「今日/昨日/本月/总浏览量、访客数」。
+ *
+ * 配置步骤：注册 https://v6.51.la → 应用管理 → 添加应用
+ *   - 网站域名必须填 xiami299792.github.io（填错会统计不到）
+ *   - 拿到「掩码」后填到下面的 id / ck（多数情况下两个值相同）
+ *   - 再进「数据挂件」页点启用，等几分钟挂件才生效
+ *
+ * id 留空 = 整站不加载任何统计代码，本地开发也一样。
+ */
+export const ANALYTICS = {
+  la: {
+    /** 51.LA 应用掩码。留空则不装统计 */
+    id: '3RQY2xQlG0kpWkSQ',
+    /** 51.LA 的 ck。通常与 id 相同 */
+    ck: '3RQY2xQlG0kpWkSQ',
+    /**
+     * 页脚是否显示 51.LA 数据挂件。
+     * 下面这串查询参数只是占位，等你启用挂件后，把 51.LA 后台生成的那串整行抄过来替换即可
+     * （theme / col / f / display 都是它给的：display 里的 1 和 0 就是「这项显示 / 不显示」）。
+     */
+    widget: true,
+    widgetQuery: 'theme=0&col=true&f=12&display=1,0,1,0,1,1,1',
+  },
+} as const;
+
 /** 顶部导航（路径不要带 base，代码里会自动补） */
 export const NAV = [
   { href: '/', label: '首页' },

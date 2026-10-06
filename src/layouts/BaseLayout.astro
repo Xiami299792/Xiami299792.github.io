@@ -24,6 +24,7 @@ import '@fontsource/dm-mono/latin-500.css';
 import { SITE } from '../consts';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 import '../styles/global.css';
 import '../styles/cat-essay.css';
 import '../styles/cat-tech.css';
@@ -109,6 +110,8 @@ const ogImage = image ? new URL(image, Astro.site ?? 'https://example.com').href
         </>
       )
     }
+    {/* 统计埋点：id 未配置时不输出任何东西，见 components/Analytics.astro */}
+    <Analytics />
   </head>
 
   <body>

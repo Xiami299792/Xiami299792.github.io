@@ -1,8 +1,12 @@
 ---
-import { SITE } from '../consts';
+import { ANALYTICS, SITE } from '../consts';
 import { withBase } from '../utils/url';
 
 const year = new Date().getFullYear();
+
+// 51.LA 数据挂件：显示访问量。id 未配置 / 本地 dev 时不输出。
+const { id: laId, widget: laWidget, widgetQuery } = ANALYTICS.la;
+const statsEnabled = import.meta.env.PROD && laId !== '' && laWidget;
 ---
 
 <footer class="site-footer" data-pagefind-ignore>
@@ -14,4 +18,43 @@ const year = new Date().getFullYear();
       <a href={withBase('/search/')}>搜索</a>
     </span>
   </div>
+
+  {
+    statsEnabled && (
+      <div class="container footer-stats">
+        {/* 51.LA「数据挂件」，脚本会把统计数字渲染成 HTML 写在这里。
+            不要加 async/defer：挂件是边解析边插入的，异步会让它插到错的地方。 */}
+        <script
+          is:inline
+          id="LA-DATA-WIDGET"
+          crossorigin="anonymous"
+          charset="UTF-8"
+          src={`https://v6-widget.51.la/v6/${laId}/quote.js?${widgetQuery}`}
+        />
+      </div>
+    )
+  }
 </footer>
+
+<style>
+  .footer-stats {
+    margin-top: 14px;
+    text-align: center;
+    color: var(--ink-faint);
+    line-height: 1.9;
+  }
+
+  /* 挂件由 51.LA 远程渲染，拿不到 scoped 类名，只能从容器往里透 */
+  .footer-stats :global(a) {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .footer-stats :global(a:hover) {
+    color: var(--accent);
+  }
+
+  .footer-stats :global(img) {
+    vertical-align: middle;
+  }
+</style>
