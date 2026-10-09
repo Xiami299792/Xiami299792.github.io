@@ -41,11 +41,53 @@ $$A-\varepsilon<g(x)\leqslant f(x)\leqslant h(x)<A+\varepsilon,$$
 
 即 $|f(x)-A|<\varepsilon$，故 $\lim\limits_{x\to x_0}f(x)=A$。
 
-（2）证明与（1）类似。
+（2）设当 $|x|>N_1$ 时，$g(x)\leqslant f(x)\leqslant h(x)$。
+
+对 $\forall\varepsilon>0$，由于 $\lim\limits_{x\to\infty}g(x)=A$，$\exists N_2>0$，当 $|x|>N_2$ 时 $|g(x)-A|<\varepsilon$，即
+
+$$A-\varepsilon<g(x)<A+\varepsilon;$$
+
+由于 $\lim\limits_{x\to\infty}h(x)=A$，$\exists N_3>0$，当 $|x|>N_3$ 时 $|h(x)-A|<\varepsilon$，即
+
+$$A-\varepsilon<h(x)<A+\varepsilon.$$
+
+令 $N=\max\{N_1,N_2,N_3\}$，则当 $|x|>N$ 时上面三组不等式同时成立，于是
+
+$$A-\varepsilon<g(x)\leqslant f(x)\leqslant h(x)<A+\varepsilon,$$
+
+即 $|f(x)-A|<\varepsilon$，故 $\lim\limits_{x\to\infty}f(x)=A$。
+
+（1）与（2）要证的其实是同一件事：三个条件各自管住一段自变量范围，取它们的**公共部分**。区别只在这个"取公共部分"的写法 —— $x\to x_0$ 时是"离 $x_0$ 足够近"，所以取 $\min$；$x\to\infty$ 时是"离原点足够远"，所以取 $\max$。
 
 对自变量的其他趋向以及数列有同样的结论。数列的情形即：当 $n>N$ 时，有 $y_n\leqslant x_n\leqslant z_n$，且 $\lim\limits_{n\to\infty}y_n=\lim\limits_{n\to\infty}z_n=A$，则 $\lim\limits_{n\to\infty}x_n=A$。
 
-当 $n\to\infty$ 时，量 $\sqrt[n]{a}$，$\sqrt[n]{n}$，$\sqrt[n]{n^k}$（$a>0$，$k>0$）均收敛到常数 $1$（可以使用夹逼定理进行证明）。而在同一极限过程中，$\sqrt[n]{c^n}\to c$，$c$ 为任意实数；$\sqrt[n]{n!}$，$\sqrt[n]{n^n}$ 均为无穷大量。
+当 $n\to\infty$ 时，量 $\sqrt[n]{a}$，$\sqrt[n]{n}$，$\sqrt[n]{n^k}$（$a>0$，$k>0$）均收敛到常数 $1$（可以使用夹逼定理进行证明）。这几个极限前面是直接引用过来的，下面用夹逼准则把它们补出来。
+
+**（i）$\lim\limits_{n\to\infty}\sqrt[n]{a}=1$（$a>0$）**
+
+$a=1$ 时显然。$a>1$ 时，令 $\sqrt[n]a=1+\alpha_n$，则 $\alpha_n>0$，由二项式定理，只保留前两项：
+
+$$a=(1+\alpha_n)^n=1+n\alpha_n+\frac{n(n-1)}{2}\alpha_n^2+\dots\geqslant1+n\alpha_n,$$
+
+于是 $0<\alpha_n\leqslant\dfrac{a-1}{n}$。由 $\lim\limits_{n\to\infty}\dfrac{a-1}{n}=0$ 与夹逼准则得 $\lim\limits_{n\to\infty}\alpha_n=0$，即 $\lim\limits_{n\to\infty}\sqrt[n]a=1$。
+
+$0<a<1$ 时，$\dfrac1a>1$，用上面已证的情形：
+
+$$\lim_{n\to\infty}\sqrt[n]{a}=\lim_{n\to\infty}\frac{1}{\sqrt[n]{1/a}}=\frac11=1.$$
+
+**（ii）$\lim\limits_{n\to\infty}\sqrt[n]{n}=1$**
+
+$n>1$ 时令 $\sqrt[n]n=1+\beta_n$，则 $\beta_n>0$。仍由二项式定理，这次只保留含 $\beta_n^2$ 的那一项：
+
+$$n=(1+\beta_n)^n\geqslant\frac{n(n-1)}{2}\beta_n^2,$$
+
+于是 $0<\beta_n^2\leqslant\dfrac{2}{n-1}$，即 $0<\beta_n\leqslant\sqrt{\dfrac{2}{n-1}}$。由 $\sqrt{\dfrac{2}{n-1}}\to0$ 与夹逼准则得 $\beta_n\to0$，即 $\lim\limits_{n\to\infty}\sqrt[n]n=1$。
+
+**（iii）$\lim\limits_{n\to\infty}\sqrt[n]{n^k}=1$（$k>0$）**
+
+$k$ 为**正整数**时，$\sqrt[n]{n^k}=(\sqrt[n]n)^k$，由（ii）与极限的乘法法则即得；$k$ 为一般的正实数时，要用到幂函数 $x^k$ 的连续性，留到后面再补。
+
+而在同一极限过程中，$\sqrt[n]{c^n}\to c$，$c$ 为任意实数；$\sqrt[n]{n!}$，$\sqrt[n]{n^n}$ 均为无穷大量（$\sqrt[n]{n^n}$ 就是 $n$ 本身）。
 
 利用夹逼准则求极限，关键是构造出 $\{y_n\}$ 与 $\{z_n\}$（或 $g(x)$ 与 $h(x)$），并且它们的极限是容易求的。
 
@@ -202,7 +244,58 @@ $$\lim_{n\to\infty}\left(\frac{1}{\sqrt{n^2+1}}+\frac{1}{\sqrt{n^2+2}}+\dots+\fr
 
 如果数列 $\{y_n\}$ 单调增加，且有上界，即存在数 $M$，使得 $y_n\leqslant M$（$n=1,2,\cdots$），则 $\lim\limits_{n\to\infty}y_n$ 一定存在；如果数列 $\{y_n\}$ 单调减少，且有下界，即存在数 $M$，使得 $y_n\geqslant M$（$n=1,2,\cdots$），则 $\lim\limits_{n\to\infty}y_n$ 一定存在。
 
-定理 2 的证明要用到实数的完备性，此处从略。
+正文说"定理 2 的证明要用到实数的完备性，此处从略"。本节标题里讲的"几个关于区间和极限的基本定理"，指的也正是这件事。下面把它补上。
+
+#### 实数的完备性
+
+实数的完备性说的是：**数轴上没有"洞"**。一个数集只要有界，它"想逼近"的那个数就一定在实数集里。把它写成能操作的命题，最常用的是**确界原理**：
+
+> **确界原理**　非空有上界的数集必有上确界；非空有下界的数集必有下确界。
+
+这里数 $A$ 叫作数集 $S$ 的**上确界**（记作 $\sup S$），是指两件事：
+
+① $A$ 是 $S$ 的上界，即对一切 $x\in S$ 都有 $x\leqslant A$；
+
+② $A$ 是 $S$ 的**最小**上界，即比 $A$ 小的任何数都不是 $S$ 的上界。
+
+有理数集就不满足确界原理。例如 $S=\{x\in\mathbf Q:x^2<2\}$ 有上界（比如 $2$），但它在有理数范围内没有上确界 —— 它的"上确界"应该是 $\sqrt2$，而 $\sqrt2$ 不是有理数。实数集把这些"洞"填上了，这就是完备性。
+
+实数完备性有好几种彼此等价的说法，任取其一作出发点，其余都能推出来：
+
+| 名称 | 内容 |
+| --- | --- |
+| 确界原理 | 非空有上界的数集必有上确界 |
+| 单调有界定理 | 单调有界数列必有极限（就是定理 2） |
+| 区间套定理 | 若闭区间列 $\{[a_n,b_n]\}$ 满足 $[a_{n+1},b_{n+1}]\subset[a_n,b_n]$ 且 $b_n-a_n\to0$，则存在唯一的 $\xi$ 属于所有这些闭区间 |
+| 柯西收敛准则 | 数列 $\{y_n\}$ 收敛 $\iff$ 对 $\forall\varepsilon>0$，$\exists N>0$，当 $m,n>N$ 时 $\lvert y_m-y_n\rvert<\varepsilon$ |
+| 聚点定理（致密性定理） | 有界数列必有收敛子列 |
+| 有限覆盖定理 | 闭区间上的任一开覆盖都含有限子覆盖 |
+
+下面取**确界原理**作出发点，证明定理 2。这也说明定理 2 并不是"显然"的，它的分量全压在实数的完备性上。
+
+#### 定理 2 的证明
+
+只证"单调增加且有上界"这一半；"单调减少且有下界"的情形把 $\{y_n\}$ 换成 $\{-y_n\}$ 就化归到已证的情形（$y_n\geqslant M$ 给出 $-y_n\leqslant-M$，$\{-y_n\}$ 单调增加且有上界）。
+
+设 $\{y_n\}$ 单调增加且有上界。令
+
+$$S=\{y_1,y_2,\dots\},$$
+
+则 $S$ 非空且有上界，由确界原理，$S$ 有上确界。记 $A=\sup S$。
+
+下面证 $\lim\limits_{n\to\infty}y_n=A$。对 $\forall\varepsilon>0$：
+
+① 因为 $A$ 是 $S$ 的上界，所以对一切 $n$ 都有 $y_n\leqslant A<A+\varepsilon$；
+
+② 因为 $A-\varepsilon<A$，而 $A$ 是 $S$ 的最小上界，所以 $A-\varepsilon$ **不是** $S$ 的上界。也就是说，$S$ 中至少有一个数比 $A-\varepsilon$ 大，把这一个记作 $y_N$，即 $y_N>A-\varepsilon$。又因 $\{y_n\}$ 单调增加，当 $n>N$ 时 $y_n\geqslant y_N>A-\varepsilon$。
+
+两件事合起来，当 $n>N$ 时
+
+$$A-\varepsilon<y_n<A+\varepsilon,\quad\text{即}\quad \lvert y_n-A\rvert<\varepsilon.$$
+
+按数列极限的定义，$\lim\limits_{n\to\infty}y_n=A$。证毕。
+
+整个证明里只有第②步用到了完备性：**$A$ 这个数存在**，后面的一切才有意义。没有它，单调增加且有上界的数列也可能"扑空" —— 取 $\sqrt2$ 的不足近似值 $y_1=1$，$y_2=1.4$，$y_3=1.41$，$y_4=1.414$，$\dots$，它在有理数范围内单调增加且有上界 $2$，却收敛不到任何一个有理数。
 
 由于数列 $\{y_n\}$ 是否有极限同 $\{y_n\}$ 的前有限项无关，故定理 2 对单调性的要求可放宽到：当 $n$ 充分大时 $\{y_n\}$ 单调。
 
@@ -210,17 +303,17 @@ $$\lim_{n\to\infty}\left(\frac{1}{\sqrt{n^2+1}}+\frac{1}{\sqrt{n^2+2}}+\dots+\fr
 
 对 $x\to-\infty$，$x\to x_0^-$，$x\to x_0^+$ 有类似的结论。例如，设函数在点 $x_0$ 的某个右邻域内单调并且有界，则 $f(x)$ 在点 $x_0$ 的右极限必定存在。
 
-要注意，函数的情形**只有单侧**的单调有界准则。右邻域内单调有界只能推出右极限存在，左邻域内单调有界只能推出左极限存在；把"右邻域"换成**去心邻域**，命题就不再成立。例如
+要注意，函数的情形**只有单侧**的单调有界准则。右邻域内单调有界只能推出右极限存在，左邻域内单调有界只能推出左极限存在；把"右邻域"换成**去心邻域**，命题就不再成立。例如分段函数
 
-$$f(x)=\operatorname{sgn}x=\begin{cases}-1,&x<0,\\0,&x=0,\\1,&x>0,\end{cases}$$
+$$f(x)=\begin{cases}x,&x<0,\\x+1,&x>0,\end{cases}$$
 
-在 $U^\circ(0)$ 内单调增加且有界（$\lvert f(x)\rvert\leqslant1$），但 $\lim\limits_{x\to0}\operatorname{sgn}x$ 不存在，因为左极限为 $-1$、右极限为 $1$，两者不等。左右极限各自存在，并不能拼成双侧极限 —— 单侧只保证自己那一头。
+在 $0$ 的去心邻域 $(-1,1)\setminus\{0\}$ 内**严格**单调增加，且 $\lvert f(x)\rvert<2$ 有界，可是 $x\to0$ 时左极限为 $0$、右极限为 $1$，两者不等，所以 $\lim\limits_{x\to0}f(x)$ 不存在。左右极限各自存在，并不能拼成双侧极限 —— 单侧准则只保证自己那一头。
 
 定理 2 指出了极限的存在性，至于如何求极限需借助其他方法。其实在某些场合下，我们并不要求具体计算出极限值，只要能判定极限存在就可以了。
 
-**例 6** 设 $0<x_1<2$，$x_{n+1}=\sqrt{2+x_n}$（$n=1,2,\dots$），证明数列 $\{x_n\}$ 有极限，并求出极限值。
+**例 6** 设 $x_1=\sqrt2$，$x_{n+1}=\sqrt{2+x_n}$（$n=1,2,\dots$），证明数列 $\{x_n\}$ 有极限，并求出极限值。
 
-**解**　先看有界性：由 $x_1<2$，若 $x_n<2$，则 $x_{n+1}=\sqrt{2+x_n}<\sqrt4=2$，故由归纳法知
+**解**　先看有界性：由 $x_1=\sqrt2<2$，若 $x_n<2$，则 $x_{n+1}=\sqrt{2+x_n}<\sqrt4=2$，故由归纳法知
 
 $$0<x_n<2\quad(n=1,2,\dots).$$
 
