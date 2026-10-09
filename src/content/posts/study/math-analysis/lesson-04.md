@@ -65,7 +65,7 @@ $$A-\varepsilon<g(x)\leqslant f(x)\leqslant h(x)<A+\varepsilon,$$
 
 **（i）$\lim\limits_{n\to\infty}\sqrt[n]{a}=1$（$a>0$）**
 
-$a=1$ 时显然。$a>1$ 时，令 $\sqrt[n]a=1+\alpha_n$，则 $\alpha_n>0$，由二项式定理，只保留前两项：
+$a=1$ 时显然。$a>1$ 时，令 $\sqrt[n]a=1+\alpha_n$，则 $\alpha_n>0$，由二项式定理展开（除前两项外其余各项都非负，丢掉只会变小）：
 
 $$a=(1+\alpha_n)^n=1+n\alpha_n+\frac{n(n-1)}{2}\alpha_n^2+\dots\geqslant1+n\alpha_n,$$
 
@@ -77,7 +77,7 @@ $$\lim_{n\to\infty}\sqrt[n]{a}=\lim_{n\to\infty}\frac{1}{\sqrt[n]{1/a}}=\frac11=
 
 **（ii）$\lim\limits_{n\to\infty}\sqrt[n]{n}=1$**
 
-$n>1$ 时令 $\sqrt[n]n=1+\beta_n$，则 $\beta_n>0$。仍由二项式定理，这次只保留含 $\beta_n^2$ 的那一项：
+$n>1$ 时令 $\sqrt[n]n=1+\beta_n$，则 $\beta_n>0$。仍由二项式定理，这次只保留含 $\beta_n^2$ 的那一项（同样是把非负的项丢掉）：
 
 $$n=(1+\beta_n)^n\geqslant\frac{n(n-1)}{2}\beta_n^2,$$
 
@@ -413,7 +413,39 @@ $$
 
 $$\lim_{n\to\infty}\left(1+\frac1n\right)^n=e.$$
 
-$\{y_n\}$ 的单调性与有界性都还有更简洁的证法。
+$\{y_n\}$ 的单调性与有界性都还有更简洁的证法，代价是要先备好两个不等式。下面把这两个不等式也证出来。
+
+#### 均值不等式
+
+> **均值不等式**（算术—几何平均不等式）　设 $a_1,a_2,\dots,a_m$ 都是正数，则
+> $$\frac{a_1+a_2+\dots+a_m}{m}\geqslant\sqrt[m]{a_1a_2\cdots a_m},$$
+> 等号成立当且仅当 $a_1=a_2=\dots=a_m$。
+
+**证**　分三步。
+
+**第一步：$m=2$ 时成立。** 对任意正数 $a,b$，
+
+$$(\sqrt a-\sqrt b)^2\geqslant0\ \Longrightarrow\ a+b\geqslant2\sqrt{ab}\ \Longrightarrow\ \frac{a+b}{2}\geqslant\sqrt{ab},$$
+
+且等号成立当且仅当 $\sqrt a=\sqrt b$，即 $a=b$。
+
+**第二步：$m$ 成立 $\Rightarrow$ $2m$ 成立。** 把 $2m$ 个正数分成两组：$a_1,\dots,a_m$ 与 $a_{m+1},\dots,a_{2m}$，记两组的算术平均分别为 $A_1$、$A_2$。由归纳假设
+
+$$A_1\geqslant\sqrt[m]{a_1\cdots a_m},\qquad A_2\geqslant\sqrt[m]{a_{m+1}\cdots a_{2m}}.$$
+
+再把第一步用在 $A_1$、$A_2$ 这两个正数上，并接上上面两个不等式：
+
+$$\frac{a_1+\dots+a_{2m}}{2m}=\frac{A_1+A_2}{2}\geqslant\sqrt{A_1A_2}\geqslant\sqrt{\sqrt[m]{a_1\cdots a_m}\cdot\sqrt[m]{a_{m+1}\cdots a_{2m}}}=\sqrt[2m]{a_1\cdots a_{2m}}.$$
+
+**第三步：$m$ 成立 $\Rightarrow$ $m-1$ 成立（往回退一位）。** 给定 $m-1$ 个正数 $a_1,\dots,a_{m-1}$，记它们的算术平均为 $A$，再补上第 $m$ 个数 $a_m=A$，凑成 $m$ 个数。对这 $m$ 个数用归纳假设，注意补进去的那个数正好使算术平均仍是 $A$：
+
+$$A=\frac{a_1+\dots+a_{m-1}+A}{m}\geqslant\sqrt[m]{a_1\cdots a_{m-1}A}.$$
+
+两边取 $m$ 次方得 $A^m\geqslant a_1\cdots a_{m-1}A$，约去 $A>0$，得 $A^{m-1}\geqslant a_1\cdots a_{m-1}$，即
+
+$$A\geqslant\sqrt[m-1]{a_1\cdots a_{m-1}}.$$
+
+由第一、二步知 $m=2,4,8,\dots$ 全部成立；再由第三步，$m$ 成立就能往前退一位，于是 $m=3,5,6,7,\dots$ 也全部成立。等号成立的条件在每一步都能对回来：第一步要求两个数相等，第二、三步要求各数都等于所在组的平均，合起来就是 $a_1=a_2=\dots=a_m$。
 
 **单调增加：用均值不等式**　对下面 $n+1$ 个正数用均值不等式：$1+\dfrac1n$ 取 $n$ 个（它们相等），再添一个 $1$。算术平均为
 
@@ -423,7 +455,7 @@ $$\frac{n\left(1+\frac1n\right)+1}{n+1}=\frac{n+2}{n+1}=1+\frac1{n+1},$$
 
 $$\left[\left(1+\frac1n\right)^n\cdot1\right]^{\frac1{n+1}}.$$
 
-因为这 $n+1$ 个数不全相等（那个 $1$ 与 $1+\dfrac1n$ 不同），均值不等式取严格不等号：
+因为这 $n+1$ 个数不全相等（那个 $1$ 与 $1+\dfrac1n$ 不同），均值不等式里的等号取不到，于是取严格不等号：
 
 $$1+\frac1{n+1}>\left(1+\frac1n\right)^{\frac{n}{n+1}},$$
 
@@ -433,17 +465,37 @@ $$\left(1+\frac1{n+1}\right)^{n+1}>\left(1+\frac1n\right)^n,$$
 
 即 $y_{n+1}>y_n$，$\{y_n\}$ 单调增加。
 
-**有上界：用对数不等式**　对 $t>0$ 有对数不等式
+#### 对数不等式
 
-$$\ln(1+t)<t\quad(t>0).$$
+> **对数不等式**　对 $t>0$，$\ln(1+t)<t$。
 
-取 $t=\dfrac1n$，得 $n\ln\left(1+\dfrac1n\right)<1$，于是
+它跟 $e^t>1+t$ 是同一件事。因为 $\exp$ 与 $\ln$ 互为反函数，且 $\exp$ 单调增加，两边同时取 $\exp$ 得
+
+$$\ln(1+t)<t\iff 1+t<e^t.$$
+
+所以只要证 $e^t>1+t$（$t>0$）。
+
+**证**　任取整数 $n\geqslant2$，把 $\left(1+\dfrac tn\right)^n$ 用二项式定理展开，除前两项与 $t^2$ 项外，其余各项都非负，丢掉它们只会变小：
+
+$$\left(1+\frac tn\right)^n=1+t+\frac{n(n-1)}{2}\cdot\frac{t^2}{n^2}+\dots\geqslant1+t+\frac{n-1}{2n}t^2\geqslant1+t+\frac{t^2}{4},$$
+
+最后一步用了 $n\geqslant2$ 时 $\dfrac{n-1}{2n}\geqslant\dfrac14$。令 $n\to\infty$：把左边写成 $\left[\left(1+\dfrac tn\right)^{\frac nt}\right]^{t}$，括号内趋于 $e$，所以左边趋于 $e^t$；右边 $1+t+\dfrac{t^2}{4}$ 与 $n$ 无关。由**保序性**得
+
+$$e^t\geqslant1+t+\frac{t^2}{4}>1+t\quad(t>0).$$
+
+于是 $\ln(1+t)<t$。证毕。
+
+（另有一条更省事的路子：把 $\ln(1+t)$ 用后面要讲的幂级数展开写成 $t-\dfrac{t^2}{2}+\dfrac{t^3}{3}-\dots$，对 $0<t\leqslant1$ 一眼就能看出它小于 $t$。上面给的是只用第二个重要极限与保序性的初等证法。）
+
+**有上界：用对数不等式**　取 $t=\dfrac1n$，得 $n\ln\left(1+\dfrac1n\right)<1$，于是
 
 $$y_n=\left(1+\frac1n\right)^n=e^{\,n\ln\left(1+\frac1n\right)}<e<3,$$
 
-即 $\{y_n\}$ 有上界。
+即 $\{y_n\}$ 有上界（这里 $e$ 是常数 $2.718\,281\cdots$，当然有 $e<3$）。
 
-两个证法都比较短，代价是要另外用到均值不等式与对数不等式；正文那条路只用二项式定理，是"手边有什么就用什么"的做法。
+两条捷径都短，但各有代价：均值不等式那条要先把不等式本身证出来（上面用的是 Cauchy 归纳法，$2\to4\to8\to\cdots$ 正推、$m\to m-1$ 反推）；对数不等式那条要先把 $\ln$ 与 $e$ 拿出来用。正文那条路只用二项式定理，是"手边有什么就用什么"的做法。
+
+还有一句话要交代：**对数不等式那条路上的"有上界"其实不算独立**。它用的界是常数 $e$ 本身，而按课本的先后顺序，$e$ 正是本例要定义的那个量 —— 拿它去证它的存在性，绕了一个圈。真正把 $e$ 立起来的还是正文那条"放大成几何级数"的路（$y_n<3-\frac1{2^{n-1}}<3$，只用二项式定理与等比求和，什么都没欠）。把两条路对照着看，正好看出正文为什么绕那一下。
 
 （2）当 $x\to+\infty$ 时，记 $[x]=n$，则 $n\leqslant x<n+1$，当 $x\to+\infty$ 时，有 $n\to\infty$，并且有不等式
 
