@@ -210,11 +210,66 @@ $$\lim_{n\to\infty}\left(\frac{1}{\sqrt{n^2+1}}+\frac{1}{\sqrt{n^2+2}}+\dots+\fr
 
 对 $x\to-\infty$，$x\to x_0^-$，$x\to x_0^+$ 有类似的结论。例如，设函数在点 $x_0$ 的某个右邻域内单调并且有界，则 $f(x)$ 在点 $x_0$ 的右极限必定存在。
 
+要注意，函数的情形**只有单侧**的单调有界准则。右邻域内单调有界只能推出右极限存在，左邻域内单调有界只能推出左极限存在；把"右邻域"换成**去心邻域**，命题就不再成立。例如
+
+$$f(x)=\operatorname{sgn}x=\begin{cases}-1,&x<0,\\0,&x=0,\\1,&x>0,\end{cases}$$
+
+在 $U^\circ(0)$ 内单调增加且有界（$\lvert f(x)\rvert\leqslant1$），但 $\lim\limits_{x\to0}\operatorname{sgn}x$ 不存在，因为左极限为 $-1$、右极限为 $1$，两者不等。左右极限各自存在，并不能拼成双侧极限 —— 单侧只保证自己那一头。
+
 定理 2 指出了极限的存在性，至于如何求极限需借助其他方法。其实在某些场合下，我们并不要求具体计算出极限值，只要能判定极限存在就可以了。
+
+**例 6** 设 $0<x_1<2$，$x_{n+1}=\sqrt{2+x_n}$（$n=1,2,\dots$），证明数列 $\{x_n\}$ 有极限，并求出极限值。
+
+**解**　先看有界性：由 $x_1<2$，若 $x_n<2$，则 $x_{n+1}=\sqrt{2+x_n}<\sqrt4=2$，故由归纳法知
+
+$$0<x_n<2\quad(n=1,2,\dots).$$
+
+**证法一（单调有界准则）**
+
+证明 $\{x_n\}$ 单调增加。因为 $x_n>0$，可以用平方来判断：
+
+$$x_{n+1}^2-x_n^2=(2+x_n)-x_n^2=-(x_n-2)(x_n+1)>0,$$
+
+（右边大于 $0$，是因为 $x_n<2$ 使 $x_n-2<0$，而 $x_n+1>0$。）又 $x_{n+1}+x_n>0$，所以
+
+$$x_{n+1}-x_n=\frac{x_{n+1}^2-x_n^2}{x_{n+1}+x_n}>0,$$
+
+即 $\{x_n\}$ 单调增加。单调增加且有上界 $2$，由单调有界准则，$\lim\limits_{n\to\infty}x_n$ 存在。
+
+设 $\lim\limits_{n\to\infty}x_n=a$。在 $x_{n+1}=\sqrt{2+x_n}$ 两端取极限，得 $a=\sqrt{2+a}$，解得 $a^2-a-2=0$，即 $a=2$ 或 $a=-1$。又因 $x_n>0$，故 $a\geqslant0$，舍去 $a=-1$，得
+
+$$\lim_{n\to\infty}x_n=2.$$
+
+**证法二（递推不等式，直接得到极限值）**
+
+这个数列有一个很好的性质：相邻两项到 $2$ 的距离按固定比例缩小。把递推式两边同时减去 $2$，再分子有理化：
+
+$$
+\begin{aligned}
+|x_{n+1}-2|
+&=\bigl|\sqrt{2+x_n}-2\bigr|
+=\left|\frac{(\sqrt{2+x_n}-2)(\sqrt{2+x_n}+2)}{\sqrt{2+x_n}+2}\right|\\
+&=\frac{|x_n-2|}{\sqrt{2+x_n}+2}.
+\end{aligned}
+$$
+
+因为 $\sqrt{2+x_n}\geqslant0$，分母 $\sqrt{2+x_n}+2>2$，所以
+
+$$|x_{n+1}-2|<\frac12|x_n-2|.$$
+
+不断递推下去：
+
+$$|x_n-2|\leqslant\frac12|x_{n-1}-2|\leqslant\frac{1}{2^2}|x_{n-2}-2|\leqslant\dots\leqslant\frac{1}{2^{n-1}}|x_1-2|.$$
+
+当 $n\to\infty$ 时，$\dfrac{1}{2^{n-1}}\to0$，于是 $\lim\limits_{n\to\infty}|x_n-2|=0$，可以直接得到
+
+$$\lim_{n\to\infty}x_n=2.$$
+
+证法二不必先证明极限存在，也省去了"两端取极限"那一步；证法一的好处是只用到单调有界准则本身，不需要知道极限值也能判定它存在。
 
 ### 2．第二个重要极限
 
-**例 6** 讨论下列极限的存在性。
+**例 7** 讨论下列极限的存在性。
 
 （1）$\lim\limits_{n\to\infty}\left(1+\dfrac1n\right)^n$；　（2）$\lim\limits_{x\to\infty}\left(1+\dfrac1x\right)^x$。
 
@@ -264,6 +319,38 @@ $$
 即 $\{y_n\}$ 有上界。因此 $\lim\limits_{n\to\infty}y_n=\lim\limits_{n\to\infty}\left(1+\dfrac1n\right)^n$ 存在。用 $e$ 来表示这个极限，即
 
 $$\lim_{n\to\infty}\left(1+\frac1n\right)^n=e.$$
+
+$\{y_n\}$ 的单调性与有界性都还有更简洁的证法。
+
+**单调增加：用均值不等式**　对下面 $n+1$ 个正数用均值不等式：$1+\dfrac1n$ 取 $n$ 个（它们相等），再添一个 $1$。算术平均为
+
+$$\frac{n\left(1+\frac1n\right)+1}{n+1}=\frac{n+2}{n+1}=1+\frac1{n+1},$$
+
+几何平均为
+
+$$\left[\left(1+\frac1n\right)^n\cdot1\right]^{\frac1{n+1}}.$$
+
+因为这 $n+1$ 个数不全相等（那个 $1$ 与 $1+\dfrac1n$ 不同），均值不等式取严格不等号：
+
+$$1+\frac1{n+1}>\left(1+\frac1n\right)^{\frac{n}{n+1}},$$
+
+两边取 $n+1$ 次方，得
+
+$$\left(1+\frac1{n+1}\right)^{n+1}>\left(1+\frac1n\right)^n,$$
+
+即 $y_{n+1}>y_n$，$\{y_n\}$ 单调增加。
+
+**有上界：用对数不等式**　对 $t>0$ 有对数不等式
+
+$$\ln(1+t)<t\quad(t>0).$$
+
+取 $t=\dfrac1n$，得 $n\ln\left(1+\dfrac1n\right)<1$，于是
+
+$$y_n=\left(1+\frac1n\right)^n=e^{\,n\ln\left(1+\frac1n\right)}<e<3,$$
+
+即 $\{y_n\}$ 有上界。
+
+两个证法都比较短，代价是要另外用到均值不等式与对数不等式；正文那条路只用二项式定理，是"手边有什么就用什么"的做法。
 
 （2）当 $x\to+\infty$ 时，记 $[x]=n$，则 $n\leqslant x<n+1$，当 $x\to+\infty$ 时，有 $n\to\infty$，并且有不等式
 
@@ -333,7 +420,7 @@ $$\lim_{\varphi(x)\to0}[1+\varphi(x)]^{\frac1{\varphi(x)}}=e.$$
 
 ### 3．第二个重要极限的应用
 
-**例 7** 求下列极限：
+**例 8** 求下列极限：
 
 （1）$\lim\limits_{x\to+\infty}\left(1-\dfrac1x\right)^{\sqrt{x}}$；　（2）$\lim\limits_{x\to0}(1+x)^{\frac{3}{\sin x}}$；　（3）$\lim\limits_{x\to\infty}\left(\dfrac{x+1}{x-2}\right)^x$；　（4）$\lim\limits_{x\to0}\cos x^{\frac{1}{\sin^2x}}$。
 
@@ -368,13 +455,13 @@ $$
 \end{aligned}
 $$
 
-**例 8** 求 $\lim\limits_{x\to\infty}\left(1-\dfrac1x\right)^x$。
+**例 9** 求 $\lim\limits_{x\to\infty}\left(1-\dfrac1x\right)^x$。
 
 **解**
 
 $$\lim_{x\to\infty}\left(1-\frac1x\right)^x=\lim_{x\to\infty}\left[\left(1+\frac1{-x}\right)^{-x}\right]^{-1}=e^{-1}=\frac1e.$$
 
-**例 9** 求 $\lim\limits_{x\to\infty}\left(\dfrac{3+x}{2+x}\right)^{2x}$。
+**例 10** 求 $\lim\limits_{x\to\infty}\left(\dfrac{3+x}{2+x}\right)^{2x}$。
 
 **解**
 
@@ -383,7 +470,7 @@ $$
 =\lim_{x\to\infty}\left[\left(1+\frac1{x+2}\right)^{x+2}\right]^{\frac{2x}{x+2}}=e^2.
 $$
 
-**例 10** 求下列极限：
+**例 11** 求下列极限：
 
 （1）$\lim\limits_{x\to0}\dfrac{\ln(1+x)}{x}$；　（2）$\lim\limits_{x\to0}\dfrac{e^x-1}{x}$；　（3）$\lim\limits_{x\to0}\dfrac{a^x-1}{x}$；　（4）$\lim\limits_{x\to0}\dfrac{(1+x)^\alpha-1}{x}$（$\alpha$ 是非零常数）。
 
@@ -409,7 +496,7 @@ $$
 =1\cdot\alpha\cdot1=\alpha.
 $$
 
-> 注：原文在例 10 的题干处中断，上面四问的解答是**按本节已给的第二个重要极限与换元法补出**的，**待你确认**是否为课本原解。
+> 注：原文在例 11 的题干处中断，上面四问的解答是**按本节已给的第二个重要极限与换元法补出**的，**待你确认**是否为课本原解。
 
 ## 三、小结
 
