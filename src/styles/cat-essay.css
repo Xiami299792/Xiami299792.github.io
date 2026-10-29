@@ -173,6 +173,11 @@
   text-justify: inter-ideograph;
 }
 
+/* 藏字的删除线：锈红墨，和正文黑字拉开（明朝体只有 400 一字重，加粗几乎看不出来） */
+[data-cat='essay'] .prose del {
+  text-decoration-color: var(--accent);
+}
+
 /* 首字下沉：铅字印刷的招牌 */
 [data-cat='essay'] .prose > p:first-of-type::first-letter {
   float: left;

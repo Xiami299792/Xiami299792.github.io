@@ -1,4 +1,7 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
 import 'katex/dist/katex.min.css';
 import BaseLayout from './BaseLayout.astro';
 import Giscus from '../components/Giscus.astro';
@@ -54,10 +57,20 @@ const seriesUrl = seriesKey ? withBase(`/series/${seriesKey}/`) : '';
 
 // 随笔页的明朝体：按页裁剪的子集（scripts/build-fonts.mjs 生成，文件名 = slug 里的 / 换成 -）。
 // 只有随笔分类用这个字体，技术栏目用中性无衬线主题。
-const fontFile =
-  post.data.category === 'essay'
-    ? withBase(`/fonts/huiwen-${postSlug(post).replace(/\//g, '-')}.woff2`)
-    : undefined;
+// 字体文件名不带哈希，重建子集后进浏览器缓存的还是旧文件（会缺字、掉回系统字体），
+// 所以按文件内容算一个短哈希挂在 query 上，内容一变 URL 就变。
+const fontName = `huiwen-${postSlug(post).replace(/\//g, '-')}.woff2`;
+let fontFile: string | undefined;
+if (post.data.category === 'essay') {
+  let version = '';
+  try {
+    const buf = fs.readFileSync(path.join(process.cwd(), 'public', 'fonts', fontName));
+    version = createHash('sha1').update(buf).digest('hex').slice(0, 8);
+  } catch {
+    /* 字体缺失时退回不带版本号的 URL */
+  }
+  fontFile = withBase(`/fonts/${fontName}${version ? `?v=${version}` : ''}`);
+}
 ---
 
 <BaseLayout
